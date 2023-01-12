@@ -32,7 +32,7 @@ public class ControllerConfig extends WebMvcConfigurerAdapter {
 	public void setApplicationContext(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 	}
-	
+
 	@Bean
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2)//
@@ -70,7 +70,7 @@ public class ControllerConfig extends WebMvcConfigurerAdapter {
 		resolver.setCharacterEncoding("UTF-8");
 		return resolver;
 	}
-	
+
 	@Bean
 	public ITemplateResolver templateResolver() {
 		SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
@@ -79,13 +79,14 @@ public class ControllerConfig extends WebMvcConfigurerAdapter {
 		resolver.setTemplateMode(TemplateMode.HTML);
 		return resolver;
 	}
-	
-	@Bean
-	public ObjectMapper objectMapper() {
-        	JavaTimeModule javaTimeModule = new JavaTimeModule();
-        	javaTimeModule.addSerializer(ZonedDateTime.class,
-                	new ZonedDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")));
-        	return Jackson2ObjectMapperBuilder.json().featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS) // ISODate
-                	.modules(javaTimeModule).build();
-    	}
+
+//	@Bean
+//
+//	public ObjectMapper objectMapper() {
+//		JavaTimeModule javaTimeModule = new JavaTimeModule();
+//		javaTimeModule.addSerializer(ZonedDateTime.class,
+//				new ZonedDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")));
+//		return Jackson2ObjectMapperBuilder.json().featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS) // ISODate
+//				.modules(javaTimeModule).build();
+//	}
 }
