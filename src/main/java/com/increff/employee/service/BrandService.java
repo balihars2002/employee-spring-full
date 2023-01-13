@@ -20,10 +20,14 @@ public class BrandService {
     public void add(BrandPojo p) throws ApiException {
         normalize(p);
         if(StringUtil.isEmpty(p.getBrand())) {
-            throw new ApiException("'Name' cannot be empty");
+            throw new ApiException("'Brand' cannot be empty");
         }
         if(StringUtil.isEmpty(p.getCategory())){
             throw new ApiException("'Category' cannot be empty");
+        }
+        //check duplicacy of brand name and category
+        if(getBrandCat(p.getBrand(),p.getCategory())!=null){
+            throw new ApiException("Similar brand: " + p.getBrand() + " and category: " + p.getCategory() + " already existss" );
         }
         dao.insert(p);
     }
@@ -63,4 +67,8 @@ public class BrandService {
     protected static void normalize(BrandPojo p) {
         p.setBrand(StringUtil.toLowerCase(p.getBrand()));
     }
+    public BrandPojo getBrandCat(String brandName, String categoryName){
+        return dao.select(brandName,categoryName);
+    }
+
 }
