@@ -42,7 +42,7 @@ public class BrandDao extends AbstractDao{
         return query.getResultList();
     }
 
-    public BrandPojo select(String brand,String category){
+    public BrandPojo selectpojotocheckduplicate(String brand,String category){
         TypedQuery<BrandPojo> query = getQuery(duplicatecheck, BrandPojo.class);
         query.setParameter("brand",brand);
         query.setParameter("category",category);

@@ -18,17 +18,6 @@ public class BrandService {
 
     @Transactional(rollbackOn = ApiException.class)
     public void add(BrandPojo p) throws ApiException {
-        brandnormalize(p);
-        if(StringUtil.isEmpty(p.getBrand())) {
-            throw new ApiException("'Brand' cannot be empty");
-        }
-        if(StringUtil.isEmpty(p.getCategory())){
-            throw new ApiException("'Category' cannot be empty");
-        }
-        //check duplicacy of brand name and category
-        if(getBrandCat(p.getBrand(),p.getCategory())!=null){
-            throw new ApiException("Similar brand: " + p.getBrand() + " and category: " + p.getCategory() + " already existss" );
-        }
         branddao.insert(p);
     }
 
@@ -48,13 +37,10 @@ public class BrandService {
     }
 
     @Transactional(rollbackOn  = ApiException.class)
-    public void update(int id, BrandPojo p) throws ApiException {
-        brandnormalize(p);
-        BrandPojo ex = getCheck(id);
-        ex.setCategory(p.getCategory());
-        ex.setBrand(p.getBrand());
+    public void update(BrandPojo ex) throws ApiException {
         branddao.update(ex);
     }
+
     @Transactional
     public BrandPojo getCheck(int id) throws ApiException {
         BrandPojo p = branddao.select(id);
@@ -63,15 +49,10 @@ public class BrandService {
         }
         return p;
     }
-
-    protected static void brandnormalize(BrandPojo p) {
-        p.setBrand(StringUtil.toLowerCase(p.getBrand()));
-        p.setCategory(StringUtil.toLowerCase((p.getCategory())));
-    }
     public BrandPojo getBrandCat(String brandName, String categoryName){
-        return branddao.select(brandName,categoryName);
+        return branddao.selectpojotocheckduplicate(brandName,categoryName);
     }
-    public BrandPojo GetbrandCatfromid(int id){
+    public BrandPojo GetbrandCatfromid(int id) throws ApiException{
         return branddao.getbrandformid(id);
     }
 

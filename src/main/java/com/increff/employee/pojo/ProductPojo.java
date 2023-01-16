@@ -38,11 +38,11 @@ public class ProductPojo {
         this.barcode = brand;
     }
 
-    public int getProCategory() {
+    public int getProbrandCategory() {
         return brand_category;
     }
 
-    public void setProCategory(int brand_category) {
+    public void setProbrandCategory(int brand_category) {
         this.brand_category = brand_category;
     }
 
