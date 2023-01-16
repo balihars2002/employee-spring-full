@@ -14,11 +14,11 @@ import com.increff.employee.util.StringUtil;
 public class BrandService {
 
     @Autowired
-    private BrandDao dao;
+    private BrandDao branddao;
 
     @Transactional(rollbackOn = ApiException.class)
     public void add(BrandPojo p) throws ApiException {
-        normalize(p);
+        brandnormalize(p);
         if(StringUtil.isEmpty(p.getBrand())) {
             throw new ApiException("'Brand' cannot be empty");
         }
@@ -29,12 +29,12 @@ public class BrandService {
         if(getBrandCat(p.getBrand(),p.getCategory())!=null){
             throw new ApiException("Similar brand: " + p.getBrand() + " and category: " + p.getCategory() + " already existss" );
         }
-        dao.insert(p);
+        branddao.insert(p);
     }
 
     @Transactional
     public void delete(int id) {
-        dao.delete(id);
+        branddao.delete(id);
     }
 
     @Transactional(rollbackOn = ApiException.class)
@@ -44,31 +44,35 @@ public class BrandService {
 
     @Transactional
     public List<BrandPojo> getAll() {
-        return dao.selectAll();
+        return branddao.selectAll();
     }
 
     @Transactional(rollbackOn  = ApiException.class)
     public void update(int id, BrandPojo p) throws ApiException {
-        normalize(p);
+        brandnormalize(p);
         BrandPojo ex = getCheck(id);
         ex.setCategory(p.getCategory());
         ex.setBrand(p.getBrand());
-        dao.update(ex);
+        branddao.update(ex);
     }
     @Transactional
     public BrandPojo getCheck(int id) throws ApiException {
-        BrandPojo p = dao.select(id);
+        BrandPojo p = branddao.select(id);
         if (p == null) {
-            throw new ApiException("Employee with given ID does not exit, id: " + id);
+            throw new ApiException("Brand with given ID does not exit, id: " + id);
         }
         return p;
     }
 
-    protected static void normalize(BrandPojo p) {
+    protected static void brandnormalize(BrandPojo p) {
         p.setBrand(StringUtil.toLowerCase(p.getBrand()));
+        p.setCategory(StringUtil.toLowerCase((p.getCategory())));
     }
     public BrandPojo getBrandCat(String brandName, String categoryName){
-        return dao.select(brandName,categoryName);
+        return branddao.select(brandName,categoryName);
+    }
+    public BrandPojo GetbrandCatfromid(int id){
+        return branddao.getbrandformid(id);
     }
 
 }

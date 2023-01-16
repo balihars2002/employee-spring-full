@@ -21,16 +21,18 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 @Api
 @RestController
+// Todo : Remove api word from all the controllers
 public class BrandApiController {
 
     @Autowired
-    private BrandService service;
+    private BrandService brandService;
 
     @ApiOperation(value = "Add a Brand")
     @RequestMapping(path = "/api/brand", method = RequestMethod.POST)
     public void add(@RequestBody BrandForm form) throws ApiException{
+        // TODO: this should be done in dto layer
         BrandPojo p = convert(form);
-        service.add(p);
+        brandService.add(p);
     }
 
 
@@ -38,21 +40,21 @@ public class BrandApiController {
     @RequestMapping(path = "/api/brand/{id}",method = RequestMethod.DELETE)
 
     public void delete(@PathVariable int id) {
-        service.delete(id);
+        brandService.delete(id);
     }
 
     @ApiOperation(value = "Get a Brand by ID")
     @RequestMapping(path = "/api/brand/{id}",method = RequestMethod.GET)
 
     public BrandData get(@PathVariable int id) throws ApiException {
-        BrandPojo p= service.get(id);
+        BrandPojo p= brandService.get(id);
         return convert(p);
     }
 
     @ApiOperation(value = "Gets list of all Brands")
     @RequestMapping(path = "/api/brand",method = RequestMethod.GET)
     public List<BrandData> getAll() {
-        List<BrandPojo> list = service.getAll();
+        List<BrandPojo> list = brandService.getAll();
         List<BrandData> list2 = new ArrayList<BrandData>();
         for(BrandPojo p : list){
             list2.add(convert(p));
@@ -64,14 +66,13 @@ public class BrandApiController {
     @RequestMapping(path = "/api/brand/{id}", method = RequestMethod.PUT)
     public void update(@PathVariable int id, @RequestBody BrandForm f) throws ApiException {
         BrandPojo p = convert(f);
-        service.update(id, p);
+        brandService.update(id, p);
     }
 
     private static BrandData convert(BrandPojo p) {
         BrandData d = new BrandData();
         d.setCategory(p.getCategory());
-        d.setBrand(p.getBrand()
-        );
+        d.setBrand(p.getBrand());
         d.setId(p.getId());
         return d;
     }

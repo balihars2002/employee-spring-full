@@ -9,8 +9,11 @@ import javax.persistence.Id;
 public class BrandPojo {
 
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private int id;
+    // Todo: Use table generation type
+    // Todo: Use box type everywhere
+    // Todo: Add unique constraint
+       @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Integer id;
     private String brand;
     private String category;
 

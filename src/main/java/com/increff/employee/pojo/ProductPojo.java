@@ -11,46 +11,54 @@ public class ProductPojo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String barcode;
-    private String brand_category;
+    private int brand_category;
     private String name;
     private double mrp;
+    //default constructor
+     public ProductPojo(){ }
+     public ProductPojo(String BARCODE,int BRAND_CATEGORY,String NAME,double MRP){
+         barcode=BARCODE;
+         brand_category=BRAND_CATEGORY;
+         name=NAME;
+         mrp= MRP;
+     }
 
-    public int getId(){
+    public int getProId(){
         return id;
     }
-    public void setId(){
+    public void setProId(){
         this.id = id;
     }
 
-    public String getBarcode() {
+    public String getProBarcode() {
         return barcode;
     }
 
-    public void setBarcode(String brand) {
+    public void setProBarcode(String brand) {
         this.barcode = brand;
     }
 
-    public String getBrand_category() {
+    public int getProCategory() {
         return brand_category;
     }
 
-    public void setBrand_category(String brand_category) {
+    public void setProCategory(int brand_category) {
         this.brand_category = brand_category;
     }
 
-    public String getName() {
+    public String getProName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setProName(String name) {
         this.name = name;
     }
 
-    public double getMrp() {
+    public double getProMrp() {
         return mrp;
     }
 
-    public void setMrp(double mrp) {
+    public void setProMrp(double mrp) {
         this.mrp = mrp;
     }
 }

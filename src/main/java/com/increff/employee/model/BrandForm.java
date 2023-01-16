@@ -1,6 +1,9 @@
 package com.increff.employee.model;
 
+import com.sun.istack.NotNull;
+
 public class BrandForm {
+    //@NotNull
     private String brand;
     private String category;
 

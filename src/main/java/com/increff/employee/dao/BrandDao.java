@@ -9,7 +9,6 @@ import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Repository;
-
 import com.increff.employee.pojo.BrandPojo;
 @Repository
 public class BrandDao extends AbstractDao{
@@ -17,6 +16,7 @@ public class BrandDao extends AbstractDao{
     private static String select_id = "select p from BrandPojo p where id=:id";
     private static String select_all = "select p from BrandPojo p";
     private static String duplicatecheck = "select p from BrandPojo p where brand=:brand and category=:category";
+    private static String brandformid= "select p from BrandPojo p where id=:id";
     @PersistenceContext
     private EntityManager em;
 
@@ -48,7 +48,11 @@ public class BrandDao extends AbstractDao{
         query.setParameter("category",category);
         return getSingle(query);
     }
-
+    public BrandPojo getbrandformid(int id) {
+        TypedQuery<BrandPojo> query = getQuery(brandformid, BrandPojo.class);
+        query.setParameter("id",id);
+        return getSingle(query);
+    }
     public void update(BrandPojo p) {
     }
 
