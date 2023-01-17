@@ -9,7 +9,6 @@ import com.increff.employee.pojo.BrandPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.increff.employee.util.StringUtil;
 @Service
 public class BrandService {
 
@@ -50,10 +49,10 @@ public class BrandService {
         return p;
     }
     public BrandPojo getBrandCat(String brandName, String categoryName){
-        return branddao.selectpojotocheckduplicate(brandName,categoryName);
+        return branddao.selectPojoToCheckDuplicate(brandName,categoryName);
     }
-    public BrandPojo GetbrandCatfromid(int id) throws ApiException{
-        return branddao.getbrandformid(id);
+    public BrandPojo getBrandCatFromiId(int id) throws ApiException{
+        return branddao.getBrandFromId(id);
     }
 
 }

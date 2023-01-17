@@ -59,6 +59,19 @@ public class ProductService {
 ////        ex.setBrand(p.getBrand());
 ////        prodao.update(ex);
 //    }
+      public ProductPojo givepojobyid(int id){
+            return prodao.selectpojobyid(id);
+      }
+        public ProductPojo givepojobybarcode(String barcode){
+            return prodao.selectpojobybarcode(barcode);
+        }
+        public ProductPojo getCheckbybarcode(String barcode) throws ApiException{
+            ProductPojo p = prodao.selectpojobybarcode(barcode);
+            if(p == null){
+                throw new ApiException("The product with given barcode does not exist");
+            }
+            return p;
+        }
 //    @Transactional
 //    public ProductPojo getCheckid(int id) throws ApiException {
 //        ProductPojo p = prodao.selectpojobyid(id);

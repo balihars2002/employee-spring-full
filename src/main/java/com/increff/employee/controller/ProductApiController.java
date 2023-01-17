@@ -4,10 +4,12 @@ package com.increff.employee.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.increff.employee.dto.InventoryDto;
 import com.increff.employee.dto.ProductDto;
 import com.increff.employee.model.BrandData;
 import com.increff.employee.model.BrandForm;
 import com.increff.employee.pojo.BrandPojo;
+import com.increff.employee.pojo.InventoryPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +26,8 @@ import io.swagger.annotations.ApiOperation;
 public class ProductApiController {
     @Autowired
     private ProductDto productDto;
+    @Autowired
+    private InventoryDto inventoryDto;
     @ApiOperation(value = "Add a Product")
     @RequestMapping(path = "/api/product", method = RequestMethod.POST)
     public void add(@RequestBody ProductForm form) throws ApiException{
@@ -68,9 +72,12 @@ public class ProductApiController {
 
 //    @ApiOperation(value = "Updates a Product")
 //    @RequestMapping(path = "/api/product/{id}", method = RequestMethod.PUT)
-//    public void update(@PathVariable int id, @RequestBody ProductForm f) throws ApiException {
+//    public void update(@RequestParam(value="barcode") String barcode, @RequestBody ProductForm f) throws ApiException {
 //        ProductPojo p = convert(f);
 //        service.update(id, p);
+//        delete(barcode);
+//        add(f);
+//        productDto.updateproduct(barcode,f);
 //    }
 
 

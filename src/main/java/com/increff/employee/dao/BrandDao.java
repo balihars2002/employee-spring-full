@@ -12,11 +12,11 @@ import org.springframework.stereotype.Repository;
 import com.increff.employee.pojo.BrandPojo;
 @Repository
 public class BrandDao extends AbstractDao{
-    private static String delete_id = "delete from BrandPojo p where id=:id";
-    private static String select_id = "select p from BrandPojo p where id=:id";
-    private static String select_all = "select p from BrandPojo p";
-    private static String duplicatecheck = "select p from BrandPojo p where brand=:brand and category=:category";
-    private static String brandformid= "select p from BrandPojo p where id=:id";
+    private final static String delete_id = "delete from BrandPojo p where id=:id";
+    private final static String select_id = "select p from BrandPojo p where id=:id";
+    private final static String select_all = "select p from BrandPojo p";
+    private final static String duplicate_check = "select p from BrandPojo p where brand=:brand and category=:category";
+    private final static String pojo_from_id = "select p from BrandPojo p where id=:id";
     @PersistenceContext
     private EntityManager em;
 
@@ -42,14 +42,14 @@ public class BrandDao extends AbstractDao{
         return query.getResultList();
     }
 
-    public BrandPojo selectpojotocheckduplicate(String brand,String category){
-        TypedQuery<BrandPojo> query = getQuery(duplicatecheck, BrandPojo.class);
+    public BrandPojo selectPojoToCheckDuplicate(String brand, String category){
+        TypedQuery<BrandPojo> query = getQuery(duplicate_check, BrandPojo.class);
         query.setParameter("brand",brand);
         query.setParameter("category",category);
         return getSingle(query);
     }
-    public BrandPojo getbrandformid(int id) {
-        TypedQuery<BrandPojo> query = getQuery(brandformid, BrandPojo.class);
+    public BrandPojo getBrandFromId(int id) {
+        TypedQuery<BrandPojo> query = getQuery(pojo_from_id, BrandPojo.class);
         query.setParameter("id",id);
         return getSingle(query);
     }

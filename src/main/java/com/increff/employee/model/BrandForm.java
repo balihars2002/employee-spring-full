@@ -6,6 +6,7 @@ public class BrandForm {
     //@NotNull
     private String brand;
     private String category;
+    private boolean isDisabled;
 
     public String getBrand() {
         return brand;
@@ -20,5 +21,15 @@ public class BrandForm {
     public void setCategory(String category){
         this.category = category;
     }
+    public void setDisabled(boolean isDisabled) {
+        this.isDisabled = isDisabled;
+    }
 
+    public boolean getDisabled(){
+        return isDisabled;
+    }
+
+    public boolean isDisabled() {
+        return isDisabled;
+    }
 }

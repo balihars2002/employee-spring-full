@@ -1,35 +1,34 @@
-//package com.increff.employee.pojo;
-//
-//
-//import javax.persistence.Entity;
-//import javax.persistence.GeneratedValue;
-//import javax.persistence.GenerationType;
-//import javax.persistence.Id;
-//
-//public class InventoryPojo {
-//    @Id
-//    // Todo: Use table generation type
-//    // Todo: Use box type everywhere
-//    // Todo: Add unique constraint
+package com.increff.employee.pojo;
+
+import com.mysql.cj.BindValue;
+import io.swagger.models.auth.In;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+@Entity
+public class InventoryPojo {
+    @Id
 //    @GeneratedValue(strategy=GenerationType.IDENTITY)
-//    private Integer id;
-//    private String brand;
-//    private String category;
-//
-//    public int getId() {
-//        return id;
-//    }
-//
-//    public void setId(int id) {
-//        this.id = id;
-//    }
-//
-//    public String getBrand() {
-//        return brand;
-//    }
-//
-//    public void setBrand(String brand) {
-//        this.brand = brand;
-//    }
-//
-//}
+    private int id;
+    private int quantity;
+    public InventoryPojo(){ }
+    public InventoryPojo(int ID,int QUANTITY){
+        id=ID;
+        quantity=QUANTITY;
+    }
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
+    public int getQuantity() {
+        return quantity;
+    }
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+}

@@ -20,6 +20,7 @@ public class ProductDao extends AbstractDao {
     private static  String select_barcode= "select p from ProductPojo where barcode=:barcode";
     private static String select_all= "select p from ProductPojo p";
    // private static String get_brandcategory_id = "select id from BrandPojo where brand=:brand and category=:category";
+   // private static String select_from_id= "select p from ProductPojo where id=:id";
 
     @PersistenceContext
     private EntityManager em;

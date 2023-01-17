@@ -1,7 +1,6 @@
 package com.increff.employee.controller;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.increff.employee.dto.BrandDto;
@@ -14,9 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.increff.employee.model.BrandData;
 import com.increff.employee.model.BrandForm;
-import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.service.ApiException;
-import com.increff.employee.service.BrandService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -25,37 +22,37 @@ import io.swagger.annotations.ApiOperation;
 // Todo : Remove api word from all the controllers
 public class BrandApiController {
     @Autowired
-    private BrandDto branddto;
+    private BrandDto brandDto;
     @ApiOperation(value = "Add a Brand")
     @RequestMapping(path = "/api/brand", method = RequestMethod.POST)
     public void add(@RequestBody BrandForm form) throws ApiException{
-        branddto.add(form);
+        brandDto.add(form);
     }
 
     @ApiOperation(value = "Deletes a Brand")
     @RequestMapping(path = "/api/brand/{id}",method = RequestMethod.DELETE)
 
     public void delete(@PathVariable int id) {
-        branddto.delete(id);
+        brandDto.delete(id);
     }
 
     @ApiOperation(value = "Get a Brand by ID")
     @RequestMapping(path = "/api/brand/{id}",method = RequestMethod.GET)
 
     public BrandData get(@PathVariable int id) throws ApiException {
-        return branddto.get(id);
+        return brandDto.get(id);
     }
 
     @ApiOperation(value = "Gets list of all Brands")
     @RequestMapping(path = "/api/brand",method = RequestMethod.GET)
     public List<BrandData> getAll() {
-        return branddto.getAlllist();
+        return brandDto.getAllList();
     }
 
     @ApiOperation(value = "Updates a Brand")
     @RequestMapping(path = "/api/brand/{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable int id, @RequestBody BrandForm f) throws ApiException {
-        branddto.updatelist(id,f);
+    public void update(@PathVariable int id, @RequestBody BrandForm form) throws ApiException {
+        brandDto.updateList(id,form);
     }
 
 

@@ -2,18 +2,15 @@ package com.increff.employee.dto;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.transaction.Transactional;
-
-import com.increff.employee.dao.BrandDao;
-import com.increff.employee.dao.ProductDao;
-import com.increff.employee.model.BrandData;
 import com.increff.employee.model.ProductForm;
 import com.increff.employee.pojo.BrandPojo;
+import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.model.ProductData;
 import com.increff.employee.service.ApiException;
 import com.increff.employee.service.BrandService;
+import com.increff.employee.service.InventoryService;
 import com.increff.employee.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +22,8 @@ public class ProductDto {
     private ProductService productService;
     @Autowired
     private BrandService brandService;
+    @Autowired
+    private InventoryService inventoryService;
 
     @Transactional(rollbackOn = ApiException.class)
     public void adddto(ProductForm f) throws ApiException {
@@ -36,23 +35,41 @@ public class ProductDto {
         if(StringUtil.isEmpty(p.getProName())) {
             throw new ApiException("'Brand' cannot be empty");
         }
-//        if(StringUtil.isEmpty(p.getMrp())) {
-//            throw new ApiException("'Mrp' cannot be empty");
-//        }
-       // check duplicacy of brand name and category
-//        if(getProCat(p.getBrand(),p.getCategory())==null){
-//            throw new ApiException("Similar brand: " + p.getBrand() + " and category: " + p.getCategory() + " already existss" );
-//        }
         productService.insertservice(p);
-    }
 
-//    @Transactional
-//    public void deletedtoid(int id) {
-//        productService.deleteserviceid(id);
-//    }
+        InventoryPojo ip= new InventoryPojo(p.getProId(),0);
+        inventoryService.addservice(ip);
+    }
+    @Transactional
+    public ProductPojo getCheckfromservice(String barcode) throws ApiException{
+        return productService.getCheckbybarcode(barcode);
+    }
     @Transactional
     public void deletedtobarcode(String barcode) {
         productService.deleteservicebarcode(barcode);
+    }
+
+    @Transactional
+    public List<ProductData> getAlldto() throws ApiException {
+        List<ProductPojo> list= productService.selectAllservice();
+        List<ProductData> list1 = new ArrayList<ProductData>();
+        for(ProductPojo p:list){
+            list1.add(convertpojotodata(p));
+        }
+        return list1;
+    }
+    @Transactional(rollbackOn  = ApiException.class)
+    public void updateproduct(String barcode, ProductForm f) throws ApiException {
+//          deletedtobarcode(barcode);
+//          adddto(f);
+//        ProductPojo productPojo= convertformtopojo(f);
+//        productnormalize(productPojo);
+//        ProductPojo ex = getCheckfromservice(barcode);
+//        ex.setProBarcode(productPojo.getProBarcode());
+//        ex.setProMrp(productPojo.getProMrp());
+//        ex.setProName(productPojo.getProName());
+//        brandService.update(ex);
+
     }
 
 //    @Transactional(rollbackOn = ApiException.class)
@@ -65,17 +82,7 @@ public class ProductDto {
 //        return getCheckstring(barcode);
 //    }
 
-    @Transactional
-    public List<ProductData> getAlldto() throws ApiException {
-        List<ProductPojo> list= productService.selectAllservice();
-        List<ProductData> list1 = new ArrayList<ProductData>();
-        for(ProductPojo p:list){
-            list1.add(convertpojotodata(p));
-        }
-        return list1;
-    }
-
-//    @Transactional(rollbackOn  = ApiException.class)
+    //    @Transactional(rollbackOn  = ApiException.class)
 //    public void update(int id, ProductPojo p) throws ApiException {
 //        productnormalize(p);
 ////        ProductPojo ex = getCheck(id);
@@ -99,7 +106,6 @@ public class ProductDto {
 //        }
 //        return p;
 //    }
-
     private ProductPojo convertformtopojo(ProductForm form) throws ApiException{
         BrandPojo brandPojo= brandService.getBrandCat(form.getProBrand(),form.getProCategory());
         if(brandPojo==null){
@@ -144,7 +150,7 @@ public class ProductDto {
         d.setProBarcode(p.getProBarcode());
         d.setProName(p.getProName());
         d.setProMrp(p.getProMrp());
-        BrandPojo bp= brandService.GetbrandCatfromid(p.getProbrandCategory());
+        BrandPojo bp= brandService.getBrandCatFromiId(p.getProbrandCategory());
         if(bp == null){
             throw new ApiException("ID is not valid");
         }
