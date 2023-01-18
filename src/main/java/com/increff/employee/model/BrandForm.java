@@ -3,10 +3,11 @@ package com.increff.employee.model;
 import com.sun.istack.NotNull;
 
 public class BrandForm {
-    //@NotNull
+    @NotNull
     private String brand;
+    @NotNull
     private String category;
-    private boolean isDisabled;
+    private Boolean isDisabled=false;
 
     public String getBrand() {
         return brand;
@@ -24,7 +25,6 @@ public class BrandForm {
     public void setDisabled(boolean isDisabled) {
         this.isDisabled = isDisabled;
     }
-
     public boolean getDisabled(){
         return isDisabled;
     }

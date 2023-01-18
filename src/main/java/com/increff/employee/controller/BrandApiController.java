@@ -19,41 +19,40 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 @Api
 @RestController
-// Todo : Remove api word from all the controllers
+@RequestMapping("/api")
+
 public class BrandApiController {
     @Autowired
     private BrandDto brandDto;
     @ApiOperation(value = "Add a Brand")
-    @RequestMapping(path = "/api/brand", method = RequestMethod.POST)
+    @RequestMapping(path = "/brand", method = RequestMethod.POST)
     public void add(@RequestBody BrandForm form) throws ApiException{
         brandDto.add(form);
     }
 
     @ApiOperation(value = "Deletes a Brand")
-    @RequestMapping(path = "/api/brand/{id}",method = RequestMethod.DELETE)
+    @RequestMapping(path = "/brand/{id}",method = RequestMethod.DELETE)
 
     public void delete(@PathVariable int id) {
         brandDto.delete(id);
     }
 
     @ApiOperation(value = "Get a Brand by ID")
-    @RequestMapping(path = "/api/brand/{id}",method = RequestMethod.GET)
+    @RequestMapping(path = "/brand/{id}",method = RequestMethod.GET)
 
     public BrandData get(@PathVariable int id) throws ApiException {
         return brandDto.get(id);
     }
 
     @ApiOperation(value = "Gets list of all Brands")
-    @RequestMapping(path = "/api/brand",method = RequestMethod.GET)
+    @RequestMapping(path = "/brand",method = RequestMethod.GET)
     public List<BrandData> getAll() {
         return brandDto.getAllList();
     }
 
     @ApiOperation(value = "Updates a Brand")
-    @RequestMapping(path = "/api/brand/{id}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/brand/{id}", method = RequestMethod.PUT)
     public void update(@PathVariable int id, @RequestBody BrandForm form) throws ApiException {
         brandDto.updateList(id,form);
     }
-
-
 }

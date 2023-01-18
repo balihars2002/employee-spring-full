@@ -8,7 +8,6 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
-import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.pojo.ProductPojo;
 import org.springframework.stereotype.Repository;
 @Repository
@@ -16,11 +15,9 @@ public class ProductDao extends AbstractDao {
 
     private static  String delete_id = "delete from ProductPojo where id=:id";
     private static  String delete_barcode = "delete from ProductPojo where barcode=:barcode";
-    private static String  select_id= "select p from ProductPojo where id=:id";
-    private static  String select_barcode= "select p from ProductPojo where barcode=:barcode";
+    private static String  select_id= "select p from ProductPojo p where id=:id";
+    private static  String select_barcode= "select p from ProductPojo p where barcode=:barcode";
     private static String select_all= "select p from ProductPojo p";
-   // private static String get_brandcategory_id = "select id from BrandPojo where brand=:brand and category=:category";
-   // private static String select_from_id= "select p from ProductPojo where id=:id";
 
     @PersistenceContext
     private EntityManager em;
@@ -40,13 +37,13 @@ public class ProductDao extends AbstractDao {
         query.setParameter("barcode", barcode);
         return query.executeUpdate();
     }
-    public ProductPojo selectpojobyid(int id) {
+    public ProductPojo selectPojoById(int id) {
         TypedQuery<ProductPojo> query = getQuery(select_id, ProductPojo.class);
         query.setParameter("id", id);
         return getSingle(query);
     }
 
-    public ProductPojo selectpojobybarcode(String barcode){
+    public ProductPojo selectPojoByBarcode(String barcode){
         TypedQuery<ProductPojo> query = getQuery(select_barcode, ProductPojo.class);
         query.setParameter("barcode", barcode);
         return getSingle(query);

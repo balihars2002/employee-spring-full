@@ -20,14 +20,10 @@ public class BrandDto extends DtoHelper{
     private BrandService brandService;
 
     public void add(BrandForm form) throws ApiException {
-        BrandPojo brandPojo= convert(form);
+        validateBrandForm(form);
+        BrandPojo brandPojo = convertFormToPojo(form);
         normalizeBrand(brandPojo);
-        if(StringUtil.isEmpty(brandPojo.getBrand())) {
-            throw new ApiException("'Brand' cannot be empty");
-        }
-        if(StringUtil.isEmpty(brandPojo.getCategory())){
-            throw new ApiException("'Category' cannot be empty");
-        }
+
         //check duplicacy of brand name and category
         BrandPojo existingPojo = checkDuplicate(brandPojo.getBrand(),brandPojo.getCategory());
         if(existingPojo != null){
@@ -42,29 +38,29 @@ public class BrandDto extends DtoHelper{
 
     @Transactional(rollbackOn = ApiException.class)
     public BrandData get(int id) throws ApiException{
-        return convert(brandService.get(id));
+        return convertPojoToData(brandService.get(id));
     }
     @Transactional
     public List<BrandData> getAllList() {
         List<BrandPojo> list = brandService.getAll();
         List<BrandData> list2 = new ArrayList<BrandData>();
         for(BrandPojo p : list){
-            list2.add(convert(p));
+            list2.add(convertPojoToData(p));
         }
         return list2;
     }
     @Transactional(rollbackOn  = ApiException.class)
     public void updateList(int id, BrandForm brandform) throws ApiException {
-        BrandPojo brandPojo= convert(brandform);
+        BrandPojo brandPojo= convertFormToPojo(brandform);
         BrandPojo brandPojo1 = brandService.getBrandCat(brandPojo.getBrand(),brandPojo.getCategory());
         if(brandPojo1 != null){
             throw new ApiException("Brand and Category already exist");
         }
         normalizeBrand(brandPojo);
-        BrandPojo ex = getCheckFromService(id);
-        ex.setCategory(brandPojo.getCategory());
-        ex.setBrand(brandPojo.getBrand());
-        brandService.update(ex);
+        BrandPojo updated = getCheckFromService(id);
+        updated.setCategory(brandPojo.getCategory());
+        updated.setBrand(brandPojo.getBrand());
+        brandService.update(updated);
 
     }
     @Transactional
@@ -82,4 +78,15 @@ public class BrandDto extends DtoHelper{
         }
         return bp;
     }
+
+
+    private void validateBrandForm(BrandForm form) throws ApiException{
+        if(StringUtil.isEmpty(form.getBrand())) {
+            throw new ApiException("'Brand' cannot be empty");
+        }
+        if(StringUtil.isEmpty(form.getCategory())){
+            throw new ApiException("'Category' cannot be empty");
+        }
+    }
+
 }

@@ -12,8 +12,8 @@ import org.springframework.stereotype.Repository;
 import com.increff.employee.pojo.BrandPojo;
 @Repository
 public class BrandDao extends AbstractDao{
-    private final static String delete_id = "delete from BrandPojo p where id=:id";
-    private final static String select_id = "select p from BrandPojo p where id=:id";
+    private final static String DELETE_ID = "delete from BrandPojo p where id=:id";
+    private final static String SELECT_ID = "select p from BrandPojo p where id=:id";
     private final static String select_all = "select p from BrandPojo p";
     private final static String duplicate_check = "select p from BrandPojo p where brand=:brand and category=:category";
     private final static String pojo_from_id = "select p from BrandPojo p where id=:id";
@@ -26,13 +26,13 @@ public class BrandDao extends AbstractDao{
     }
 
     public int delete(int id) {
-        Query query = em.createQuery(delete_id);
+        Query query = em.createQuery(DELETE_ID);
         query.setParameter("id", id);
         return query.executeUpdate();
     }
 
     public BrandPojo select(int id) {
-        TypedQuery<BrandPojo> query = getQuery(select_id, BrandPojo.class);
+        TypedQuery<BrandPojo> query = getQuery(SELECT_ID, BrandPojo.class);
         query.setParameter("id", id);
         return getSingle(query);
     }

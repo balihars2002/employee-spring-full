@@ -3,17 +3,17 @@ package com.increff.employee.pojo;
 import javax.persistence.*;
 
 @Entity
-//@Table
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"brand","category"})})
 public class BrandPojo {
 
     @Id
-//     Todo: Use table generation type
 //     Todo: Use box type everywhere
-//     Todo: Add unique constraint
-       @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @TableGenerator(name = "brand_id", pkColumnValue = "brand_id")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "brand_id")
     private Integer id;
     private String brand;
     private String category;
+    private Boolean isDisabled = false;
 
     public int getId() {
         return id;
@@ -39,5 +39,12 @@ public class BrandPojo {
         this.category = category;
     }
 
+    public Boolean getDisabled() {
+        return isDisabled;
+    }
+
+    public void setDisabled(Boolean disabled) {
+        isDisabled = disabled;
+    }
 }
 

@@ -13,16 +13,16 @@ import org.springframework.stereotype.Service;
 public class BrandService {
 
     @Autowired
-    private BrandDao branddao;
+    private BrandDao brandDao;
 
     @Transactional(rollbackOn = ApiException.class)
-    public void add(BrandPojo p) throws ApiException {
-        branddao.insert(p);
+    public void add(BrandPojo pojo) throws ApiException {
+        brandDao.insert(pojo);
     }
 
     @Transactional
     public void delete(int id) {
-        branddao.delete(id);
+        brandDao.delete(id);
     }
 
     @Transactional(rollbackOn = ApiException.class)
@@ -32,27 +32,27 @@ public class BrandService {
 
     @Transactional
     public List<BrandPojo> getAll() {
-        return branddao.selectAll();
+        return brandDao.selectAll();
     }
 
     @Transactional(rollbackOn  = ApiException.class)
-    public void update(BrandPojo ex) throws ApiException {
-        branddao.update(ex);
+    public void update(BrandPojo existing) throws ApiException {
+        brandDao.update(existing);
     }
 
     @Transactional
     public BrandPojo getCheck(int id) throws ApiException {
-        BrandPojo p = branddao.select(id);
+        BrandPojo p = brandDao.select(id);
         if (p == null) {
             throw new ApiException("Brand with given ID does not exit, id: " + id);
         }
         return p;
     }
     public BrandPojo getBrandCat(String brandName, String categoryName){
-        return branddao.selectPojoToCheckDuplicate(brandName,categoryName);
+        return brandDao.selectPojoToCheckDuplicate(brandName,categoryName);
     }
     public BrandPojo getBrandCatFromiId(int id) throws ApiException{
-        return branddao.getBrandFromId(id);
+        return brandDao.getBrandFromId(id);
     }
 
 }

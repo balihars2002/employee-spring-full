@@ -20,7 +20,10 @@ public class InventoryDao extends AbstractDao {
 
     private static String deletebyid = "delete from InventoryPojo p where id=:id";
     private static String selectbyid ="select p from InventoryPojo p where id=:id";
+    private static String selectbybarcode ="select p from InventoryPojo p where barcode=:barcode";
     private static String select_alls = "select p from InventoryPojo p";
+    //private static String update_by_id= "UPDATE InventoryPojo Set quantity=:quantity WHERE id=:id";
+
     //private static String update_by_id = "update InventoryPojo where";
     @PersistenceContext
     private EntityManager em;
@@ -34,20 +37,32 @@ public class InventoryDao extends AbstractDao {
         TypedQuery<InventoryPojo> query = getQuery(select_alls, InventoryPojo.class);
         return query.getResultList();
     }
-//    public int delete(int id) {
-//        Query query = em.createQuery(deletebyid);
-//        query.setParameter("id", id);
-//        return query.executeUpdate();
-//    }
+    public int delete(int id) {
+        Query query = em.createQuery(deletebyid);
+        query.setParameter("id", id);
+        return query.executeUpdate();
+    }
 //    public ProductPojo selectpojobyid(int id) {
 //        TypedQuery<ProductPojo> query = getQuery(select_id, ProductPojo.class);
 //        query.setParameter("id", id);
 //        return getSingle(query);
 //    }
-//    public InventoryPojo selectpojobyid(int id){
-//        TypedQuery<InventoryPojo> query= getQuery(selectbyid, InventoryPojo.class);
-//        query.setParameter("id",id);
-//        return getSingle(query);
-//    }
+    public InventoryPojo selectPojoByBarcode(String barcode){
+        TypedQuery<InventoryPojo> query= getQuery(selectbybarcode, InventoryPojo.class);
+        query.setParameter("barcode",barcode);
+        return getSingle(query);
+    }
+    public InventoryPojo selectPojoById(int id){
+        TypedQuery<InventoryPojo> query= getQuery(selectbyid, InventoryPojo.class);
+        query.setParameter("id",id);
+        return getSingle(query);
+    }
+//        public void updateInventory(int id){
+//            Query query = em.createQuery(update_by_id);
+//            query.setParameter("id",id);
+//            return getSingle(query);
+//        }
+        public void update(InventoryPojo inventoryPojo) {
 
+        }
 }

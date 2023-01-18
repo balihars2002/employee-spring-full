@@ -2,7 +2,7 @@
 
 function getProductUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/brand";
+	return baseUrl + "/product";
 }
 
 //BUTTON ACTION
@@ -11,7 +11,7 @@ function addProduct(event){
 	var $form = $("#product-form");
 	var json = toJson($form);
 	var url = getProductUrl();
-
+	//console.log(url, json);
 	$.ajax({
 	   url: url,
 	   type: 'POST',
@@ -145,8 +145,8 @@ function displayProductList(data){
 		buttonHtml += ' <button onclick="displayEditProduct(' + e.id + ')">edit</button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
-		+ '<td>' + e.brand + '</td>'
-		+ '<td>'  + e.category + '</td>'
+		+ '<td>' + e.brand_category_id + '</td>'
+		+ '<td>'  + e.barcode + '</td>'
         + '<td>'  + e.mrp + '</td>'
         + '<td>'  + e.name + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
@@ -196,10 +196,12 @@ function displayUploadData(){
  	resetUploadDialog(); 	
 	$('#upload-product-modal').modal('toggle');
 }
-
+ 
 function displayProduct(data){
-	$("#product-edit-form input[name=brand]").val(data.brand);	
-	$("#product-edit-form input[name=category]").val(data.category);	
+	$("#product-edit-form input[name=bacode]").val(data.barcode);
+	$("#product-edit-form input[name=name]").val(data.name);
+	$("#product-edit-form input[name=brand_category_id]").val(data.brand_category_id);	
+	$("#product-edit-form input[name=mrp]").val(data.mrp);	
 	$("#product-edit-form input[name=id]").val(data.id);	
 	$('#edit-product-modal').modal('toggle');
 }

@@ -4,7 +4,7 @@ function getBrandUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/brand";
 }
-
+	
 //BUTTON ACTION
 function addBrand(event){
 	//Set the values to update
