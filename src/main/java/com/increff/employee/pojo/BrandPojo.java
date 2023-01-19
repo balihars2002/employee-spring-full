@@ -7,9 +7,11 @@ import javax.persistence.*;
 public class BrandPojo {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
 //     Todo: Use box type everywhere
-    @TableGenerator(name = "brand_id", pkColumnValue = "brand_id")
-    @GeneratedValue(strategy = GenerationType.TABLE, generator = "brand_id")
+//    @TableGenerator(name = "brand_id", pkColumnValue = "brand_id")
+//    @GeneratedValue(strategy = GenerationType.TABLE, generator = "brand_id")
     private Integer id;
     private String brand;
     private String category;
