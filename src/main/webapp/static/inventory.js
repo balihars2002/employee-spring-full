@@ -1,16 +1,16 @@
 
 
-function getBrandUrl(){
+function getInventoryUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/brand";
+	return baseUrl + "/api/inventory";
 }
 	
 //BUTTON ACTION
-function addBrand(event){
+function addInventory(event){
 	//Set the values to update
-	var $form = $("#brand-form");
+	var $form = $("#inventory-form");
 	var json = toJson($form);
-	var url = getBrandUrl();
+	var url = getInventoryUrl();
 
 	$.ajax({
 	   url: url,
@@ -29,13 +29,13 @@ function addBrand(event){
 }
 
 function updateInventory(event){
-	$('#edit-brand-modal').modal('toggle');
+	$('#edit-inventory-modal').modal('toggle');
 	//Get the ID
-	var id = $("#brand-edit-form input[name=id]").val();	
-	var url = getBrandUrl() + "/" + id;
+	var id = $("#inventory-edit-form input[name=id]").val();	
+	var url = getInventoryUrl() + "/" + id;
 
 	//Set the values to update
-	var $form = $("#brand-edit-form");
+	var $form = $("#inventory-edit-form");
 	var json = toJson($form);
 
 	$.ajax({
@@ -56,19 +56,22 @@ function updateInventory(event){
 
 
 function getInventoryList(){
-	var url = getBrandUrl();
+	var url = getInventoryUrl();
+	
+	console.log(" into the get inventory function ");
+	console.log(" the url int the get inv is :", url);
 	$.ajax({
 	   url: url,
 	   type: 'GET',
 	   success: function(data) {
-	   		displayBrandList(data);  
+	   		displayInventoryList(data);  
 	   },
 	   error: handleAjaxError
 	});
 }
 
-function deleteBrand(id){
-	var url = getBrandUrl() + "/" + id;
+function deleteInventory(id){
+	var url = getInventoryUrl() + "/" + id;
 
 	$.ajax({
 	   url: url,
@@ -87,7 +90,7 @@ var processCount = 0;
 
 
 function processData(){
-	var file = $('#brandFile')[0].files[0];
+	var file = $('#inventoryFile')[0].files[0];
 	readFileData(file, readFileDataCallback);
 }
 
@@ -109,7 +112,7 @@ function uploadRows(){
 	processCount++;
 	
 	var json = JSON.stringify(row);
-	var url = getBrandUrl();
+	var url = getInventoryUrl();
 
 	//Make ajax call
 	$.ajax({
@@ -137,30 +140,38 @@ function downloadErrors(){
 
 //UI DISPLAY METHODS
 
-function displayBrandList(data){
-	var $tbody = $('#brand-table').find('tbody');
+function displayInventoryList(data){
+	console.log("into the display inventory ");
+	var $tbody = $('#inventory-table').find('tbody');
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button onclick="deleteBrand(' + e.id + ')">delete</button>'
-		buttonHtml += ' <button onclick="displayEditBrand(' + e.id + ')">edit</button>'
+		var buttonHtml = '<button onclick="deleteInventory(' + e.id + ')">delete</button>'
+		buttonHtml += ' <button onclick="displayEditInventory(' + e.id + ')">edit</button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.brand + '</td>'
-		+ '<td>'  + e.category + '</td>'
+		+ '<td>' + e.category + '</td>'
+		+ '<td>' + e.barcode + '</td>'
+		+ '<td>' + e.mrp + '</td>'
+		+ '<td>' + e.name + '</td>'
+		+ '<td>' + e.quantity + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);
 	}
 }
 
-function displayEditBrand(id){
-	var url = getBrandUrl() + "/" + id;
+function displayEditInventory(id){
+	var url = getInventoryUrl() + "/" + id;
+	console.log(" into the get edit inventory function ");
+	console.log(" the url int the get inv is :", url);
+	//console.log("the inventory is :",data);
 	$.ajax({
 	   url: url,
 	   type: 'GET',
 	   success: function(data) {
-	   		displayBrand(data);   
+	   		displayInventory(data);   
 	   },
 	   error: handleAjaxError
 	});	
@@ -168,9 +179,9 @@ function displayEditBrand(id){
 
 function resetUploadDialog(){
 	//Reset file name
-	var $file = $('#brandFile');
+	var $file = $('#inventoryFile');
 	$file.val('');
-	$('#brandFileName').html("Choose File");
+	$('#inventoryFileName').html("Choose File");
 	//Reset various counts
 	processCount = 0;
 	fileData = [];
@@ -186,35 +197,38 @@ function updateUploadDialog(){
 }
 
 function updateFileName(){
-	var $file = $('#brandFile');
+	var $file = $('#inventoryFile');
 	var fileName = $file.val();
-	$('#brandFileName').html(fileName);
+	$('#inventoryFileName').html(fileName);
 }
 
 function displayUploadData(){
  	resetUploadDialog(); 	
-	$('#upload-brand-modal').modal('toggle');
+	$('#upload-inventory-modal').modal('toggle');
 }
 
-function displayBrand(data){
-	$("#brand-edit-form input[name=brand]").val(data.brand);	
-	$("#brand-edit-form input[name=category]").val(data.category);	
-	$("#brand-edit-form input[name=id]").val(data.id);	
-	$('#edit-brand-modal').modal('toggle');
+function displayInventory(data){
+	$("#inventory-edit-form input[name=id]").val(data.id);	
+	$("#inventory-edit-form input[name=brand]").val(data.brand);
+	$("#inventory-edit-form input[name=category]").val(data.category);	
+	$("#inventory-edit-form input[name=barcode]").val(data.barcode);	
+	$("#inventory-edit-form input[name=mrp]").val(data.mrp);
+	$("#inventory-edit-form input[name=name]").val(data.name);
+	$("#inventory-edit-form input[name=quantity]").val(data.quantity);
+	$('#edit-inventory-modal').modal('toggle');
 }
 
 
 //INITIALIZATION CODE
 function init(){
-	$('#add-brand').click(addBrand);
-	$('#update-brand').click(updateInventory);
+	$('#add-inventory').click(addInventory);
+	$('#update-inventory').click(updateInventory);
 	$('#refresh-data').click(getInventoryList);
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
-    $('#brandFile').on('change', updateFileName)
+    $('#inventoryFile').on('change', updateFileName)
 }
 
 $(document).ready(init);
 $(document).ready(getInventoryList);
-

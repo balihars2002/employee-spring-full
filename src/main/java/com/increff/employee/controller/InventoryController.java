@@ -20,32 +20,32 @@ public class InventoryController {
     private InventoryDto inventoryDto;
     @ApiOperation(value = "Add a Product in Inventory")
     @RequestMapping(path = "/inventory",method = RequestMethod.POST)
-    public void addinInv(@RequestBody InventoryForm f) throws ApiException{
+    public void addInInv(@RequestBody InventoryForm f) throws ApiException{
         inventoryDto.addDto(f);
     }
 
-    @ApiOperation(value = "Deletes a Product by Barcode")
-    @RequestMapping(path = "/product/{barcode}",method = RequestMethod.DELETE)
-    public void delete(@PathVariable String barcode) throws ApiException{
-        inventoryDto.deleteInventoryByBarcode(barcode);
+    @ApiOperation(value = "Deletes a Product by Id")
+    @RequestMapping(path = "/inventory/{id}",method = RequestMethod.DELETE)
+    public void delete(@PathVariable int id) throws ApiException{
+        inventoryDto.deleteInventoryById(id);
     }
 
-    @ApiOperation(value = "Gets list of all Products")
+    @ApiOperation(value = "Gets list of all Products in inventory")
     @RequestMapping(path = "/inventory",method = RequestMethod.GET)
     public List<InventoryData> getAll() throws ApiException {
         return inventoryDto.getAllDto();
     }
-    @ApiOperation(value = "Updates a Product")
-    @RequestMapping(path = "/product/{id}", method = RequestMethod.PUT)
-    public void update(@RequestParam(value="barcode") String barcode,@RequestBody InventoryForm inventoryForm) throws ApiException {
+    @ApiOperation(value = "Updates a Product quantity in inventory")
+    @RequestMapping(path = "/inventory/{id}", method = RequestMethod.PUT)
+    public void update(@PathVariable int id,@RequestBody InventoryForm inventoryForm) throws ApiException {
        // ProductPojo p = convert(f);
-        inventoryDto.updateInv(barcode,inventoryForm);
+        inventoryDto.updateInv(id,inventoryForm);
     }
-
-//    @ApiOperation(value = "Updates a Product")
-//    @RequestMapping(path = "/product/{id}", method = RequestMethod.PUT)
-//    public void update(@PathVariable String barcode,@PathVariable int quanTity) throws ApiException {
+//    @ApiOperation(value = "Increase a Product Quantity")
+//    @RequestMapping(path = "/product/increase{id}", method = RequestMethod.PUT)
+//    public void increaseUpdate(@RequestParam(value="barcode") String barcode,@PathVariable int addQuantity) throws ApiException {
 //        // ProductPojo p = convert(f);
-//        inventoryDto.updateInv(barcode,quanTity);
+//        inventoryDto.increaseQuantity(barcode,addQuantity);
 //    }
+//
 }

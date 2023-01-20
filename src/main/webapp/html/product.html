@@ -19,34 +19,34 @@
 			  <div class="form-group">
 			    <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="barcode" id="inputBarcode" placeholder="enter barcode">
+			      <input type="text" class="form-control" name="proBarcode" id="inputBarcode" placeholder="enter barcode">
 			    </div>
 			  </div>
 			  <div class="form-group">
 			    <label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="brand" id="inputBrand" placeholder="enter brand">
+			      <input type="text" class="form-control" name="proBrand" id="inputBrand" placeholder="enter brand">
 			    </div>
 			  </div>
               <div class="form-group">
 			    <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="category" id="inputCategory" placeholder="enter category">
+			      <input type="text" class="form-control" name="proCategory" id="inputCategory" placeholder="enter category">
 			    </div>
 			  </div>
               <div class="form-group">
-			    <label for="inputMrp" class="col-sm-2 col-form-label">MRP</label>
+			    <label for="inputMrp" class="col-sm-2 col-form-label">Mrp</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="mrp" id="inputMrp" placeholder="enter MRP">
+			      <input type="text" class="form-control" name="proMrp" id="inputMrp" placeholder="enter MRP">
 			    </div>
 			  </div>
               <div class="form-group">
 			    <label for="inputName" class="col-sm-2 col-form-label">Name</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="mrp" id="inputName" placeholder="enter name">
+			      <input type="text" class="form-control" name="proName" id="inputName" placeholder="enter name">
 			    </div>
 			  </div>
-			  <button type="button" class="btn btn-primary" id="add-Product">Add</button>
+			  <button type="button" class="btn btn-primary" id="add-product">Add</button>
 			  &nbsp;
 			  <button type="button" class="btn btn-primary" id="refresh-data">Refresh</button>
 			  &nbsp;
@@ -54,7 +54,6 @@
 			</form>
 	 </div>	
 </div> 
-
 
 <!-- Blank Row -->
 <div class="row">
@@ -69,7 +68,8 @@
 	    <tr>
 	      <th scope="col">ID</th>
           <th scope="col">Barcode</th>
-	      <th scope="col">Brand_Category</th>
+	      <th scope="col">Brand</th>
+		  <th scope="col">Category</th>
 	      <th scope="col">Mrp</th>
 	      <th scope="col">Name</th>
           <th scope="col">Actions</th>
@@ -96,36 +96,41 @@
       <div class="modal-body">
 			<form class="form-inline" id="product-edit-form">
 			  <div class="form-group">
+				<label for="inputId" class="col-sm-2 col-form-label">Id</label>
+			    <div class="col-sm-10">
+			      <input type="text" class="form-control" name="proId" placeholder="enter id">
+			    </div>
+			  </div>
 			    <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="barcode" placeholder="enter barcode">
+			      <input type="text" class="form-control" name="proBarcode" placeholder="enter barcode">
 			    </div>
 			  </div>
               <div class="form-group">
 			    <label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="brand" placeholder="enter brand">
+			      <input type="text" class="form-control" name="proBrand" placeholder="enter brand">
 			    </div>
-			  </div>
-			  <div class="form-group">
+			  </div> 
+			 <div class="form-group">
 			    <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="category" placeholder="enter category">
+			      <input type="text" class="form-control" name="proCategory" placeholder="enter category">
 			    </div>
 			  </div>
               <div class="form-group">
 			    <label for="inputMrp" class="col-sm-2 col-form-label">Mrp</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="mrp" placeholder="enter mrp">
+			      <input type="text" class="form-control" name="proMrp" placeholder="enter mrp">
 			    </div>
 			  </div>
               <div class="form-group">
 			    <label for="inputName" class="col-sm-2 col-form-label">Name</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="name" placeholder="enter name">
+			      <input type="text" class="form-control" name="proName" placeholder="enter name">
 			    </div>
 			  </div>
- 	        <input type="hidden" name="id" >
+ 	        <input type="hidden" name="proId" >
 			</form>        
       </div>
       <div class="modal-footer">
@@ -137,7 +142,7 @@
 </div>
 
 
-<!-- Employee Edit Modal -->
+<!-- Edit Modal -->
 <div class="modal" tabindex="-1" role="dialog" id="upload-product-modal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -170,13 +175,10 @@
   </div>
 </div>
 
-</div> <!-- Container end-->
+</div> 
+<!-- Container end-->
 
 <footer th:replace="snippets.html :: name_footer"></footer>
-<script src="http://code.jquery.com/jquery-1.10.2.js"></script>
-<script src="http://code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
-<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script src="exponential.js"></script>
 <script th:src="@{/static/product.js}"/></script>
 
 </body>	

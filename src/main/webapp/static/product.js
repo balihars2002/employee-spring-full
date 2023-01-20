@@ -1,20 +1,21 @@
 function getProductUrl() {
     var baseUrl = $("meta[name=baseUrl]").attr("content")
-    return baseUrl + "/api/products";
+    return baseUrl + "/api/product";
 }
 
 function getBrandUrl() {
     var baseUrl = $("meta[name=baseUrl]").attr("content")
-    return baseUrl + "/api/brands";
+    return baseUrl + "/api/brand";
 }
 
 //BUTTON ACTIONS
 function addProduct(event) {
     //Set the values to update
+    var url = getProductUrl();
+    console.log("url is : ", url);
     var $form = $("#product-form");
     var json = toJson($form);
-    var url = getProductUrl();
-
+    console.log("json : : -> : ", json);
     $.ajax({
         url: url,
         type: 'POST',
@@ -33,11 +34,13 @@ function addProduct(event) {
 }
 
 function updateProduct(event) {
+    console.log("int to the update product");
     $('#edit-product-modal').modal('toggle');
-    //Get the ID
-    var id = $("#product-edit-form input[name=id]").val();
-    var url = getProductUrl() + "/" + id;
 
+    //Get the ID
+    var id = $("#product-edit-form input[name=proId]").val();
+    var url = getProductUrl() + "/" + id;
+    console.log("the url in the updateproduct function is : ",  url );
     //Set the values to update
     var $form = $("#product-edit-form");
     var json = toJson($form);
@@ -61,10 +64,13 @@ function updateProduct(event) {
 
 function getProductList() {
     var url = getProductUrl();
+    console.log("url: ", url);
+
     $.ajax({
         url: url,
         type: 'GET',
         success: function (data) {
+            console.log("got result : ", data);
             displayProductList(data);
         },
         error: handleAjaxError
@@ -72,7 +78,9 @@ function getProductList() {
 }
 
 function deleteProduct(id) {
+   // var barcode = $('#'+id)[0].value;
     var url = getProductUrl() + "/" + id;
+    console.log(" url is : ", url);
 
     $.ajax({
         url: url,
@@ -162,13 +170,13 @@ function fillDropDown(data) {
 
     let brandArr = [], categoryArr = [];
     data.forEach((e) => {
-        brandArr.push(e.brand);
-        categoryArr.push(e.category);
+        brandArr.push(e.proBrand);
+        categoryArr.push(e.proCategory);
     });
 
     brandArr = [...new Set(brandArr)];
     categoryArr = [...new Set(categoryArr)];
-    
+
     // BRAND
     var $brandDropdown = $('#brand-dropdown-menu');
     $brandDropdown.empty();
@@ -178,8 +186,8 @@ function fillDropDown(data) {
     var firstRowBrand = '<option value="none" selected disabled>Select Brand</option>';
     $brandDropdown.append(firstRowBrand);
 
-    brandArr.forEach((brand) => {
-        var row = '<option value="' + brand + '">' + brand + '</option>';
+    brandArr.forEach((proBrand) => {
+        var row = '<option value="' + proBrand + '">' + proBrand + '</option>';
         $brandDropdown.append(row);
         $editBrandDropdown.append(row);
     })
@@ -193,12 +201,12 @@ function fillDropDown(data) {
     var firstRowCategory = '<option value="none" selected disabled hidden>Select Category</option>';
     $categoryDropdown.append(firstRowCategory);
 
-    categoryArr.forEach((category) => {
-        var row = '<option value="' + category + '">' + category + '</option>';
+    categoryArr.forEach((proCategory) => {
+        var row = '<option value="' + proCategory + '">' + proCategory + '</option>';
         $categoryDropdown.append(row);
         $editCategoryDropdown.append(row);
     })
-
+    
 }
 
 //UI DISPLAY METHODS
@@ -208,15 +216,16 @@ function displayProductList(data) {
     $tbody.empty();
     for (var i in data) {
         var e = data[i];
-        var buttonHtml = '<button onclick="deleteProduct(' + e.id + ')">delete</button>'
-        buttonHtml += ' <button onclick="displayEditProduct(' + e.id + ')">edit</button>'
+        console.log("data: ", data);
+        var buttonHtml = '<button onclick="deleteProduct(' +e.proId + ')" id = "' +e.proId + '" value="' + e.proBarcode + '">delete</button>'
+        buttonHtml += ' <button onclick="displayEditProduct(' + e.proId + ')">edit</button>'
         var row = '<tr>'
-            + '<td>' + e.id + '</td>'
-            + '<td>' + e.brand + '</td>'
-            + '<td>' + e.category + '</td>'
-            + '<td>' + e.barcode + '</td>'
-            + '<td>' + e.name + '</td>'
-            + '<td>' + e.mrp + '</td>'
+            + '<td>' + e.proId + '</td>'
+            + '<td>' + e.proBarcode + '</td>'
+            + '<td>' + e.proBrand + '</td>'
+            + '<td>' + e.proCategory + '</td>'
+            + '<td>' + e.proMrp + '</td>'
+            + '<td>' + e.proName + '</td>'
             + '<td>' + buttonHtml + '</td>'
             + '</tr>';
         $tbody.append(row);
@@ -224,7 +233,11 @@ function displayProductList(data) {
 }
 
 function displayEditProduct(id) {
-    var url = getProductUrl() + "/" + id;
+    //var barcode = $('#'+id)[0].value;
+    console.log("the product is being displayed after editing");
+    var url = getProductUrl() + "/" + id ;
+    console.log(" url is : ", url);
+   
     $.ajax({
         url: url,
         type: 'GET',
@@ -267,17 +280,18 @@ function displayUploadData() {
 }
 
 function displayProduct(data) {
-    $("#edit-brand-dropdown-menu").val(data.brand);
-    $("#edit-category-dropdown-menu").val(data.category);
-    $("#product-edit-form input[name=id]").val(data.id);
-    $("#product-edit-form input[name=barcode]").val(data.barcode);
-    $("#product-edit-form input[name=name]").val(data.name);
-    $("#product-edit-form input[name=mrp]").val(data.mrp);
+    $("#edit-brand-dropdown-menu").val(data.proBrand);
+    $("#edit-category-dropdown-menu").val(data.proCategory);
+    $("#product-edit-form input[name=id]").val(data.proId);
+    $("#product-edit-form input[name=barcode]").val(data.proBarcode);
+    $("#product-edit-form input[name=name]").val(data.proName);
+    $("#product-edit-form input[name=mrp]").val(data.proMrp);
     $('#edit-product-modal').modal('toggle');
 }
 
 
 //INITIALIZATION CODE
+
 function init() {
     $('#add-product').click(addProduct);
     $('#update-product').click(updateProduct);
@@ -285,7 +299,7 @@ function init() {
     $('#upload-data').click(displayUploadData);
     $('#process-data').click(processData);
     $('#download-errors').click(downloadErrors);
-    $('#productFile').on('change',updateFileName);
+    $('#productFile').on('change', updateFileName);
     $("#brand-dropdown").change(function () {
         var selected = $(this).children("option:selected").val();
         alert("You have selected - " + selected);

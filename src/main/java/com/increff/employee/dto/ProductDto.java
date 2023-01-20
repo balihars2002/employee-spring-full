@@ -46,10 +46,10 @@ public class ProductDto extends DtoHelper{
         return productService.getCheckByBarcode(barcode);
     }
     @Transactional
-    public void deletedToBarcode(String barcode) throws ApiException {
-        ProductPojo productPojo = productService.getPojoFromBarcode(barcode);
+    public void deletedToBarcode(int id) throws ApiException {
+        ProductPojo productPojo = productService.getPojoFromId(id);
         inventoryService.deleteService(productPojo.getProId());
-        productService.deleteServiceByBarcode(barcode);
+        productService.deleteServiceById(id);
     }
 
     @Transactional
@@ -62,9 +62,10 @@ public class ProductDto extends DtoHelper{
         return list1;
     }
     @Transactional(rollbackOn  = ApiException.class)
-    public void updateProduct(String barcode, ProductForm productForm) throws ApiException {
+    public void updateProduct(int id, ProductForm productForm) throws ApiException {
         ProductPojo productPojo= convertFormToPojo(productForm);
-        ProductPojo productPojo1 = productService.getPojoFromBarcode(barcode);
+        ProductPojo productPojo1 = productService.getPojoFromId(id);
+        //String barcode= productPojo1.getProBarcode();
         normalizeProduct(productPojo);
         normalizeProduct(productPojo1);
         ProductPojo productPojo2 = productService.getPojoFromId(productPojo1.getProId());

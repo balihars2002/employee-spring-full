@@ -1,6 +1,7 @@
 //from new branch
 package com.increff.employee.spring;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -82,7 +83,6 @@ public class ControllerConfig extends WebMvcConfigurerAdapter {
 	}
 
 //	@Bean
-//
 //	public ObjectMapper objectMapper() {
 //		JavaTimeModule javaTimeModule = new JavaTimeModule();
 //		javaTimeModule.addSerializer(ZonedDateTime.class,
