@@ -1,34 +1,22 @@
 package com.increff.employee.dto;
 
-import com.increff.employee.dao.OrderItemDao;
-import com.increff.employee.model.BrandForm;
 import com.increff.employee.model.OrderData;
 import com.increff.employee.model.OrderForm;
 import com.increff.employee.model.OrderItemForm;
-import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
 import com.increff.employee.service.ApiException;
 import com.increff.employee.service.OrderApi;
-import com.increff.employee.service.OrderItemApi;
-import com.increff.employee.service.ProductService;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
-//public class CurrentDateTimeExample1 {
-//    public static void main(String[] args) {
-//        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-//        LocalDateTime now = LocalDateTime.now();
-//        System.out.println(dtf.format(now));
-//    }
-//}
+
 @Service
 public class OrderDto {
 
@@ -44,15 +32,15 @@ public class OrderDto {
     public void add(OrderForm orderForm) throws ApiException{
         OrderPojo orderPojo = convertFormToPojo(orderForm);
         orderApi.add(orderPojo);
-        int id = orderPojo.getId();
-        Vector<OrderItemPojo> orderItemPojo;
-        for(OrderItemForm a:orderForm.getOrderItemFormvector()){
+        Integer id = orderPojo.getId();
+        List<OrderItemPojo> orderItemPojo;
+        for(OrderItemForm a:orderForm.getOrderItemFormList()){
             orderItemDto.add(a,id);
         }
     }
 
     @Transactional
-    public void delete(int id) {
+    public void delete(Integer id) {
         orderApi.delete(id);
     }
 
@@ -84,12 +72,13 @@ public class OrderDto {
     public OrderData convertPojoToData(OrderPojo orderPojo){
         OrderData orderData = new OrderData();
         orderData.setId(orderPojo.getId());
-        orderData.setLocalDateTime(orderPojo.getDateTime());
+        //orderData.setDate(orderPojo.getDate());
         return orderData;
     }
     public OrderPojo convertFormToPojo(OrderForm orderForm){
         OrderPojo orderPojo = new OrderPojo();
         LocalDateTime localDateTime = LocalDateTime.now();
+//        Date date = Date.UTC();
         orderPojo.setDateTime(localDateTime);
         return orderPojo;
     }

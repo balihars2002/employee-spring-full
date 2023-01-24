@@ -14,17 +14,17 @@ import com.increff.employee.model.UserData;
 import com.increff.employee.model.UserForm;
 import com.increff.employee.pojo.UserPojo;
 import com.increff.employee.service.ApiException;
-import com.increff.employee.service.UserService;
+import com.increff.employee.service.UserApi;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
-public class AdminApiController {
+public class AdminController {
 
 	@Autowired
-	private UserService service;
+	private UserApi service;
 
 	@ApiOperation(value = "Adds a user")
 	@RequestMapping(path = "/api/admin/user", method = RequestMethod.POST)

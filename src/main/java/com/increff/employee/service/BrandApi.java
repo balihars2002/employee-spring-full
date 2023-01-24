@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BrandService {
+public class BrandApi {
 
     @Autowired
     private BrandDao brandDao;
@@ -21,12 +21,12 @@ public class BrandService {
     }
 
     @Transactional
-    public void delete(int id) {
+    public void delete(Integer id) {
         brandDao.delete(id);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public BrandPojo get(int id) throws ApiException{
+    public BrandPojo get(Integer id) throws ApiException{
         return getCheck(id);
     }
 
@@ -41,7 +41,7 @@ public class BrandService {
     }
 
     @Transactional
-    public BrandPojo getCheck(int id) throws ApiException {
+    public BrandPojo getCheck(Integer id) throws ApiException {
         BrandPojo p = brandDao.select(id);
         if (p == null) {
             throw new ApiException("Brand with given ID does not exit, id: " + id);
@@ -51,7 +51,7 @@ public class BrandService {
     public BrandPojo getBrandCat(String brandName, String categoryName){
         return brandDao.selectPojoToCheckDuplicate(brandName,categoryName);
     }
-    public BrandPojo getBrandCatFromiId(int id) throws ApiException{
+    public BrandPojo getBrandCatFromiId(Integer id) throws ApiException{
         return brandDao.getBrandFromId(id);
     }
 

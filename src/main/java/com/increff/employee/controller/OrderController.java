@@ -29,7 +29,7 @@ public class OrderController {
     @ApiOperation(value = "Deletes a Brand")
     @RequestMapping(path = "/order/{id}",method = RequestMethod.DELETE)
 
-    public void delete(@PathVariable int id) {
+    public void delete(@PathVariable Integer id) {
         orderDto.delete(id);
     }
 
@@ -38,6 +38,8 @@ public class OrderController {
     public List<OrderData> view(){
        return  orderDto.viewAlLOrder();
     }
+
+
 //
 //    @ApiOperation(value = "Updates a Brand")
 //    @RequestMapping(path = "/order/{id}", method = RequestMethod.PUT)

@@ -21,7 +21,7 @@ public class OrderApi {
     }
 
     @Transactional
-    public void delete(int id) {
+    public void delete(Integer id) {
         orderDao.delete(id);
     }
 

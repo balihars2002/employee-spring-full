@@ -37,7 +37,7 @@ function updateInventory(event){
 	//Set the values to update
 	var $form = $("#inventory-edit-form");
 	var json = toJson($form);
-
+	console.log(" json ***** : ", json);
 	$.ajax({
 	   url: url,
 	   type: 'PUT',
@@ -149,7 +149,7 @@ function displayInventoryList(data){
 		var buttonHtml = '<button onclick="deleteInventory(' + e.id + ')">delete</button>'
 		buttonHtml += ' <button onclick="displayEditInventory(' + e.id + ')">edit</button>'
 		var row = '<tr>'
-		+ '<td>' + e.id + '</td>'
+		+ '<td>' + e.productId + '</td>'
 		+ '<td>' + e.brand + '</td>'
 		+ '<td>' + e.category + '</td>'
 		+ '<td>' + e.barcode + '</td>'
@@ -208,7 +208,8 @@ function displayUploadData(){
 }
 
 function displayInventory(data){
-	$("#inventory-edit-form input[name=id]").val(data.id);	
+	$("#inventory-edit-form input[name=id]").val(data.id);
+	$("#inventory-edit-form input[name=productId]").val(data.productId);	
 	$("#inventory-edit-form input[name=brand]").val(data.brand);
 	$("#inventory-edit-form input[name=category]").val(data.category);	
 	$("#inventory-edit-form input[name=barcode]").val(data.barcode);	
@@ -232,3 +233,4 @@ function init(){
 
 $(document).ready(init);
 $(document).ready(getInventoryList);
+

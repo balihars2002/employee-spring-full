@@ -1,16 +1,15 @@
 package com.increff.employee.dto;
 
 import com.increff.employee.model.InventoryForm;
-import com.increff.employee.model.ProductData;
 import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.model.InventoryData;
 
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.ApiException;
-import com.increff.employee.service.BrandService;
-import com.increff.employee.service.InventoryService;
-import com.increff.employee.service.ProductService;
+import com.increff.employee.service.BrandApi;
+import com.increff.employee.service.InventoryApi;
+import com.increff.employee.service.ProductApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,25 +21,25 @@ import java.util.List;
 public class InventoryDto {
 
     @Autowired
-    private ProductService productService;
+    private ProductApi productApi;
     @Autowired
-    private BrandService brandService;
+    private BrandApi brandApi;
     @Autowired
-    private InventoryService inventoryService;
+    private InventoryApi inventoryApi;
     @Transactional(rollbackOn = ApiException.class)
     public void addDto(InventoryForm form) throws ApiException {
         InventoryPojo pojo = convertFormToPojo(form);
-        inventoryService.addService(pojo);
+        inventoryApi.addService(pojo);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public void deleteInventoryById(int id) throws ApiException{
-        inventoryService.deleteService(id);
+    public void deleteInventoryById(Integer id) throws ApiException{
+        inventoryApi.deleteService(id);
     }
 
       @Transactional
     public List<InventoryData> getAllDto() throws ApiException{
-          List<InventoryPojo> list= inventoryService.selectAllFromService();
+          List<InventoryPojo> list= inventoryApi.selectAllFromService();
           List<InventoryData> list1 = new ArrayList<InventoryData>();
           for(InventoryPojo p:list){
               list1.add(convertPojoToData(p));
@@ -48,16 +47,32 @@ public class InventoryDto {
           return list1;
       }
       @Transactional(rollbackOn = ApiException.class)
-      public void updateInv(int id,InventoryForm inventoryForm) throws ApiException{
-          InventoryPojo inventoryPojo = convertFormToPojo(inventoryForm);
-          ProductPojo productPojo= productService.getPojoFromId(id);
-          InventoryPojo inventoryPojo1 = inventoryService.getPojoFromId(productPojo.getProId());
+      public void updateInv(Integer id,InventoryForm inventoryForm) throws ApiException{
+          InventoryPojo inventoryPojo1 = inventoryApi.getPojoFromId(id);
           if(inventoryPojo1 == null){
               throw new ApiException("The product does not exist");
           }
-          inventoryPojo1.setQuantity(inventoryPojo.getQuantity());
-          inventoryService.updateInv(inventoryPojo1);
+          inventoryPojo1.setQuantity(inventoryForm.getQuantity());
+          inventoryApi.updateInv(inventoryPojo1);
       }
+
+      @Transactional(rollbackOn = ApiException.class)
+      public void increaseOrDecreaseInventory(Integer id,Integer changeQuantityBy,Boolean increase){
+            if(increase) {
+                changeQuantityBy = -changeQuantityBy;
+            }
+           InventoryPojo inventoryPojo = inventoryApi.getPojoFromId(id);
+            int initialQuantity = inventoryPojo.getQuantity();
+            inventoryPojo.setQuantity(initialQuantity - changeQuantityBy);
+            inventoryApi.updateInv(inventoryPojo);
+      }
+      public InventoryData getDataFromId(Integer id) throws ApiException {
+        InventoryPojo inventoryPojo = inventoryApi.getPojoFromId(id);
+        if(inventoryPojo == null){
+            throw new ApiException("Product with given id does not exist.");
+        }
+        return convertPojoToData(inventoryPojo);
+    }
 //    @Transactional(rollbackOn = ApiException.class)
 //    public void increaseQuantity(String barcode,int addQuantity) throws ApiException{
 //        //InventoryPojo inventoryPojo = convertFormToPojo(inventoryForm);
@@ -82,24 +97,28 @@ public class InventoryDto {
 //          inventoryService.updateInv(inventoryPojo);
 //      }
       public InventoryData convertPojoToData(InventoryPojo inventoryPojo) throws ApiException{
-          InventoryData d= new InventoryData();
-          ProductPojo productPojo= productService.givePojoById(inventoryPojo.getId());
+          InventoryData d = new InventoryData();
+          ProductPojo productPojo= productApi.givePojoById(inventoryPojo.getProductId());
           //  get brand and category from id
-          BrandPojo brandPojo = brandService.getCheck(productPojo.getProbrandCategory());
-          d.setId(productPojo.getProId());
+          BrandPojo brandPojo = brandApi.getCheck(productPojo.getBrand_category());
+          d.setId(inventoryPojo.getId());
+          d.setProductId(productPojo.getId());
           d.setQuantity(inventoryPojo.getQuantity());
-          d.setMrp(productPojo.getProMrp());
-          d.setName(productPojo.getProName());
-          d.setBarcode(productPojo.getProBarcode());
+          d.setMrp(productPojo.getMrp());
+          d.setName(productPojo.getName());
+          d.setBarcode(productPojo.getBarcode());
           d.setBrand(brandPojo.getBrand());
           d.setCategory(brandPojo.getCategory());
           return d;
       }
         public InventoryPojo convertFormToPojo(InventoryForm form) throws ApiException{
-            ProductPojo productPojo = productService.getPojoFromBarcode(form.getInvBarcode());
+            ProductPojo productPojo = productApi.getPojoFromBarcode(form.getBarcode());
+            if(productPojo == null){
+                throw new ApiException("The Product with Id does not exist.");
+            }
             InventoryPojo inventoryPojo = new InventoryPojo();
-            inventoryPojo.setId(productPojo.getProId());
-            inventoryPojo.setQuantity(form.getInvQuantity());
+            inventoryPojo.setProductId(productPojo.getId());
+            inventoryPojo.setQuantity(form.getQuantity());
             return inventoryPojo;
         }
 

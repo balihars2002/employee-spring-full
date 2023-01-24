@@ -12,9 +12,9 @@ import java.util.List;
 @Repository
 public class OrderDao extends AbstractDao {
 
-    private static String SELECT_ALL = "select p from OrderPojo p";
+    private static final String SELECT_ALL = "select p from OrderPojo p";
 
-    private final static String DELETE_ID = "delete from OrderPojo p where id=:id";
+    private static final String DELETE_ID = "delete from OrderPojo p where id=:id";
     @PersistenceContext
     private EntityManager em;
 
@@ -23,7 +23,7 @@ public class OrderDao extends AbstractDao {
         em.persist(orderPojo);
     }
 
-    public int delete(int id) {
+    public Integer delete(Integer id) {
         Query query = em.createQuery(DELETE_ID);
         query.setParameter("id", id);
         return query.executeUpdate();

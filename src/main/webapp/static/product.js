@@ -33,18 +33,18 @@ function addProduct(event) {
     return false;
 }
 
-function updateProduct(event) {
-    console.log("int to the update product");
+function updateTheProduct(event) {
+    console.log("int to the update product 5");
     $('#edit-product-modal').modal('toggle');
 
     //Get the ID
-    var id = $("#product-edit-form input[name=proId]").val();
+    var id = $("#product-edit-form input[name=id]").val();
     var url = getProductUrl() + "/" + id;
     console.log("the url in the updateproduct function is : ",  url );
     //Set the values to update
     var $form = $("#product-edit-form");
     var json = toJson($form);
-
+    console.log(" the json **** :",json);
     $.ajax({
         url: url,
         type: 'PUT',
@@ -170,8 +170,8 @@ function fillDropDown(data) {
 
     let brandArr = [], categoryArr = [];
     data.forEach((e) => {
-        brandArr.push(e.proBrand);
-        categoryArr.push(e.proCategory);
+        brandArr.push(e.brand);
+        categoryArr.push(e.category);
     });
 
     brandArr = [...new Set(brandArr)];
@@ -186,8 +186,8 @@ function fillDropDown(data) {
     var firstRowBrand = '<option value="none" selected disabled>Select Brand</option>';
     $brandDropdown.append(firstRowBrand);
 
-    brandArr.forEach((proBrand) => {
-        var row = '<option value="' + proBrand + '">' + proBrand + '</option>';
+    brandArr.forEach((brand) => {
+        var row = '<option value="' + brand + '">' + brand + '</option>';
         $brandDropdown.append(row);
         $editBrandDropdown.append(row);
     })
@@ -201,8 +201,8 @@ function fillDropDown(data) {
     var firstRowCategory = '<option value="none" selected disabled hidden>Select Category</option>';
     $categoryDropdown.append(firstRowCategory);
 
-    categoryArr.forEach((proCategory) => {
-        var row = '<option value="' + proCategory + '">' + proCategory + '</option>';
+    categoryArr.forEach((category) => {
+        var row = '<option value="' + category + '">' + category + '</option>';
         $categoryDropdown.append(row);
         $editCategoryDropdown.append(row);
     })
@@ -217,15 +217,15 @@ function displayProductList(data) {
     for (var i in data) {
         var e = data[i];
         console.log("data: ", data);
-        var buttonHtml = '<button onclick="deleteProduct(' +e.proId + ')" id = "' +e.proId + '" value="' + e.proBarcode + '">delete</button>'
-        buttonHtml += ' <button onclick="displayEditProduct(' + e.proId + ')">edit</button>'
+        var buttonHtml = '<button onclick="deleteProduct(' +e.id + ')" id = "' +e.id + '" value="' + e.barcode + '">delete</button>'
+        buttonHtml += ' <button onclick="displayEditProduct(' + e.id + ')">edit</button>'
         var row = '<tr>'
-            + '<td>' + e.proId + '</td>'
-            + '<td>' + e.proBarcode + '</td>'
-            + '<td>' + e.proBrand + '</td>'
-            + '<td>' + e.proCategory + '</td>'
-            + '<td>' + e.proMrp + '</td>'
-            + '<td>' + e.proName + '</td>'
+            + '<td>' + e.id + '</td>'
+            + '<td>' + e.barcode + '</td>'
+            + '<td>' + e.brand + '</td>'
+            + '<td>' + e.category + '</td>'
+            + '<td>' + e.mrp + '</td>'
+            + '<td>' + e.name + '</td>'
             + '<td>' + buttonHtml + '</td>'
             + '</tr>';
         $tbody.append(row);
@@ -242,6 +242,7 @@ function displayEditProduct(id) {
         url: url,
         type: 'GET',
         success: function (data) {
+            console.log("int to the update product 4");
             displayProduct(data);
         },
         error: handleAjaxError
@@ -280,12 +281,13 @@ function displayUploadData() {
 }
 
 function displayProduct(data) {
-    $("#edit-brand-dropdown-menu").val(data.proBrand);
-    $("#edit-category-dropdown-menu").val(data.proCategory);
-    $("#product-edit-form input[name=id]").val(data.proId);
-    $("#product-edit-form input[name=barcode]").val(data.proBarcode);
-    $("#product-edit-form input[name=name]").val(data.proName);
-    $("#product-edit-form input[name=mrp]").val(data.proMrp);
+    $("#edit-brand-dropdown-menu").val(data.brand);
+    $("#edit-category-dropdown-menu").val(data.category);
+    $("#product-edit-form input[name=id]").val(data.id);
+    $("#product-edit-form input[name=barcode]").val(data.barcode);
+    $("#product-edit-form input[name=name]").val(data.name);
+    $("#product-edit-form input[name=mrp]").val(data.mrp);
+    console.log("int to the update product 3");
     $('#edit-product-modal').modal('toggle');
 }
 
@@ -294,7 +296,7 @@ function displayProduct(data) {
 
 function init() {
     $('#add-product').click(addProduct);
-    $('#update-product').click(updateProduct);
+    $('#update-the-product').click(updateTheProduct);
     $('#refresh-data').click(getProductList);
     $('#upload-data').click(displayUploadData);
     $('#process-data').click(processData);

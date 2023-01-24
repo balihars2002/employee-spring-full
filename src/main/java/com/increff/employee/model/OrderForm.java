@@ -1,18 +1,18 @@
 package com.increff.employee.model;
 import com.sun.istack.NotNull;
 
+import java.util.List;
 import java.util.Vector;
 
 public class OrderForm{
 
-   private Vector<OrderItemForm> orderItemFormvector;
+   private List<OrderItemForm> orderItemFormList;
 
-   public Vector<OrderItemForm> getOrderItemFormvector() {
-      return orderItemFormvector;
+   public List<OrderItemForm> getOrderItemFormList() {
+      return orderItemFormList;
    }
 
-   public void setOrderItemFormvector(Vector<OrderItemForm> orderItemFormvector) {
-      this.orderItemFormvector = orderItemFormvector;
+   public void setOrderItemFormList(List<OrderItemForm> orderItemFormvector) {
+      this.orderItemFormList = orderItemFormvector;
    }
-
 }

@@ -5,17 +5,16 @@ import com.increff.employee.dao.InventoryDao;
 import com.increff.employee.pojo.InventoryPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 import javax.transaction.Transactional;
 
 @Service
-public class InventoryService {
+public class InventoryApi {
     @Autowired
     private InventoryDao inventoryDao;
     @Transactional(rollbackOn = ApiException.class)
-    public void addService(InventoryPojo p){
-            inventoryDao.insert(p);
+    public void addService(InventoryPojo inventoryPojo){
+            inventoryDao.insert(inventoryPojo);
     }
     @Transactional
     public List<InventoryPojo> selectAllFromService() {
@@ -23,7 +22,7 @@ public class InventoryService {
     }
 
     @Transactional
-    public void deleteService(int id){
+    public void deleteService(Integer id){
         inventoryDao.delete(id);
     }
 
@@ -33,7 +32,7 @@ public class InventoryService {
     }
 
     @Transactional
-    public InventoryPojo getPojoFromId(int id){
+    public InventoryPojo getPojoFromId(Integer id){
         return inventoryDao.selectPojoById(id);
     }
 

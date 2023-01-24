@@ -18,15 +18,16 @@ public class InventoryController {
 
     @Autowired
     private InventoryDto inventoryDto;
+
     @ApiOperation(value = "Add a Product in Inventory")
     @RequestMapping(path = "/inventory",method = RequestMethod.POST)
-    public void addInInv(@RequestBody InventoryForm f) throws ApiException{
-        inventoryDto.addDto(f);
+    public void addInInv(@RequestBody InventoryForm inventoryForm) throws ApiException{
+        inventoryDto.addDto(inventoryForm);
     }
 
     @ApiOperation(value = "Deletes a Product by Id")
     @RequestMapping(path = "/inventory/{id}",method = RequestMethod.DELETE)
-    public void delete(@PathVariable int id) throws ApiException{
+    public void delete(@PathVariable Integer id) throws ApiException{
         inventoryDto.deleteInventoryById(id);
     }
 
@@ -37,9 +38,17 @@ public class InventoryController {
     }
     @ApiOperation(value = "Updates a Product quantity in inventory")
     @RequestMapping(path = "/inventory/{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable int id,@RequestBody InventoryForm inventoryForm) throws ApiException {
+    public void update(@PathVariable Integer id,@RequestBody InventoryForm inventoryForm) throws ApiException {
        // ProductPojo p = convert(f);
         inventoryDto.updateInv(id,inventoryForm);
+    }
+
+//
+    @ApiOperation(value = "Get a Product Quantity in Inventory by Id")
+    @RequestMapping(path = "/inventory/{id}",method = RequestMethod.GET)
+
+    public InventoryData get(@PathVariable Integer id) throws ApiException {
+        return inventoryDto.getDataFromId(id);
     }
 //    @ApiOperation(value = "Increase a Product Quantity")
 //    @RequestMapping(path = "/product/increase{id}", method = RequestMethod.PUT)

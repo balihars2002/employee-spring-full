@@ -19,31 +19,31 @@
 			  <div class="form-group">
 			    <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="proBarcode" id="inputBarcode" placeholder="enter barcode">
+			      <input type="text" class="form-control" name="barcode" id="inputBarcode" placeholder="enter barcode">
 			    </div>
 			  </div>
 			  <div class="form-group">
 			    <label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="proBrand" id="inputBrand" placeholder="enter brand">
+			      <input type="text" class="form-control" name="brand" id="inputBrand" placeholder="enter brand">
 			    </div>
 			  </div>
               <div class="form-group">
 			    <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="proCategory" id="inputCategory" placeholder="enter category">
+			      <input type="text" class="form-control" name="category" id="inputCategory" placeholder="enter category">
 			    </div>
 			  </div>
               <div class="form-group">
 			    <label for="inputMrp" class="col-sm-2 col-form-label">Mrp</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="proMrp" id="inputMrp" placeholder="enter MRP">
+			      <input type="text" class="form-control" name="mrp" id="inputMrp" placeholder="enter MRP">
 			    </div>
 			  </div>
               <div class="form-group">
 			    <label for="inputName" class="col-sm-2 col-form-label">Name</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="proName" id="inputName" placeholder="enter name">
+			      <input type="text" class="form-control" name="name" id="inputName" placeholder="enter name">
 			    </div>
 			  </div>
 			  <button type="button" class="btn btn-primary" id="add-product">Add</button>
@@ -84,7 +84,7 @@
 </div>
 
 <!-- Product Edit Modal -->
-<div class="modal" tabindex="-1" role="dialog" id="edit-product-modal">
+<!-- <div class="modal" tabindex="-1" role="dialog" id="edit-product-modal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -95,53 +95,74 @@
       </div>
       <div class="modal-body">
 			<form class="form-inline" id="product-edit-form">
-			  <div class="form-group">
-				<label for="inputId" class="col-sm-2 col-form-label">Id</label>
-			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="proId" placeholder="enter id">
-			    </div>
-			  </div>
 			    <label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="proBarcode" placeholder="enter barcode">
+			      <input type="text" class="form-control" name="barcode" placeholder="enter barcode">
 			    </div>
 			  </div>
-              <div class="form-group">
-			    <label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
-			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="proBrand" placeholder="enter brand">
-			    </div>
-			  </div> 
-			 <div class="form-group">
-			    <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
-			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="proCategory" placeholder="enter category">
-			    </div>
-			  </div>
+             
               <div class="form-group">
 			    <label for="inputMrp" class="col-sm-2 col-form-label">Mrp</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="proMrp" placeholder="enter mrp">
+			      <input type="text" class="form-control" name="mrp" placeholder="enter mrp">
 			    </div>
 			  </div>
               <div class="form-group">
 			    <label for="inputName" class="col-sm-2 col-form-label">Name</label>
 			    <div class="col-sm-10">
-			      <input type="text" class="form-control" name="proName" placeholder="enter name">
+			      <input type="text" class="form-control" name="name" placeholder="enter name">
 			    </div>
 			  </div>
- 	        <input type="hidden" name="proId" >
+ 	        <input type="hidden" name="id" >
 			</form>        
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary" id="update-product">Update</button>
+        <button type="button" class="btn btn-primary" id="update-the-product" >Update</button>
       </div>
     </div>
   </div>
+</div> -->
+<!-- <button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#staticBackdrop2">
+    Launch modal register form
+</button> -->
+
+<!-- Modal -->
+<div class="modal" id="edit-product-modal" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+    <div class="modal-dialog d-flex justify-content-center">
+        <div class="modal-content w-75">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">Edit Product </h5>
+                <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">&times;</button>
+            </div>
+            <div class="modal-body p-4">
+                <form id="product-edit-form" >
+
+					<div class="form-outline mb-4">
+                        <label class="form-label" for="barcode">Barcode</label>
+                        <input type="text" id="barcode" class="form-control" name="barcode"/>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="mrp">Mrp</label>
+                        <input type="mrp" id="mrp" class="form-control" name="mrp"/>
+                    </div>
+
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="name">Name</label>
+						<input type="name" id="name" class="form-control" name="name" />
+                    </div>
+
+					<input type="hidden" name="id" >
+
+                    <!-- Submit button -->
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-primary" id="update-the-product" >Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-
-
 <!-- Edit Modal -->
 <div class="modal" tabindex="-1" role="dialog" id="upload-product-modal">
   <div class="modal-dialog" role="document">
@@ -179,7 +200,7 @@
 <!-- Container end-->
 
 <footer th:replace="snippets.html :: name_footer"></footer>
-<script th:src="@{/static/product.js}"/></script>
+<script th:src="@{/static/product.js}"></script>
 
 </body>	
 

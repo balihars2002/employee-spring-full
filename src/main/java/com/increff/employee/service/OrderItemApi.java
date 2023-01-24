@@ -24,12 +24,12 @@ public class OrderItemApi {
     }
 
     @Transactional
-    public void deleteByOrderId(int order_id) {
+    public void deleteByOrderId(Integer order_id) {
         orderItemDao.deleteByOrderId(order_id);
     }
 
     @Transactional
-    public void deleteByProductId(int product_id) {
+    public void deleteByProductId(Integer product_id) {
         orderItemDao.deleteByProductId(product_id);
     }
 

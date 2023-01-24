@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping("/api")
 
-public class BrandApiController {
+public class BrandController {
     @Autowired
     private BrandDto brandDto;
     @ApiOperation(value = "Add a Brand")
@@ -33,14 +33,14 @@ public class BrandApiController {
     @ApiOperation(value = "Deletes a Brand")
     @RequestMapping(path = "/brand/{id}",method = RequestMethod.DELETE)
 
-    public void delete(@PathVariable int id) {
+    public void delete(@PathVariable Integer id) {
         brandDto.delete(id);
     }
 
     @ApiOperation(value = "Get a Brand by ID")
     @RequestMapping(path = "/brand/{id}",method = RequestMethod.GET)
 
-    public BrandData get(@PathVariable int id) throws ApiException {
+    public BrandData get(@PathVariable Integer id) throws ApiException {
         return brandDto.get(id);
     }
 
@@ -52,7 +52,7 @@ public class BrandApiController {
 
     @ApiOperation(value = "Updates a Brand")
     @RequestMapping(path = "/brand/{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable int id, @RequestBody BrandForm form) throws ApiException {
+    public void update(@PathVariable Integer id, @RequestBody BrandForm form) throws ApiException {
         brandDto.updateList(id,form);
     }
 }

@@ -3,7 +3,6 @@ package com.increff.employee.controller;
 
 import java.util.List;
 
-import com.increff.employee.dto.InventoryDto;
 import com.increff.employee.dto.ProductDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,7 @@ import io.swagger.annotations.ApiOperation;
 @Api
 @RestController
 @RequestMapping("/api")
-public class ProductApiController {
+public class ProductController {
     @Autowired
     private ProductDto productDto;
     @ApiOperation(value = "Add a Product")
@@ -28,7 +27,7 @@ public class ProductApiController {
 
     @ApiOperation(value = "Deletes a Product by ID")
     @RequestMapping(path = "/product/{id}",method = RequestMethod.DELETE)
-    public void delete(@PathVariable int id) throws ApiException {
+    public void delete(@PathVariable Integer id) throws ApiException {
         productDto.deletedToBarcode(id);
     }
 //
@@ -36,7 +35,7 @@ public class ProductApiController {
     @ApiOperation(value = "Get a Product by Id")
     @RequestMapping(path = "/product/{id}",method = RequestMethod.GET)
 
-    public ProductData get(@PathVariable int id) throws ApiException {
+    public ProductData get(@PathVariable Integer id) throws ApiException {
         return productDto.getDataFromId(id);
     }
 //
@@ -54,8 +53,8 @@ public class ProductApiController {
 
     @ApiOperation(value = "Updates a Product")
     @RequestMapping(path = "/product/{id}", method = RequestMethod.PUT)
-    public void update(@PathVariable int id, @RequestBody ProductForm f) throws ApiException {
-        productDto.updateProduct(id,f);
+    public void update(@PathVariable Integer id, @RequestBody ProductForm productForm) throws ApiException {
+        productDto.updateProduct(id,productForm);
     }
 
 

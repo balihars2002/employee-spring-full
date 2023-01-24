@@ -12,15 +12,15 @@ import com.increff.employee.model.InfoData;
 import com.increff.employee.model.UserForm;
 import com.increff.employee.pojo.UserPojo;
 import com.increff.employee.service.ApiException;
-import com.increff.employee.service.UserService;
+import com.increff.employee.service.UserApi;
 
 import io.swagger.annotations.ApiOperation;
 
 @Controller
-public class InitApiController extends AbstractUiController {
+public class InitController extends AbstractUiController {
 
 	@Autowired
-	private UserService service;
+	private UserApi service;
 	@Autowired
 	private InfoData info;
 

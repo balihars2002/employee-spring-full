@@ -27,14 +27,14 @@ public class OrderItemController {
     @ApiOperation(value = "Deletes an order item by Product Id")
     @RequestMapping(path = "/orderItem/id/{id}",method = RequestMethod.DELETE)
 
-    public void deleteByProductId(@PathVariable int product_id) {
+    public void deleteByProductId(@PathVariable Integer product_id) {
         orderItemDto.deleteByProductId(product_id);
     }
 
     @ApiOperation(value = "Deletes an order item by Order Id")
     @RequestMapping(path = "/orderItem//{id}",method = RequestMethod.DELETE)
 
-    public void deleteByOrderId(@PathVariable int order_id) {
+    public void deleteByOrderId(@PathVariable Integer order_id) {
         orderItemDto.deleteByOrderId(order_id);
     }
 
@@ -44,10 +44,5 @@ public class OrderItemController {
         return  orderItemDto.viewAlLOrder();
     }
 
-//    @ApiOperation(value = "Updates a Brand")
-//    @RequestMapping(path = "/brand/{id}", method = RequestMethod.PUT)
-//    public void update(@RequestBody OrderItemForm form) throws ApiException {
-//        orderItemDto.updateList(form);
-//    }
 
 }

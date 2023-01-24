@@ -5,41 +5,46 @@ public class ProductForm {
     private  String brand;
     private String category;
     private String name;
-    private double mrp;
+    private Double mrp;
     //barcode
-    public String getProBarcode(){
+
+    public String getBarcode() {
         return barcode;
     }
-    public void setProBarcode(String barcode){
-        this.barcode=barcode;
+
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
-    // brand
-    public String getProBrand() {
+
+    public String getBrand() {
         return brand;
     }
 
-    public void setProBrand(String brand) {
+    public void setBrand(String brand) {
         this.brand = brand;
     }
-    //category
-    public String getProCategory(){
+
+    public String getCategory() {
         return category;
     }
-    public void setProCategory(String category){
+
+    public void setCategory(String category) {
         this.category = category;
     }
-    //name
-    public String getProName(){
+
+    public String getName() {
         return name;
     }
-    public void setProName(String name){
+
+    public void setName(String name) {
         this.name = name;
     }
 
-    public double getProMrp(){
+    public Double getMrp() {
         return mrp;
     }
-    public void setProMrp(double mrp){
+
+    public void setMrp(Double mrp) {
         this.mrp = mrp;
     }
 }

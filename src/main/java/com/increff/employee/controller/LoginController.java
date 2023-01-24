@@ -21,7 +21,7 @@ import com.increff.employee.model.InfoData;
 import com.increff.employee.model.LoginForm;
 import com.increff.employee.pojo.UserPojo;
 import com.increff.employee.service.ApiException;
-import com.increff.employee.service.UserService;
+import com.increff.employee.service.UserApi;
 import com.increff.employee.util.SecurityUtil;
 import com.increff.employee.util.UserPrincipal;
 
@@ -31,7 +31,7 @@ import io.swagger.annotations.ApiOperation;
 public class LoginController {
 
 	@Autowired
-	private UserService service;
+	private UserApi service;
 	@Autowired
 	private InfoData info;
 	

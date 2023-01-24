@@ -11,7 +11,7 @@ import com.increff.employee.dao.UserDao;
 import com.increff.employee.pojo.UserPojo;
 
 @Service
-public class UserService {
+public class UserApi {
 
 	@Autowired
 	private UserDao dao;

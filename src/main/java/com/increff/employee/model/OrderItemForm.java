@@ -5,8 +5,8 @@ import com.sun.istack.NotNull;
 public class OrderItemForm {
     @NotNull
     private String barcode;
-    private int quantity;
-    private double mrp;
+    private Integer quantity;
+    private Double mrp;
 
     public String getBarcode() {
         return barcode;
@@ -16,19 +16,19 @@ public class OrderItemForm {
         this.barcode = barcode;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
-    public double getMrp() {
+    public Double getMrp() {
         return mrp;
     }
 
-    public void setMrp(double mrp) {
+    public void setMrp(Double mrp) {
         this.mrp = mrp;
     }
 }

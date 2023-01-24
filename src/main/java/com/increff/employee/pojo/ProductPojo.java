@@ -1,64 +1,69 @@
 package com.increff.employee.pojo;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+
 @Entity
 public class ProductPojo {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+
+    @TableGenerator(name = "product_id", pkColumnValue = "product_id")
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "product_id")
+    private Integer id;
     private String barcode;
-    private int brand_category;
+    private Integer brand_category;
     private String name;
-    private double mrp;
+    private Double mrp;
     //default constructor
      public ProductPojo(){ }
-     public ProductPojo(String BARCODE,int BRAND_CATEGORY,String NAME,double MRP){
-         barcode=BARCODE;
-         brand_category=BRAND_CATEGORY;
-         name=NAME;
-         mrp= MRP;
-     }
+    public ProductPojo(String BARCODE, Integer BRAND_CATEGORY, String NAME, Double MRP){
+        barcode=BARCODE;
+        brand_category=BRAND_CATEGORY;
+        name=NAME;
+        mrp= MRP;
+    }
 
-    public int getProId(){
+
+    public Integer getId() {
         return id;
     }
-    public void setProId(){
+
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getProBarcode() {
+    public String getBarcode() {
         return barcode;
     }
 
-    public void setProBarcode(String brand) {
-        this.barcode = brand;
+    public void setBarcode(String barcode) {
+        this.barcode = barcode;
     }
 
-    public int getProbrandCategory() {
+    public Integer getBrand_category() {
         return brand_category;
     }
 
-    public void setProbrandCategory(int brand_category) {
+    public void setBrand_category(Integer brand_category) {
         this.brand_category = brand_category;
     }
 
-    public String getProName() {
+    public String getName() {
         return name;
     }
 
-    public void setProName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public double getProMrp() {
+    public Double getMrp() {
         return mrp;
     }
 
-    public void setProMrp(double mrp) {
+    public void setMrp(Double mrp) {
         this.mrp = mrp;
     }
+
+
+
 }

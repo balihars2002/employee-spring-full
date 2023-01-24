@@ -14,17 +14,17 @@ import com.increff.employee.model.EmployeeData;
 import com.increff.employee.model.EmployeeForm;
 import com.increff.employee.pojo.EmployeePojo;
 import com.increff.employee.service.ApiException;
-import com.increff.employee.service.EmployeeService;
+import com.increff.employee.service.EmployeeApi;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
-public class EmployeeApiController {
+public class EmployeeController {
 
 	@Autowired
-	private EmployeeService service;
+	private EmployeeApi service;
 
 	@ApiOperation(value = "Adds an employee")
 	@RequestMapping(path = "/api/employee", method = RequestMethod.POST)

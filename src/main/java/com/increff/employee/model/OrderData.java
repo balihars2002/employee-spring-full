@@ -3,17 +3,20 @@ package com.increff.employee.model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
+import java.util.Vector;
 
 public class OrderData{
-    private int id;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime localDateTime;
+    private Integer id;
 
-    public int getId() {
+    private LocalDateTime localDateTime;
+    private List<OrderItemForm> orderItemFormList;
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -23,5 +26,13 @@ public class OrderData{
 
     public void setLocalDateTime(LocalDateTime localDateTime) {
         this.localDateTime = localDateTime;
+    }
+
+    public List<OrderItemForm> getOrderItemFormList() {
+        return orderItemFormList;
+    }
+
+    public void setOrderItemFormList(List<OrderItemForm> orderItemFormList) {
+        this.orderItemFormList = orderItemFormList;
     }
 }

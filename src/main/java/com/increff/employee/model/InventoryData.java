@@ -1,19 +1,27 @@
 package com.increff.employee.model;
 
 public class InventoryData {
-    private  int id;
+    private Integer productId;
+    private  Integer id;
     private String brand;
     private String category;
-    private int quantity;
+    private Integer quantity;
     private String barcode;
     private String name;
-    private double mrp;
+    private Double mrp;
 
-    public int getId() {
+    public Integer getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Integer productId) {
+        this.productId = productId;
+    }
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -33,11 +41,11 @@ public class InventoryData {
         this.category = category;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
@@ -57,11 +65,11 @@ public class InventoryData {
         this.name = name;
     }
 
-    public double getMrp() {
+    public Double getMrp() {
         return mrp;
     }
 
-    public void setMrp(double mrp) {
+    public void setMrp(Double mrp) {
         this.mrp = mrp;
     }
 }

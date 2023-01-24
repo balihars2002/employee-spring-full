@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.increff.employee.pojo.EmployeePojo;
 
-public class EmployeeServiceTest extends AbstractUnitTest {
+public class EmployeeApiTest extends AbstractUnitTest {
 
 	@Autowired
-	private EmployeeService service;
+	private EmployeeApi service;
 
 	@Test
 	public void testAdd() throws ApiException {
@@ -23,7 +23,7 @@ public class EmployeeServiceTest extends AbstractUnitTest {
 	public void testNormalize() {
 		EmployeePojo p = new EmployeePojo();
 		p.setName(" Romil Jain ");
-		EmployeeService.normalize(p);
+		EmployeeApi.normalize(p);
 		assertEquals("romil jain", p.getName());
 	}
 

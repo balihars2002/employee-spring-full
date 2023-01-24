@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ProductService {
+public class ProductApi {
     @Autowired
     private ProductDao productDao;
 
@@ -21,7 +21,7 @@ public class ProductService {
     }
 
     @Transactional
-    public void deleteServiceById(int id) {
+    public void deleteServiceById(Integer id) {
         productDao.delete(id);
     }
     @Transactional
@@ -39,7 +39,7 @@ public class ProductService {
         return productDao.selectPojoByBarcode(barcode);
     }
     @Transactional
-    public ProductPojo getPojoFromId(int id) throws ApiException{
+    public ProductPojo getPojoFromId(Integer id) throws ApiException{
         return productDao.selectPojoById(id);
     }
 //
@@ -47,7 +47,7 @@ public class ProductService {
     public void update(ProductPojo productPojo) throws ApiException {
       productDao.update(productPojo);
     }
-      public ProductPojo givePojoById(int id){
+      public ProductPojo givePojoById(Integer id){
             return productDao.selectPojoById(id);
       }
         public ProductPojo givePojoByBarcode(String barcode){

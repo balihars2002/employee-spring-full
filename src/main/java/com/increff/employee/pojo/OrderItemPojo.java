@@ -9,49 +9,49 @@ public class OrderItemPojo {
 
     @TableGenerator(name = "orderItem_id", pkColumnValue = "orderItem_id")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "orderItem_id")
-    private int id;
-    private int orderId;
-    private int productId;
-    private int quantity;
-    private double sellingPrice;
+    private Integer id;
+    private Integer orderId;
+    private Integer productId;
+    private Integer quantity;
+    private Double sellingPrice;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getOrderId() {
+    public Integer getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(int orderId) {
+    public void setOrderId(Integer orderId) {
         this.orderId = orderId;
     }
 
-    public int getProductId() {
+    public Integer getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(Integer productId) {
         this.productId = productId;
     }
 
-    public int getQuantity() {
+    public Integer getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
 
-    public double getSellingPrice() {
+    public Double getSellingPrice() {
         return sellingPrice;
     }
 
-    public void setSellingPrice(double sellingPrice) {
+    public void setSellingPrice(Double sellingPrice) {
         this.sellingPrice = sellingPrice;
     }
 }

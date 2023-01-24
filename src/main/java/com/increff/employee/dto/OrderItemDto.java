@@ -1,15 +1,13 @@
 package com.increff.employee.dto;
 
-import com.increff.employee.model.OrderData;
-import com.increff.employee.model.OrderForm;
 import com.increff.employee.model.OrderItemData;
 import com.increff.employee.model.OrderItemForm;
 import com.increff.employee.pojo.OrderItemPojo;
-import com.increff.employee.pojo.OrderPojo;
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.ApiException;
 import com.increff.employee.service.OrderItemApi;
-import com.increff.employee.service.ProductService;
+import com.increff.employee.service.ProductApi;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,19 +22,29 @@ public class OrderItemDto{
     private OrderItemApi orderItemApi;
 
     @Autowired
-    private ProductService productService;
+    private ProductApi productApi;
+
+    @Autowired
+    private ProductDto productDto;
+    @Autowired
+    private InventoryDto inventoryDto;
 
     @Transactional(rollbackOn = ApiException.class)
-    public void add(OrderItemForm orderItemForm,int orderId) throws ApiException{
+    public void add(OrderItemForm orderItemForm,Integer orderId) throws ApiException{
         OrderItemPojo orderItemPojo = convertFormToPojo(orderItemForm,orderId);
+        Integer getQuantityInInventory = productDto.getQuantityFromInventoryByPID(orderItemPojo.getProductId());
+        if(getQuantityInInventory < orderItemPojo.getQuantity()){
+            throw new ApiException("Not sufficient quantity of product available in inventory");
+        }
+        inventoryDto.increaseOrDecreaseInventory(orderItemPojo.getProductId(),orderItemPojo.getQuantity(),false);
         orderItemApi.add(orderItemPojo);
     }
     @Transactional
-    public void deleteByProductId(int product_id) {
+    public void deleteByProductId(Integer product_id) {
         orderItemApi.deleteByProductId(product_id);
     }
     @Transactional
-    public void deleteByOrderId(int order_id) {
+    public void deleteByOrderId(Integer order_id) {
         orderItemApi.deleteByProductId(order_id);
     }
 //    @Transactional(rollbackOn  = ApiException.class)
@@ -68,13 +76,13 @@ public class OrderItemDto{
         orderItemData.setSellingPrice(orderItemPojo.getSellingPrice());
         return orderItemData;
     }
-    public OrderItemPojo convertFormToPojo(OrderItemForm orderItemForm,int id) throws ApiException{
-        ProductPojo productPojo = productService.getPojoFromBarcode(orderItemForm.getBarcode());
+    public OrderItemPojo convertFormToPojo(OrderItemForm orderItemForm,Integer id) throws ApiException{
+        ProductPojo productPojo = productApi.getPojoFromBarcode(orderItemForm.getBarcode());
         OrderItemPojo orderItemPojo = new OrderItemPojo();
         orderItemPojo.setOrderId(id);
-        orderItemPojo.setProductId(productPojo.getProId());
+        orderItemPojo.setProductId(productPojo.getId());
         orderItemPojo.setQuantity(orderItemForm.getQuantity());
-        orderItemPojo.setSellingPrice(productPojo.getProMrp());
+        orderItemPojo.setSellingPrice(productPojo.getMrp());
         return orderItemPojo;
     }
 }

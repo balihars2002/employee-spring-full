@@ -9,7 +9,7 @@ import com.increff.employee.model.BrandData;
 import com.increff.employee.model.BrandForm;
 import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.service.ApiException;
-import com.increff.employee.service.BrandService;
+import com.increff.employee.service.BrandApi;
 import com.increff.employee.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 public class BrandDto extends DtoHelper{
 
     @Autowired
-    private BrandService brandService;
+    private BrandApi brandApi;
 
     public void add(BrandForm form) throws ApiException {
         validateBrandForm(form);
@@ -29,20 +29,20 @@ public class BrandDto extends DtoHelper{
         if(existingPojo != null){
             throw new ApiException("Similar brand: " + brandPojo.getBrand() + " and category: " + brandPojo.getCategory() + " already existss" );
         }
-         brandService.add(brandPojo);
+         brandApi.add(brandPojo);
     }
     @Transactional
-    public void delete(int id) {
-        brandService.delete(id);
+    public void delete(Integer id) {
+        brandApi.delete(id);
     }
 
     @Transactional(rollbackOn = ApiException.class)
-    public BrandData get(int id) throws ApiException{
-        return convertPojoToData(brandService.get(id));
+    public BrandData get(Integer id) throws ApiException{
+        return convertPojoToData(brandApi.get(id));
     }
     @Transactional
     public List<BrandData> getAllList() {
-        List<BrandPojo> list = brandService.getAll();
+        List<BrandPojo> list = brandApi.getAll();
         List<BrandData> list2 = new ArrayList<BrandData>();
         for(BrandPojo p : list){
             list2.add(convertPojoToData(p));
@@ -50,9 +50,9 @@ public class BrandDto extends DtoHelper{
         return list2;
     }
     @Transactional(rollbackOn  = ApiException.class)
-    public void updateList(int id, BrandForm brandform) throws ApiException {
+    public void updateList(Integer id, BrandForm brandform) throws ApiException {
         BrandPojo brandPojo= convertFormToPojo(brandform);
-        BrandPojo brandPojo1 = brandService.getBrandCat(brandPojo.getBrand(),brandPojo.getCategory());
+        BrandPojo brandPojo1 = brandApi.getBrandCat(brandPojo.getBrand(),brandPojo.getCategory());
         if(brandPojo1 != null){
             throw new ApiException("Brand and Category already exist");
         }
@@ -60,23 +60,23 @@ public class BrandDto extends DtoHelper{
         BrandPojo updated = getCheckFromService(id);
         updated.setCategory(brandPojo.getCategory());
         updated.setBrand(brandPojo.getBrand());
-        brandService.update(updated);
+        brandApi.update(updated);
 
     }
     @Transactional
-    public BrandPojo getCheckFromService(int id) throws ApiException {
-        BrandPojo p = brandService.getCheck(id);
+    public BrandPojo getCheckFromService(Integer id) throws ApiException {
+        BrandPojo p = brandApi.getCheck(id);
         if (p == null) {
             throw new ApiException("Brand with given ID does not exit, id: " + id);
         }
         return p;
     }
     public BrandPojo checkDuplicate(String brandName, String categoryName) throws ApiException{
-        BrandPojo bp= brandService.getBrandCat(brandName,categoryName);
-        if(bp != null){
+        BrandPojo brandPojo= brandApi.getBrandCat(brandName,categoryName);
+        if(brandPojo != null){
             throw new ApiException("Brand and Category already exist.");
         }
-        return bp;
+        return brandPojo;
     }
 
 

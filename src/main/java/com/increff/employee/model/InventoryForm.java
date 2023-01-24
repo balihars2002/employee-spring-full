@@ -2,19 +2,21 @@ package com.increff.employee.model;
 
 public class InventoryForm {
     private String barcode;
-    private int quantity;
-    public String getInvBarcode(){
+    private Integer quantity;
+
+    public String getBarcode() {
         return barcode;
     }
-    public void setInvBarcode(String barcode){
+
+    public void setBarcode(String barcode) {
         this.barcode = barcode;
     }
 
-    public int getInvQuantity(){
-        return  quantity;
-    }
-    public void setInvQuantity(int quantity){
-        this.quantity = quantity;
+    public Integer getQuantity() {
+        return quantity;
     }
 
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 }

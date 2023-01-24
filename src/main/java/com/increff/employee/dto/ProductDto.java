@@ -9,52 +9,54 @@ import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.model.ProductData;
 import com.increff.employee.service.ApiException;
-import com.increff.employee.service.BrandService;
-import com.increff.employee.service.InventoryService;
-import com.increff.employee.service.ProductService;
+import com.increff.employee.service.BrandApi;
+import com.increff.employee.service.InventoryApi;
+import com.increff.employee.service.ProductApi;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 
 import com.increff.employee.util.StringUtil;
 @Service
 public class ProductDto extends DtoHelper{
     @Autowired
-    private ProductService productService;
+    private ProductApi productApi;
     @Autowired
-    private BrandService brandService;
+    private BrandApi brandApi;
     @Autowired
-    private InventoryService inventoryService;
+    private InventoryApi inventoryApi;
 
     @Transactional(rollbackOn = ApiException.class)
-    public void addDto(ProductForm f) throws ApiException {
-        normaliseProduct(f);
-        ProductPojo p= convertFormToPojo(f);
-        if(StringUtil.isEmpty(p.getProBarcode())) {
+    public void addDto(ProductForm productForm) throws ApiException {
+        normaliseProduct(productForm);
+        ProductPojo productPojo= convertFormToPojo(productForm);
+        if(StringUtil.isEmpty(productPojo.getBarcode())) {
             throw new ApiException("'Barcode' cannot be empty");
         }
-        if(StringUtil.isEmpty(p.getProName())) {
+        if(StringUtil.isEmpty(productPojo.getName())) {
             throw new ApiException("'Brand' cannot be empty");
         }
-        productService.insertService(p);
+        productApi.insertService(productPojo);
 
-        InventoryPojo ip= new InventoryPojo(p.getProId(),0);
-        inventoryService.addService(ip);
+        InventoryPojo inventoryPojo= new InventoryPojo();
+        inventoryPojo.setQuantity(0);
+        inventoryPojo.setProductId(productPojo.getId());
+        inventoryApi.addService(inventoryPojo);
     }
     @Transactional
     public ProductPojo getCheckFromService(String barcode) throws ApiException{
-        return productService.getCheckByBarcode(barcode);
+        return productApi.getCheckByBarcode(barcode);
     }
     @Transactional
-    public void deletedToBarcode(int id) throws ApiException {
-        ProductPojo productPojo = productService.getPojoFromId(id);
-        inventoryService.deleteService(productPojo.getProId());
-        productService.deleteServiceById(id);
+    public void deletedToBarcode(Integer id) throws ApiException {
+        ProductPojo productPojo = productApi.getPojoFromId(id);
+        inventoryApi.deleteService(productPojo.getId());
+        productApi.deleteServiceById(id);
     }
+
 
     @Transactional
     public List<ProductData> getAllDto() throws ApiException {
-        List<ProductPojo> list= productService.selectAllService();
+        List<ProductPojo> list= productApi.selectAllService();
         List<ProductData> list1 = new ArrayList<ProductData>();
         for(ProductPojo p:list){
             list1.add(convertPojoToData(p));
@@ -62,28 +64,37 @@ public class ProductDto extends DtoHelper{
         return list1;
     }
     @Transactional(rollbackOn  = ApiException.class)
-    public void updateProduct(int id, ProductForm productForm) throws ApiException {
-        ProductPojo productPojo= convertFormToPojo(productForm);
-        ProductPojo productPojo1 = productService.getPojoFromId(id);
+    public void updateProduct(Integer id, ProductForm productForm) throws ApiException {
+       // ProductPojo productPojo= convertFormToPojo(productForm);
+        ProductPojo productPojo1 = productApi.getPojoFromId(id);
+        if(productPojo1 == null)
+        {
+            throw new ApiException("The product with given id does not exist.");
+        }
         //String barcode= productPojo1.getProBarcode();
-        normalizeProduct(productPojo);
+       // normalizeProduct(productPojo);
         normalizeProduct(productPojo1);
-        ProductPojo productPojo2 = productService.getPojoFromId(productPojo1.getProId());
-        productPojo2.setProBarcode(productPojo.getProBarcode());
-        productPojo2.setProMrp(productPojo.getProMrp());
-        productPojo2.setProName(productPojo.getProName());
-        productService.update(productPojo2);
+     //   ProductPojo productPojo2 = productService.getPojoFromId(productPojo1.getProId());
+        productPojo1.setBarcode(productForm.getBarcode());
+        productPojo1.setMrp(productForm.getMrp());
+        productPojo1.setName(productForm.getName());
+        productApi.update(productPojo1);
 
     }
+
+    public Integer getQuantityFromInventoryByPID(Integer id){
+       Integer quantity = inventoryApi.getPojoFromId(id).getQuantity();
+       return quantity;
+    }
     public ProductData getDataFromBarcode(String barcode) throws ApiException {
-          ProductPojo productPojo = productService.getPojoFromBarcode(barcode);
+          ProductPojo productPojo = productApi.getPojoFromBarcode(barcode);
           if(productPojo == null){
               throw new ApiException("Product with given barcode does not exist.");
           }
           return convertPojoToData(productPojo);
     }
-    public ProductData getDataFromId(int id) throws ApiException {
-        ProductPojo productPojo = productService.getPojoFromId(id);
+    public ProductData getDataFromId(Integer id) throws ApiException {
+        ProductPojo productPojo = productApi.getPojoFromId(id);
         if(productPojo == null){
             throw new ApiException("Product with given barcode does not exist.");
         }
@@ -91,29 +102,29 @@ public class ProductDto extends DtoHelper{
     }
 
     private ProductPojo convertFormToPojo(ProductForm form) throws ApiException{
-        BrandPojo brandPojo= brandService.getBrandCat(form.getProBrand(),form.getProCategory());
+        BrandPojo brandPojo= brandApi.getBrandCat(form.getBrand(),form.getCategory());
         if(brandPojo==null){
             throw new ApiException("The brand and category does not exist");
         }
-        int brandcat_id= brandPojo.getId();
-        ProductPojo p= new ProductPojo(form.getProBarcode(),brandcat_id,form.getProName(),form.getProMrp());
-        return p;
+        Integer brandCategory_Id= brandPojo.getId();
+        ProductPojo productPojo= new ProductPojo(form.getBarcode(),brandCategory_Id,form.getName(),form.getMrp());
+        return productPojo;
     }
 
-    private ProductData convertPojoToData(ProductPojo p) throws ApiException {
-        ProductData d = new ProductData();
-        d.setProId(p.getProId());
-        d.setProBarcode(p.getProBarcode());
-        d.setProName(p.getProName());
-        d.setProMrp(p.getProMrp());
-        BrandPojo bp= brandService.getBrandCatFromiId(p.getProbrandCategory());
-        if(bp == null){
+    private ProductData convertPojoToData(ProductPojo productPojo) throws ApiException {
+        ProductData productData = new ProductData();
+        productData.setId(productPojo.getId());
+        productData.setBarcode(productPojo.getBarcode());
+        productData.setName(productPojo.getName());
+        productData.setMrp(productPojo.getMrp());
+        BrandPojo brandPojo= brandApi.getBrandCatFromiId(productPojo.getBrand_category());
+        if(brandPojo == null){
             throw new ApiException("ID is not valid");
         }
-        String brandname= bp.getBrand();
-        String categoryname= bp.getCategory();
-        d.setProBrand(brandname);
-        d.setProCategory(categoryname);
-        return d;
+        String brandName= brandPojo.getBrand();
+        String categoryName= brandPojo.getCategory();
+        productData.setBrand(brandName);
+        productData.setCategory(categoryName);
+        return productData;
     }
 }

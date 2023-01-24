@@ -21,17 +21,17 @@ public class DtoHelper {
         p.setBrand(form.getBrand());
         return p;
     }
-    protected static void normalizeBrand(BrandPojo p) {
-        p.setBrand(StringUtil.toLowerCase(p.getBrand()));
-        p.setCategory(StringUtil.toLowerCase((p.getCategory())));
+    protected static void normalizeBrand(BrandPojo brandPojo) {
+        brandPojo.setBrand(StringUtil.toLowerCase(brandPojo.getBrand()));
+        brandPojo.setCategory(StringUtil.toLowerCase((brandPojo.getCategory())));
     }
 
-    protected static void normalizeProduct(ProductPojo p) {
-        p.setProBarcode(StringUtil.toLowerCase(p.getProBarcode()));
-        p.setProName(StringUtil.toLowerCase(p.getProName()));
+    protected static void normalizeProduct(ProductPojo productPojo) {
+        productPojo.setBarcode(StringUtil.toLowerCase(productPojo.getBarcode()));
+        productPojo.setName(StringUtil.toLowerCase(productPojo.getName()));
     }
-    protected static void normaliseProduct(ProductForm f) {
-        f.setProBarcode(StringUtil.toLowerCase(f.getProBarcode()));
-        f.setProName(StringUtil.toLowerCase(f.getProName()));
+    protected static void normaliseProduct(ProductForm productForm) {
+        productForm.setBarcode(StringUtil.toLowerCase(productForm.getBarcode()));
+        productForm.setName(StringUtil.toLowerCase(productForm.getName()));
     }
 }

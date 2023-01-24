@@ -15,11 +15,11 @@ import java.util.List;
 
 @Repository
 public class OrderItemDao extends AbstractDao{
-    private static String SELECT_ALL = "select p from OrderItemPojo p";
+    private static final String SELECT_ALL = "select p from OrderItemPojo p";
 
-    private static String DELETE_BY_PRODUCTID = "delete from OrderItemPojo p where productId=:productId";
+    private static final String DELETE_BY_PRODUCT_ID = "delete from OrderItemPojo p where productId=:productId";
 
-    private static String DELETE_BY_ORDERID = "delete from OrderItemPojo p where orderId=:orderId";
+    private static final String DELETE_BY_ORDER_ID = "delete from OrderItemPojo p where orderId=:orderId";
 
     @PersistenceContext
     private EntityManager em;
@@ -30,15 +30,15 @@ public class OrderItemDao extends AbstractDao{
     }
 
 
-    public int deleteByProductId(int product_id) {
-        Query query = em.createQuery(DELETE_BY_PRODUCTID);
+    public void deleteByProductId(Integer product_id) {
+        Query query = em.createQuery(DELETE_BY_PRODUCT_ID);
         query.setParameter("product_id", product_id);
-        return query.executeUpdate();
+        query.executeUpdate();
     }
-    public int deleteByOrderId(int order_id) {
-        Query query = em.createQuery(DELETE_BY_ORDERID);
+    public void deleteByOrderId(Integer order_id) {
+        Query query = em.createQuery(DELETE_BY_ORDER_ID);
         query.setParameter("order_id", order_id);
-        return query.executeUpdate();
+        query.executeUpdate();
     }
 
     public List<OrderItemPojo> selectAll(){
