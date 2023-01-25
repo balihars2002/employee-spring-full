@@ -2,6 +2,7 @@ package com.increff.employee.dto;
 
 import com.increff.employee.model.OrderData;
 import com.increff.employee.model.OrderForm;
+import com.increff.employee.model.OrderItemData;
 import com.increff.employee.model.OrderItemForm;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
@@ -33,7 +34,7 @@ public class OrderDto {
         OrderPojo orderPojo = convertFormToPojo(orderForm);
         orderApi.add(orderPojo);
         Integer id = orderPojo.getId();
-        List<OrderItemPojo> orderItemPojo;
+       // List<OrderItemPojo> orderItemPojo = new ArrayList<OrderItemPojo>();
         for(OrderItemForm a:orderForm.getOrderItemFormList()){
             orderItemDto.add(a,id);
         }
@@ -66,13 +67,17 @@ public class OrderDto {
         for(OrderPojo pojo:list1){
             list.add(convertPojoToData(pojo));
         }
+
         return list;
     }
 
     public OrderData convertPojoToData(OrderPojo orderPojo){
         OrderData orderData = new OrderData();
         orderData.setId(orderPojo.getId());
-        //orderData.setDate(orderPojo.getDate());
+
+        List<OrderItemData> orderItemDataList = orderItemDto.viewAlLOrderItemsWithGivenOrderId(orderPojo.getId());
+        orderData.setOrderItemDataList(orderItemDataList);
+       // orderData.setLocalDateTime(orderPojo.getDateTime());
         return orderData;
     }
     public OrderPojo convertFormToPojo(OrderForm orderForm){

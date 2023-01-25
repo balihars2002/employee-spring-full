@@ -33,8 +33,9 @@ public class ProductDto extends DtoHelper{
             throw new ApiException("'Barcode' cannot be empty");
         }
         if(StringUtil.isEmpty(productPojo.getName())) {
-            throw new ApiException("'Brand' cannot be empty");
+            throw new ApiException("'Name' cannot be empty");
         }
+        checkMrp(productPojo.getMrp());
         productApi.insertService(productPojo);
 
         InventoryPojo inventoryPojo= new InventoryPojo();
@@ -81,7 +82,11 @@ public class ProductDto extends DtoHelper{
         productApi.update(productPojo1);
 
     }
-
+    public void checkMrp(Double mrp) throws ApiException{
+        if(mrp<=0){
+            throw new ApiException("Mrp can only be in fraction and positive!");
+        }
+    }
     public Integer getQuantityFromInventoryByPID(Integer id){
        Integer quantity = inventoryApi.getPojoFromId(id).getQuantity();
        return quantity;

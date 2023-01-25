@@ -3,7 +3,7 @@ package com.increff.employee.model;
 import com.sun.istack.NotNull;
 
 public class OrderItemForm {
-    @NotNull
+   // @NotNull
     private String barcode;
     private Integer quantity;
     private Double mrp;

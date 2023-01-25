@@ -11,7 +11,7 @@ public class OrderData{
     private Integer id;
 
     private LocalDateTime localDateTime;
-    private List<OrderItemForm> orderItemFormList;
+    private List<OrderItemData> orderItemDataList;
     public Integer getId() {
         return id;
     }
@@ -28,11 +28,12 @@ public class OrderData{
         this.localDateTime = localDateTime;
     }
 
-    public List<OrderItemForm> getOrderItemFormList() {
-        return orderItemFormList;
+    public List<OrderItemData> getOrderItemDataList() {
+        return orderItemDataList;
     }
 
-    public void setOrderItemFormList(List<OrderItemForm> orderItemFormList) {
-        this.orderItemFormList = orderItemFormList;
+    public void setOrderItemDataList(List<OrderItemData> orderItemDataList) {
+        this.orderItemDataList = orderItemDataList;
     }
 }
+

@@ -36,6 +36,10 @@ public class InventoryApi {
         return inventoryDao.selectPojoById(id);
     }
 
+    @Transactional
+    public InventoryPojo getPojoFromProductId(Integer id){
+        return inventoryDao.selectPojoByProductId(id);
+    }
 //    @Transactional(rollbackOn = ApiException.class)
 //    public void deleteservice(int id){
 //        inventoryDao.delete(id);

@@ -19,7 +19,7 @@ public class InventoryDao extends AbstractDao {
     private static final String SELECT_BY_ID ="select p from InventoryPojo p where id=:id";
     private static final String SELECT_BY_BARCODE ="select p from InventoryPojo p where barcode=:barcode";
     private static final String SELECT_ALL = "select p from InventoryPojo p";
-
+    private static final String SELECT_BY_PID ="select p from InventoryPojo p where productId=:id";
     @PersistenceContext
     private EntityManager em;
 
@@ -43,6 +43,11 @@ public class InventoryDao extends AbstractDao {
     }
     public InventoryPojo selectPojoById(Integer id){
         TypedQuery<InventoryPojo> query= getQuery(SELECT_BY_ID, InventoryPojo.class);
+        query.setParameter("id",id);
+        return getSingle(query);
+    }
+    public InventoryPojo selectPojoByProductId(Integer id){
+        TypedQuery<InventoryPojo> query= getQuery(SELECT_BY_PID, InventoryPojo.class);
         query.setParameter("id",id);
         return getSingle(query);
     }

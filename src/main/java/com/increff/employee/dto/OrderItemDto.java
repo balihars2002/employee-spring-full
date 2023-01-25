@@ -36,9 +36,10 @@ public class OrderItemDto{
         if(getQuantityInInventory < orderItemPojo.getQuantity()){
             throw new ApiException("Not sufficient quantity of product available in inventory");
         }
-        inventoryDto.increaseOrDecreaseInventory(orderItemPojo.getProductId(),orderItemPojo.getQuantity(),false);
+        inventoryDto.increaseOrDecreaseInventory(orderItemPojo.getProductId(),orderItemForm.getQuantity(),false);
         orderItemApi.add(orderItemPojo);
     }
+
     @Transactional
     public void deleteByProductId(Integer product_id) {
         orderItemApi.deleteByProductId(product_id);
@@ -62,6 +63,15 @@ public class OrderItemDto{
         }
         return list;
     }
+    @Transactional
+    public List<OrderItemData> viewAlLOrderItemsWithGivenOrderId(Integer orderId){
+        List<OrderItemData> list = new ArrayList<OrderItemData>();
+        List<OrderItemPojo> list1 = orderItemApi.selectSome(orderId);
+        for(OrderItemPojo pojo:list1){
+            list.add(convertPojoToData(pojo));
+        }
+        return list;
+    }
 
 //    public OrderItemPojo getPojoFromOrderIdAndProductId(OrderItemForm orderItemForm){
 //        OrderItemPojo orderItemPojo = orderItemApi.getPojoFromOrderIdAndProductId(orderItemForm.ge);
@@ -70,6 +80,7 @@ public class OrderItemDto{
     public OrderItemData convertPojoToData(OrderItemPojo orderItemPojo){
         OrderItemData orderItemData = new OrderItemData();
        // orderItemData.setId(orderItemPojo.getId());
+        orderItemData.setId(orderItemPojo.getId());
         orderItemData.setOrderId(orderItemPojo.getOrderId());
         orderItemData.setQuantity(orderItemPojo.getQuantity());
         orderItemData.setProductId(orderItemPojo.getProductId());

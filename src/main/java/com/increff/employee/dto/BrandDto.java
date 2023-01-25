@@ -33,6 +33,7 @@ public class BrandDto extends DtoHelper{
     }
     @Transactional
     public void delete(Integer id) {
+
         brandApi.delete(id);
     }
 

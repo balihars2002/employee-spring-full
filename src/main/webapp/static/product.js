@@ -217,8 +217,8 @@ function displayProductList(data) {
     for (var i in data) {
         var e = data[i];
         console.log("data: ", data);
-        var buttonHtml = '<button onclick="deleteProduct(' +e.id + ')" id = "' +e.id + '" value="' + e.barcode + '">delete</button>'
-        buttonHtml += ' <button onclick="displayEditProduct(' + e.id + ')">edit</button>'
+        var buttonHtml = '<button class="fa fa-trash" onclick="deleteProduct(' +e.id + ')" id = "' +e.id + '" value="' + e.barcode + '">delete</button>'
+        buttonHtml += ' <button class="fa fa-pencil" onclick="displayEditProduct(' + e.id + ')">edit</button>'
         var row = '<tr>'
             + '<td>' + e.id + '</td>'
             + '<td>' + e.barcode + '</td>'

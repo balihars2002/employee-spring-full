@@ -61,7 +61,7 @@ public class InventoryDto {
             if(increase) {
                 changeQuantityBy = -changeQuantityBy;
             }
-           InventoryPojo inventoryPojo = inventoryApi.getPojoFromId(id);
+           InventoryPojo inventoryPojo = inventoryApi.getPojoFromProductId(id);
             int initialQuantity = inventoryPojo.getQuantity();
             inventoryPojo.setQuantity(initialQuantity - changeQuantityBy);
             inventoryApi.updateInv(inventoryPojo);

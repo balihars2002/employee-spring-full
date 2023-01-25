@@ -32,7 +32,7 @@ public class OrderItemController {
     }
 
     @ApiOperation(value = "Deletes an order item by Order Id")
-    @RequestMapping(path = "/orderItem//{id}",method = RequestMethod.DELETE)
+    @RequestMapping(path = "/orderItem/{id}",method = RequestMethod.DELETE)
 
     public void deleteByOrderId(@PathVariable Integer order_id) {
         orderItemDto.deleteByOrderId(order_id);
@@ -44,5 +44,10 @@ public class OrderItemController {
         return  orderItemDto.viewAlLOrder();
     }
 
+//    @ApiOperation(value = "View All Item Orders with given order id")
+//    @RequestMapping(path = "/orderItem/id/{id}", method = RequestMethod.GET)
+//    public List<OrderItemData> viewsome(Integer id){
+//        return  orderItemDto.viewAlLOrderItemsWithGivenOrderId(id);
+//    }
 
 }

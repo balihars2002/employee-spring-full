@@ -11,7 +11,7 @@ function addInventory(event){
 	var $form = $("#inventory-form");
 	var json = toJson($form);
 	var url = getInventoryUrl();
-
+	console.log("JSON : ",json);
 	$.ajax({
 	   url: url,
 	   type: 'POST',
@@ -146,8 +146,8 @@ function displayInventoryList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button onclick="deleteInventory(' + e.id + ')">delete</button>'
-		buttonHtml += ' <button onclick="displayEditInventory(' + e.id + ')">edit</button>'
+		var buttonHtml = '<button class="fa fa-trash" style="border:0.5px;border-color=grey" onclick="deleteInventory(' + e.id + ')"></button>'
+		buttonHtml += ' <button class="fa fa-pencil" style="border:0.5px;border-color=grey" onclick="displayEditInventory(' + e.id + ')"></button>'
 		var row = '<tr>'
 		+ '<td>' + e.productId + '</td>'
 		+ '<td>' + e.brand + '</td>'

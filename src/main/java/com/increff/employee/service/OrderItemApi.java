@@ -42,5 +42,9 @@ public class OrderItemApi {
         return orderItemDao.selectAll();
     }
 
+    public List<OrderItemPojo> selectSome(Integer orderId){
+        return orderItemDao.selectSome(orderId);
+    }
+
 
 }

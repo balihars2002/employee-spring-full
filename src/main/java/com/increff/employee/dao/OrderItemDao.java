@@ -21,6 +21,7 @@ public class OrderItemDao extends AbstractDao{
 
     private static final String DELETE_BY_ORDER_ID = "delete from OrderItemPojo p where orderId=:orderId";
 
+    private static final String SELECT_SOME = "select p from OrderItemPojo p where orderId=:id";
     @PersistenceContext
     private EntityManager em;
 
@@ -43,6 +44,11 @@ public class OrderItemDao extends AbstractDao{
 
     public List<OrderItemPojo> selectAll(){
         TypedQuery<OrderItemPojo> query = getQuery(SELECT_ALL,OrderItemPojo.class);
+        return query.getResultList();
+    }
+    public List<OrderItemPojo> selectSome(Integer id){
+        TypedQuery<OrderItemPojo> query = getQuery(SELECT_SOME,OrderItemPojo.class);
+        query.setParameter("id",id);
         return query.getResultList();
     }
 
