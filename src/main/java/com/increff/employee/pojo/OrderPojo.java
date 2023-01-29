@@ -22,6 +22,8 @@ public class OrderPojo {
     @NotNull
     private LocalDateTime dateTime;
 
+    private String date;
+
     public LocalDateTime getDateTime() {
         return dateTime;
     }
@@ -36,6 +38,14 @@ public class OrderPojo {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 
 }

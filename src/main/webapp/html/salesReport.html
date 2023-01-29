@@ -1,0 +1,104 @@
+<!doctype html>
+
+<html lang="en">
+
+<head th:replace="snippets.html :: name_head"></head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<body>
+
+<nav th:replace="snippets.html :: name_app_navbar"></nav>
+
+<div class="container">
+
+    
+<h3>Sales Report</h3>
+<hr>
+ <!-- Top row with form-->
+ <div class="row">
+	 <div class="col-12">
+		<form class="form-inline" id="sales-report-form">
+			<table>
+				<tr>
+					<td>
+						<div class="form-group">
+							<label for="inputStartDate" class="col-sm-2 col-form-label">Starting Date</label>
+							<div class="col-sm-10">
+							  <input type="date" class="form-control" name="startingDate" id="inputStartDate" placeholder="enter starting date">
+							</div>
+						  </div>
+					</td>
+					<td>
+						<div class="form-group">
+							<label for="inputEndDate" class="col-sm-2 col-form-label">Ending Date</label>
+							<div class="col-sm-10">
+							  <input type="date" class="form-control" name="endingDate" id="inputEndDate" placeholder="enter ending date">
+							</div>
+						  </div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="form-group">
+							<label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
+							<div class="col-sm-10">
+							  <input type="text" class="form-control" name="brand" id="inputBrand" placeholder="enter brand">
+							</div>
+						  </div>
+					</td>
+					<td>
+						<div class="form-group">
+							<label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
+							<div class="col-sm-10">
+							  <input type="text" class="form-control" name="category" id="inputCategory" placeholder="enter category">
+							</div>
+						  </div>
+					</td>
+					<td>
+						<button type="button" class="btn btn-primary" id="get-sales-report">Get Report</button>
+						&nbsp;
+						<button type="button" class="btn btn-primary" id="refresh-data">Refresh</button>
+						&nbsp;
+						<!-- <button type="button" class="btn btn-primary" id="upload-data">Upload</button> -->
+					</td>
+				</tr>
+			</table>
+		</form>
+	 </div>	
+</div> 
+<hr>
+
+<div class="row">
+	&nbsp;
+</div>
+<div class="row">
+
+ <!-- Table -->
+ <div class="col-12">
+	<table class="table table-striped" id="salesReport-table">
+	  <thead>
+	    <tr>
+	      <th scope="col">Brand</th>
+		  <th scope="col">Category</th>
+	      <th scope="col">Quantity</th>
+	      <th scope="col">Revenue</th>
+	    </tr>
+	  </thead>
+	  <tbody>
+	    
+	  </tbody>
+	</table>
+
+</div>
+</div>
+
+
+</div> 
+<!-- Container end-->
+
+<footer th:replace="snippets.html :: name_footer"></footer>
+<script th:src="@{/static/salesReport.js}"></script>
+
+</body>	
+
+</html>

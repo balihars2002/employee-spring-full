@@ -101,7 +101,7 @@ public class ProductDto extends DtoHelper{
     public ProductData getDataFromId(Integer id) throws ApiException {
         ProductPojo productPojo = productApi.getPojoFromId(id);
         if(productPojo == null){
-            throw new ApiException("Product with given barcode does not exist.");
+            throw new ApiException("Product with given Id does not exist.");
         }
         return convertPojoToData(productPojo);
     }

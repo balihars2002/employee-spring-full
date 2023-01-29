@@ -32,10 +32,10 @@ public class OrderItemDto{
     @Transactional(rollbackOn = ApiException.class)
     public void add(OrderItemForm orderItemForm,Integer orderId) throws ApiException{
         OrderItemPojo orderItemPojo = convertFormToPojo(orderItemForm,orderId);
-        Integer getQuantityInInventory = productDto.getQuantityFromInventoryByPID(orderItemPojo.getProductId());
-        if(getQuantityInInventory < orderItemPojo.getQuantity()){
-            throw new ApiException("Not sufficient quantity of product available in inventory");
-        }
+//        Integer getQuantityInInventory = productDto.getQuantityFromInventoryByPID(orderItemPojo.getProductId());
+//        if(getQuantityInInventory < orderItemPojo.getQuantity()){
+//            throw new ApiException("Not sufficient quantity of product available in inventory");
+//        }
         inventoryDto.increaseOrDecreaseInventory(orderItemPojo.getProductId(),orderItemForm.getQuantity(),false);
         orderItemApi.add(orderItemPojo);
     }

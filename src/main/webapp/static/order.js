@@ -179,7 +179,8 @@ function displayOrderList(data){
 		 buttonHtml += ' <button class="fa fa-eye" style="border:0px;" onclick="viewOrder(' + e.id + ')"></button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
-		+ '<td>' + e.localDateTime + '</td>'
+		// + '<td>' + e.localDateTime + '</td>'
+		+ '<td>' + e.date + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);
@@ -251,7 +252,8 @@ function displayInventory(data){
 	// $("#order-edit-form input[name=category]").val(data.category);	
 	// $("#order-edit-form input[name=productId]").val(data.productId);
 	// $("#order-edit-form input[name=orderId]").val(data.orderId);	
-	$("#order-edit-form input[name=localDateTime]").val(data.localDateTime);
+	$("#order-edit-form input[name=date]").val(data.date);
+	// $("#order-edit-form input[name=localDateTime]").val(data.localDateTime);
 	$('#edit-order-modal').modal('toggle');
 }
 

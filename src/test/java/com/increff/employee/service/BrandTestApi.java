@@ -9,7 +9,7 @@ import javax.transaction.Transactional;
 
 import static org.junit.Assert.assertEquals;
 @Transactional
-public class BrandApiTest extends DtoHelper {
+public class BrandTestApi extends DtoHelper {
 
     @Autowired
     private BrandApi brandApi;

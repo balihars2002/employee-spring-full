@@ -11,6 +11,8 @@ public class OrderData{
     private Integer id;
 
     private LocalDateTime localDateTime;
+    private String date;
+
     private List<OrderItemData> orderItemDataList;
     public Integer getId() {
         return id;
@@ -35,5 +37,14 @@ public class OrderData{
     public void setOrderItemDataList(List<OrderItemData> orderItemDataList) {
         this.orderItemDataList = orderItemDataList;
     }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
 }
 

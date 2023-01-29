@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -15,6 +17,11 @@ public class OrderDao extends AbstractDao {
     private static final String SELECT_ALL = "select p from OrderPojo p";
 
     private static final String DELETE_ID = "delete from OrderPojo p where id=:id";
+
+    private static final String REPORT_FULL = "select p from OrderPojo p where DATE(dateTime)>=DATE(:startDate) and DATE(dateTime)<=DATE(:endDate)";
+
+  //  private static final String REPORT_CATEGORY = "select p from OrderPojo p where DATE(dateTime)>=DATE(:startDate) and DATE(dateTime)<=DATE(:endDate) and category=:category";
+
     @PersistenceContext
     private EntityManager em;
 
@@ -39,7 +46,12 @@ public class OrderDao extends AbstractDao {
     public void update(OrderPojo p) {
     }
 
-
+    public List<OrderPojo> selectInDate(LocalDate startDate, LocalDate endDate){
+        TypedQuery<OrderPojo> query = getQuery(REPORT_FULL,OrderPojo.class);
+        query.setParameter("startDate", startDate);
+        query.setParameter("endDate", endDate);
+        return query.getResultList();
+    }
 
 }
 
