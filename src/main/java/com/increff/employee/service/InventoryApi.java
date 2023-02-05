@@ -5,14 +5,14 @@ import com.increff.employee.dao.InventoryDao;
 import com.increff.employee.pojo.InventoryPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 
 @Service
 public class InventoryApi {
     @Autowired
     private InventoryDao inventoryDao;
-    @Transactional(rollbackOn = ApiException.class)
+    @Transactional(rollbackFor = ApiException.class)
     public void addService(InventoryPojo inventoryPojo){
             inventoryDao.insert(inventoryPojo);
     }
@@ -26,7 +26,7 @@ public class InventoryApi {
         inventoryDao.delete(id);
     }
 
-    @Transactional(rollbackOn = ApiException.class)
+    @Transactional(rollbackFor = ApiException.class)
     public void updateInv(InventoryPojo inventoryPojo){
         inventoryDao.update(inventoryPojo);
     }
@@ -40,6 +40,8 @@ public class InventoryApi {
     public InventoryPojo getPojoFromProductId(Integer id){
         return inventoryDao.selectPojoByProductId(id);
     }
+
+
 //    @Transactional(rollbackOn = ApiException.class)
 //    public void deleteservice(int id){
 //        inventoryDao.delete(id);

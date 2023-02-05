@@ -2,15 +2,21 @@
 
 function getInventoryUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/inventory";
+	return baseUrl + "/api/";
 }
 	
+function getRole(){
+	var role = $("meta[name=userRole]").attr("content")
+	console.log(" role :: ",role);
+	return role;
+}
+
 //BUTTON ACTION
 function addInventory(event){
 	//Set the values to update
 	var $form = $("#inventory-form");
 	var json = toJson($form);
-	var url = getInventoryUrl();
+	var url = getInventoryUrl()+"inventory";
 	console.log("JSON : ",json);
 	$.ajax({
 	   url: url,
@@ -32,7 +38,7 @@ function updateInventory(event){
 	$('#edit-inventory-modal').modal('toggle');
 	//Get the ID
 	var id = $("#inventory-edit-form input[name=id]").val();	
-	var url = getInventoryUrl() + "/" + id;
+	var url = getInventoryUrl() + "inventory/" + id;
 
 	//Set the values to update
 	var $form = $("#inventory-edit-form");
@@ -56,7 +62,7 @@ function updateInventory(event){
 
 
 function getInventoryList(){
-	var url = getInventoryUrl();
+	var url = getInventoryUrl()+"operator/inventory";
 	
 	console.log(" into the get inventory function ");
 	console.log(" the url int the get inv is :", url);
@@ -71,7 +77,7 @@ function getInventoryList(){
 }
 
 function deleteInventory(id){
-	var url = getInventoryUrl() + "/" + id;
+	var url = getInventoryUrl() + "inventory/" + id;
 
 	$.ajax({
 	   url: url,
@@ -112,7 +118,7 @@ function uploadRows(){
 	processCount++;
 	
 	var json = JSON.stringify(row);
-	var url = getInventoryUrl();
+	var url = getInventoryUrl()+"inventory";
 
 	//Make ajax call
 	$.ajax({
@@ -156,14 +162,16 @@ function displayInventoryList(data){
 		+ '<td>' + e.mrp + '</td>'
 		+ '<td>' + e.name + '</td>'
 		+ '<td>' + e.quantity + '</td>'
+		if(getRole()=="supervisor"){
 		+ '<td>' + buttonHtml + '</td>'
+		}
 		+ '</tr>';
         $tbody.append(row);
 	}
 }
 
 function displayEditInventory(id){
-	var url = getInventoryUrl() + "/" + id;
+	var url = getInventoryUrl() + "operator/inventory" + id;
 	console.log(" into the get edit inventory function ");
 	console.log(" the url int the get inv is :", url);
 	//console.log("the inventory is :",data);
@@ -176,6 +184,16 @@ function displayEditInventory(id){
 	   error: handleAjaxError
 	});	
 }
+
+
+function disableButtons(){
+	var role = getRole();
+	if(role == "operator"){
+	document.getElementById("inventory-form").hidden = true;
+	// document.getElementById("upload-data").disabled = true;
+	}
+}
+
 
 function resetUploadDialog(){
 	//Reset file name
@@ -231,6 +249,8 @@ function init(){
     $('#inventoryFile').on('change', updateFileName)
 }
 
+
+$(document).ready(disableButtons);
 $(document).ready(init);
 $(document).ready(getInventoryList);
 

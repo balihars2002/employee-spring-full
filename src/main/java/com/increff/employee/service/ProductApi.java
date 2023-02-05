@@ -3,19 +3,20 @@ package com.increff.employee.service;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
+
 
 import com.increff.employee.dao.ProductDao;
 import com.increff.employee.pojo.ProductPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductApi {
     @Autowired
     private ProductDao productDao;
 
-    @Transactional(rollbackOn = ApiException.class)
+    @Transactional(rollbackFor = ApiException.class)
     public void insertService(ProductPojo productPojo) throws ApiException {
           productDao.insert(productPojo);
     }
@@ -43,23 +44,23 @@ public class ProductApi {
         return productDao.selectPojoById(id);
     }
 //
-    @Transactional(rollbackOn  = ApiException.class)
+    @Transactional(rollbackFor  = ApiException.class)
     public void update(ProductPojo productPojo) throws ApiException {
       productDao.update(productPojo);
     }
-      public ProductPojo givePojoById(Integer id){
+    public ProductPojo givePojoById(Integer id){
             return productDao.selectPojoById(id);
       }
-        public ProductPojo givePojoByBarcode(String barcode){
+    public ProductPojo givePojoByBarcode(String barcode){
             return productDao.selectPojoByBarcode(barcode);
         }
-        public ProductPojo getCheckByBarcode(String barcode) throws ApiException{
-            ProductPojo p = productDao.selectPojoByBarcode(barcode);
+    public ProductPojo getCheckByBarcode(String barcode) throws ApiException {
+        ProductPojo p = productDao.selectPojoByBarcode(barcode);
             if(p == null){
                 throw new ApiException("The product with given barcode does not exist");
-            }
-            return p;
         }
+        return p;
+    }
 //
 //
 }

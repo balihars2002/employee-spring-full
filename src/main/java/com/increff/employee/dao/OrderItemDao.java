@@ -1,15 +1,14 @@
 package com.increff.employee.dao;
 
-import com.increff.employee.model.OrderItemForm;
-import com.increff.employee.pojo.OrderPojo;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
+
 import com.increff.employee.pojo.OrderItemPojo;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,6 +21,8 @@ public class OrderItemDao extends AbstractDao{
     private static final String DELETE_BY_ORDER_ID = "delete from OrderItemPojo p where orderId=:orderId";
 
     private static final String SELECT_SOME = "select p from OrderItemPojo p where orderId=:id";
+
+    private static final String SELECT_BY_ID = "select p from OrderItemPojo p where id=:id";
     @PersistenceContext
     private EntityManager em;
 
@@ -50,6 +51,12 @@ public class OrderItemDao extends AbstractDao{
         TypedQuery<OrderItemPojo> query = getQuery(SELECT_SOME,OrderItemPojo.class);
         query.setParameter("id",id);
         return query.getResultList();
+    }
+
+    public OrderItemPojo getPojoFromId(Integer id){
+        TypedQuery<OrderItemPojo> query = getQuery(SELECT_BY_ID,OrderItemPojo.class);
+        query.setParameter("id",id);
+        return getSingle(query);
     }
 
     public void update(OrderItemPojo pojo) {

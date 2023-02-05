@@ -1,4 +1,10 @@
 
+
+function getRole(){
+	var role = $("meta[name=userRole]").attr("content")
+	console.log(" role :: ",role);
+	return role;
+}
 //HELPER METHOD
 function toJson($form){
     var serialized = $form.serializeArray();
@@ -52,3 +58,14 @@ function writeFileData(arr){
     tempLink.setAttribute('download', 'download.tsv');
     tempLink.click(); 
 }
+function disableButtons(){
+    if(getRole()=="operator"){
+        document.getElementById("brand-report").hidden = true;
+        document.getElementById("sales-report").hidden = true;
+        document.getElementById("inventory-report").hidden = true;
+        document.getElementById("daily-sales").hidden = true;
+        document.getElementById("admin").hidden = true;
+    }
+}
+
+$(document).ready(disableButtons);

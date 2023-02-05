@@ -1,9 +1,9 @@
 package com.increff.employee.dto;
 
-import com.increff.employee.model.InventoryForm;
+import com.increff.employee.model.form.InventoryForm;
 import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.pojo.InventoryPojo;
-import com.increff.employee.model.InventoryData;
+import com.increff.employee.model.data.InventoryData;
 
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.ApiException;
@@ -13,7 +13,7 @@ import com.increff.employee.service.ProductApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,31 +22,41 @@ public class InventoryDto {
 
     @Autowired
     private ProductApi productApi;
+
     @Autowired
     private BrandApi brandApi;
+
     @Autowired
     private InventoryApi inventoryApi;
-    @Transactional(rollbackOn = ApiException.class)
+
+
     public void addDto(InventoryForm form) throws ApiException {
-        InventoryPojo pojo = convertFormToPojo(form);
-        inventoryApi.addService(pojo);
+        if(form.getQuantity()<0){
+            throw new ApiException("The product Quantity cannot be negative");
+        }
+        Integer id = productApi.getPojoFromBarcode(form.getBarcode()).getId();
+        InventoryPojo pojo1 = inventoryApi.getPojoFromProductId(id);
+        if(pojo1 != null){
+            increaseOrDecreaseInventory(pojo1.getId(),form.getQuantity(),true);
+        }
+        else {
+            InventoryPojo pojo = convertFormToPojo(form);
+            inventoryApi.addService(pojo);
+        }
     }
 
-    @Transactional(rollbackOn = ApiException.class)
     public void deleteInventoryById(Integer id) throws ApiException{
         inventoryApi.deleteService(id);
     }
 
-      @Transactional
     public List<InventoryData> getAllDto() throws ApiException{
           List<InventoryPojo> list= inventoryApi.selectAllFromService();
           List<InventoryData> list1 = new ArrayList<InventoryData>();
           for(InventoryPojo p:list){
-              list1.add(convertPojoToData(p));
+              list1.add(convertInventoryPojoToData(p));
           }
           return list1;
       }
-      @Transactional(rollbackOn = ApiException.class)
       public void updateInv(Integer id,InventoryForm inventoryForm) throws ApiException{
           InventoryPojo inventoryPojo1 = inventoryApi.getPojoFromId(id);
           if(inventoryPojo1 == null){
@@ -56,7 +66,6 @@ public class InventoryDto {
           inventoryApi.updateInv(inventoryPojo1);
       }
 
-      @Transactional(rollbackOn = ApiException.class)
       public void increaseOrDecreaseInventory(Integer id,Integer changeQuantityBy,Boolean increase){
             if(increase) {
                 changeQuantityBy = -changeQuantityBy;
@@ -71,7 +80,7 @@ public class InventoryDto {
         if(inventoryPojo == null){
             throw new ApiException("Product with given id does not exist.");
         }
-        return convertPojoToData(inventoryPojo);
+        return convertInventoryPojoToData(inventoryPojo);
     }
 //    @Transactional(rollbackOn = ApiException.class)
 //    public void increaseQuantity(String barcode,int addQuantity) throws ApiException{
@@ -96,7 +105,7 @@ public class InventoryDto {
 //          inventoryPojo.setId(product_id);
 //          inventoryService.updateInv(inventoryPojo);
 //      }
-      public InventoryData convertPojoToData(InventoryPojo inventoryPojo) throws ApiException{
+      public InventoryData convertInventoryPojoToData(InventoryPojo inventoryPojo) throws ApiException{
           InventoryData d = new InventoryData();
           ProductPojo productPojo= productApi.givePojoById(inventoryPojo.getProductId());
           //  get brand and category from id

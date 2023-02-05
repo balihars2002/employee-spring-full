@@ -1,14 +1,12 @@
 package com.increff.employee.service;
 
 import com.increff.employee.dao.OrderItemDao;
-import com.increff.employee.model.OrderItemForm;
 import com.increff.employee.pojo.OrderItemPojo;
-import com.increff.employee.pojo.OrderPojo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
+
 import java.util.List;
 
 @Service
@@ -18,7 +16,7 @@ public class OrderItemApi {
     @Autowired
     private OrderItemDao orderItemDao;
 
-    @Transactional(rollbackOn = ApiException.class)
+    @Transactional(rollbackFor = ApiException.class)
     public void add(OrderItemPojo orderItemPojo){
         orderItemDao.insert(orderItemPojo);
     }
@@ -33,7 +31,7 @@ public class OrderItemApi {
         orderItemDao.deleteByProductId(product_id);
     }
 
-    @Transactional(rollbackOn  = ApiException.class)
+    @Transactional(rollbackFor  = ApiException.class)
     public void update(OrderItemPojo existing) throws ApiException {
         orderItemDao.update(existing);
     }
@@ -46,5 +44,7 @@ public class OrderItemApi {
         return orderItemDao.selectSome(orderId);
     }
 
-
+    public OrderItemPojo getPojoFromId(Integer id){
+        return orderItemDao.getPojoFromId(id);
+    }
 }

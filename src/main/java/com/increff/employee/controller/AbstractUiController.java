@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.increff.employee.model.InfoData;
+import com.increff.employee.model.data.InfoData;
 import com.increff.employee.util.SecurityUtil;
 import com.increff.employee.util.UserPrincipal;
 
@@ -23,6 +23,7 @@ public abstract class AbstractUiController {
 		UserPrincipal principal = SecurityUtil.getPrincipal();
 
 		info.setEmail(principal == null ? "" : principal.getEmail());
+		info.setRole(principal == null ? "" : principal.getRole());
 
 		// Set info
 		ModelAndView mav = new ModelAndView(page);

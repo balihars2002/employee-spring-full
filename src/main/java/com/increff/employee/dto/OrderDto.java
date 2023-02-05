@@ -1,34 +1,51 @@
 package com.increff.employee.dto;
 
-import com.increff.employee.model.*;
+import com.increff.employee.model.data.OrderData;
+import com.increff.employee.model.data.OrderItemData;
+import com.increff.employee.model.data.ProductData;
+import com.increff.employee.model.data.SalesReportData;
+import com.increff.employee.model.form.OrderForm;
+import com.increff.employee.model.form.OrderItemForm;
+import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
+import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.ApiException;
 import com.increff.employee.service.OrderApi;
+import com.increff.employee.service.OrderItemApi;
+import com.increff.employee.service.ProductApi;
 import com.increff.employee.spring.SecurityConfig;
 import com.increff.employee.util.StringUtil;
 import org.apache.log4j.Logger;
+import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 import java.time.LocalDateTime;
 
+import static com.increff.employee.dto.DtoHelper.*;
+
 @Service
 public class OrderDto {
 
     @Autowired
-    private OrderApi orderApi;
-    @Autowired
-    private ProductDto productDto;
-//    @Autowired
-//    private ProductService productApi;
-//    @Autowired
-//    private OrderItemApi orderItemApi;
-    @Autowired
     private OrderItemDto orderItemDto;
+    @Autowired
+    private OrderApi orderApi;
+
+
+    @Autowired
+    private OrderItemApi orderItemApi;
+
+    @Autowired
+    private ProductApi productApi;
+
+//    @Autowired
+//    private OrderItemDto orderItemDto;
     private static Logger logger = Logger.getLogger(SecurityConfig.class);
 
 //    @Autowired
@@ -36,23 +53,23 @@ public class OrderDto {
 //    @Autowired
 //    private SalesReportDto salesReportDto;
 
-    @Transactional(rollbackOn = ApiException.class)
     public void add(OrderForm orderForm) throws ApiException{
         OrderPojo orderPojo = convertFormToPojo(orderForm);
         orderApi.add(orderPojo);
         Integer id = orderPojo.getId();
-       // List<OrderItemPojo> orderItemPojo = new ArrayList<OrderItemPojo>();
-        for(OrderItemForm a:orderForm.getOrderItemFormList()){
-            orderItemDto.add(a,id);
+        for(OrderItemForm orderItemForm:orderForm.getOrderItemFormList()){
+            OrderItemPojo orderItemPojo = convertOrderItemFormToPojo(orderItemForm,id);
+            ProductPojo productPojo = productApi.getPojoFromBarcode(orderItemForm.getBarcode());
+            orderItemPojo.setProductId(productPojo.getId());
+            orderItemPojo.setSellingPrice(productPojo.getMrp());
+            orderItemApi.add(orderItemPojo);
         }
     }
 
-    @Transactional
     public void delete(Integer id) {
         orderApi.delete(id);
     }
 
-    @Transactional(rollbackOn  = ApiException.class)
     public void updateList(OrderForm form) throws ApiException {
         OrderPojo orderPojo = new OrderPojo();
 //        BrandPojo brandPojo1 = brandService.getBrandCat(brandPojo.getBrand(),brandPojo.getCategory());
@@ -67,8 +84,7 @@ public class OrderDto {
         orderApi.update(orderPojo);
     }
 
-    @Transactional
-    public List<OrderData> viewAlLOrder(){
+    public List<OrderData> viewAlLOrder() throws ApiException {
         List<OrderData> list = new ArrayList<OrderData>();
         List<OrderPojo> list1 = orderApi.selectAll();
         for(OrderPojo pojo:list1){
@@ -77,117 +93,129 @@ public class OrderDto {
 
         return list;
     }
-
-    public OrderData convertPojoToData(OrderPojo orderPojo){
+    public List<OrderItemData> viewOrderItemsInOrder(Integer id) throws ApiException {
+        List<OrderItemPojo> orderItemPojoList = orderItemApi.selectSome(id);
+        List<OrderItemData> orderItemDataList = new ArrayList<>();
+        for(OrderItemPojo orderItemPojo:orderItemPojoList){
+            OrderItemData orderItemData = convertOrderItemPojoToData(orderItemPojo);
+            ProductPojo productPojo = productApi.getPojoFromId(orderItemPojo.getProductId());
+            orderItemData.setBarcode(productPojo.getBarcode());
+            orderItemDataList.add(orderItemData);
+        }
+        return orderItemDataList;
+    }
+    
+    public OrderData convertPojoToData(OrderPojo orderPojo) throws ApiException {
         OrderData orderData = new OrderData();
         orderData.setId(orderPojo.getId());
 
         List<OrderItemData> orderItemDataList = orderItemDto.viewAlLOrderItemsWithGivenOrderId(orderPojo.getId());
         orderData.setOrderItemDataList(orderItemDataList);
         orderData.setDate(orderPojo.getDate());
-       // orderData.setLocalDateTime(orderPojo.getDateTime());
+        orderData.setUpdatedDate(orderPojo.getUpdatedDate());
         return orderData;
     }
     public OrderPojo convertFormToPojo(OrderForm orderForm){
         OrderPojo orderPojo = new OrderPojo();
         LocalDateTime localDateTime = LocalDateTime.now();
-        long millis = System.currentTimeMillis();
-        //Date date = new Date(millis);
-        DateFormat simple = new SimpleDateFormat("dd MMM yyyy HH:mm:ss ");
 
+        long millis = System.currentTimeMillis();
+        DateFormat simple = new SimpleDateFormat("dd MMM yyyy HH:mm:ss ");
         // Creating date from milliseconds
         // using Date() constructor
         Date date = new Date(millis);
-        orderPojo.setDateTime(localDateTime);
+        orderPojo.setOrderAddDateTime(localDateTime);
         orderPojo.setDate(simple.format(date));
         return orderPojo;
     }
 
-    public List<SalesReportData> getReport(LocalDate startDate,LocalDate endDate,String brand,String category) throws ApiException{
+    public List<SalesReportData> getReport(LocalDate startDate, LocalDate endDate, String brand, String category) throws ApiException{
         logger.info("Entered Order DTO");
 
         List<OrderPojo> orderPojoList = orderApi.selectInDate(startDate, endDate);
         HashMap<List<String>,Integer> mapQuantity = new HashMap<List<String>,Integer>();
         HashMap<List<String>,Double> mapRevenue = new HashMap<List<String>,Double>();
 
-        logger.info(brand + " " + category);
+//        logger.info(brand + " " + category);
 
         for(OrderPojo pojo:orderPojoList){
             List<OrderItemData> orderItemDataList = orderItemDto.viewAlLOrderItemsWithGivenOrderId(pojo.getId());
-            for(OrderItemData data: orderItemDataList){
-                ProductData productData = productDto.getDataFromId(data.getProductId());
-                if(!StringUtil.isEmpty(category) && !StringUtil.isEmpty(brand)) {
-                    if( brand.equals(productData.getBrand()) && category.equals(productData.getCategory())) {
-                        logger.info("Entered 1");
-                        List<String> tempList = new ArrayList<>();
-                        tempList.add(productData.getBrand());
-                        tempList.add(productData.getCategory());
+            for(OrderItemData data: orderItemDataList) {
+                if (data.getProductId() != null) {
+                    logger.info("into atleast 1 order item");
+//                    ProductData productData = productDto.getDataFromId(data.getProductId());
+                    ProductPojo productPojo = productApi.givePojoById(data.getProductId());
+                    ProductData productData = convertProductPojoToData(productPojo);
+                    if (!StringUtil.isEmpty(category) && !StringUtil.isEmpty(brand)) {
+                        if (brand.equals(productData.getBrand()) && category.equals(productData.getCategory())) {
+//                        logger.info("Entered 1");
+                            List<String> tempList = new ArrayList<>();
+                            tempList.add(productData.getBrand());
+                            tempList.add(productData.getCategory());
 
-                        if (mapQuantity.containsKey(tempList)) {
-                            Integer t = mapQuantity.get(tempList);
-                            mapQuantity.put(tempList, t + data.getQuantity());
-                            Double d = mapRevenue.get(tempList);
-                            Double mrp = productData.getMrp();
-                            mapRevenue.put(tempList, d + data.getQuantity() * mrp);
-                        } else {
-                            mapQuantity.put(tempList, data.getQuantity());
-                            mapRevenue.put(tempList, productData.getMrp() * data.getQuantity());
+                            if (mapQuantity.containsKey(tempList)) {
+                                Integer t = mapQuantity.get(tempList);
+                                mapQuantity.put(tempList, t + data.getQuantity());
+                                Double d = mapRevenue.get(tempList);
+                                Double mrp = productData.getMrp();
+                                mapRevenue.put(tempList, d + data.getQuantity() * mrp);
+                            } else {
+                                mapQuantity.put(tempList, data.getQuantity());
+                                mapRevenue.put(tempList, productData.getMrp() * data.getQuantity());
+                            }
                         }
-                    }
-                }
-                else if (!StringUtil.isEmpty(category)){
-                    if(category.equals(productData.getCategory())) {
-                        logger.info("Entered 2");
-                        List<String> tempList = new ArrayList<>();
-                        tempList.add(productData.getBrand());
-                        tempList.add(productData.getCategory());
+                    } else if (!StringUtil.isEmpty(category)) {
+                        if (category.equals(productData.getCategory())) {
+                            logger.info("Entered 2");
+                            List<String> tempList = new ArrayList<>();
+                            tempList.add(productData.getBrand());
+                            tempList.add(productData.getCategory());
 
-                        if (mapQuantity.containsKey(tempList)) {
-                            Integer t = mapQuantity.get(tempList);
-                            mapQuantity.put(tempList, t + data.getQuantity());
-                            Double d = mapRevenue.get(tempList);
-                            Double mrp = productData.getMrp();
-                            mapRevenue.put(tempList, d + data.getQuantity() * mrp);
-                        } else {
-                            mapQuantity.put(tempList, data.getQuantity());
-                            mapRevenue.put(tempList, productData.getMrp() * data.getQuantity());
+                            if (mapQuantity.containsKey(tempList)) {
+                                Integer t = mapQuantity.get(tempList);
+                                mapQuantity.put(tempList, t + data.getQuantity());
+                                Double d = mapRevenue.get(tempList);
+                                Double mrp = productData.getMrp();
+                                mapRevenue.put(tempList, d + data.getQuantity() * mrp);
+                            } else {
+                                mapQuantity.put(tempList, data.getQuantity());
+                                mapRevenue.put(tempList, productData.getMrp() * data.getQuantity());
+                            }
                         }
-                    }
-                }
-                else if (!StringUtil.isEmpty(brand)){
-                    if(brand.equals(productData.getBrand())) {
-                        logger.info("Entered 3");
-                        List<String> tempList = new ArrayList<>();
-                        tempList.add(productData.getBrand());
-                        tempList.add(productData.getCategory());
+                    } else if (!StringUtil.isEmpty(brand)) {
+                        if (brand.equals(productData.getBrand())) {
+                            logger.info("Entered 3");
+                            List<String> tempList = new ArrayList<>();
+                            tempList.add(productData.getBrand());
+                            tempList.add(productData.getCategory());
 
-                        if (mapQuantity.containsKey(tempList)) {
-                            Integer t = mapQuantity.get(tempList);
-                            mapQuantity.put(tempList, t + data.getQuantity());
-                            Double d = mapRevenue.get(tempList);
-                            Double mrp = productData.getMrp();
-                            mapRevenue.put(tempList, d + data.getQuantity() * mrp);
-                        } else {
-                            mapQuantity.put(tempList, data.getQuantity());
-                            mapRevenue.put(tempList, productData.getMrp() * data.getQuantity());
+                            if (mapQuantity.containsKey(tempList)) {
+                                Integer t = mapQuantity.get(tempList);
+                                mapQuantity.put(tempList, t + data.getQuantity());
+                                Double d = mapRevenue.get(tempList);
+                                Double mrp = productData.getMrp();
+                                mapRevenue.put(tempList, d + data.getQuantity() * mrp);
+                            } else {
+                                mapQuantity.put(tempList, data.getQuantity());
+                                mapRevenue.put(tempList, productData.getMrp() * data.getQuantity());
+                            }
                         }
-                    }
-                }
-                else {
-                    logger.info("Entered 4");
-                    List<String> tempList = new ArrayList<>();
-                    tempList.add(productData.getBrand());
-                    tempList.add(productData.getCategory());
-
-                    if (mapQuantity.containsKey(tempList)) {
-                        Integer t = mapQuantity.get(tempList);
-                        mapQuantity.put(tempList, t + data.getQuantity());
-                        Double d = mapRevenue.get(tempList);
-                        Double mrp = productData.getMrp();
-                        mapRevenue.put(tempList, d + data.getQuantity() * mrp);
                     } else {
-                        mapQuantity.put(tempList, data.getQuantity());
-                        mapRevenue.put(tempList, productData.getMrp() * data.getQuantity());
+                        logger.info("Entered 4");
+                        List<String> tempList = new ArrayList<>();
+                        tempList.add(productData.getBrand());
+                        tempList.add(productData.getCategory());
+
+                        if (mapQuantity.containsKey(tempList)) {
+                            Integer t = mapQuantity.get(tempList);
+                            mapQuantity.put(tempList, t + data.getQuantity());
+                            Double d = mapRevenue.get(tempList);
+                            Double mrp = productData.getMrp();
+                            mapRevenue.put(tempList, d + data.getQuantity() * mrp);
+                        } else {
+                            mapQuantity.put(tempList, data.getQuantity());
+                            mapRevenue.put(tempList, productData.getMrp() * data.getQuantity());
+                        }
                     }
                 }
             }

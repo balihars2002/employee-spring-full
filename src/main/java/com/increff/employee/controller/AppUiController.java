@@ -1,6 +1,7 @@
 package com.increff.employee.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -32,6 +33,11 @@ public class AppUiController extends AbstractUiController {
 		return mav("order.html");
 	}
 
+	@RequestMapping(value = "/ui/orderItem/{id}")
+	public ModelAndView orderItem(@PathVariable Integer id) {
+		return mav("orderItem.html");
+	}
+
 	@RequestMapping(value = "/ui/brandReport")
 	public ModelAndView brandReport() {
 		return mav("brandReport.html");
@@ -46,10 +52,19 @@ public class AppUiController extends AbstractUiController {
 	public ModelAndView salesReport() {
 		return mav("salesReport.html");
 	}
+	@RequestMapping(value = "/ui/scheduler")
+	public ModelAndView dailySalesReport() {
+		return mav("dailySales.html");
+	}
 
 	@RequestMapping(value = "/ui/employee")
 	public ModelAndView employee() {
 		return mav("employee.html");
+	}
+
+	@RequestMapping(value = "/ui/signup")
+	public ModelAndView signup() {
+		return mav("signup.html");
 	}
 
 

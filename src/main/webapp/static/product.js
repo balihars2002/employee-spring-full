@@ -1,8 +1,12 @@
 function getProductUrl() {
     var baseUrl = $("meta[name=baseUrl]").attr("content")
-    return baseUrl + "/api/product";
+    return baseUrl + "/api/";
 }
-
+function getRole(){
+	var role = $("meta[name=userRole]").attr("content")
+	console.log(" role :: ",role);
+	return role;
+}
 function getBrandUrl() {
     var baseUrl = $("meta[name=baseUrl]").attr("content")
     return baseUrl + "/api/brand";
@@ -11,7 +15,7 @@ function getBrandUrl() {
 //BUTTON ACTIONS
 function addProduct(event) {
     //Set the values to update
-    var url = getProductUrl();
+    var url = getProductUrl()+"product";
     console.log("url is : ", url);
     var $form = $("#product-form");
     var json = toJson($form);
@@ -39,7 +43,7 @@ function updateTheProduct(event) {
 
     //Get the ID
     var id = $("#product-edit-form input[name=id]").val();
-    var url = getProductUrl() + "/" + id;
+    var url = getProductUrl() + "product/" + id;
     console.log("the url in the updateproduct function is : ",  url );
     //Set the values to update
     var $form = $("#product-edit-form");
@@ -63,7 +67,7 @@ function updateTheProduct(event) {
 
 
 function getProductList() {
-    var url = getProductUrl();
+    var url = getProductUrl()+"operator/product";
     console.log("url: ", url);
 
     $.ajax({
@@ -79,7 +83,7 @@ function getProductList() {
 
 function deleteProduct(id) {
    // var barcode = $('#'+id)[0].value;
-    var url = getProductUrl() + "/" + id;
+    var url = getProductUrl() + "product/" + id;
     console.log(" url is : ", url);
 
     $.ajax({
@@ -127,7 +131,7 @@ function uploadRows() {
     processCount++;
 
     var json = JSON.stringify(row);
-    var url = getProductUrl();
+    var url = getProductUrl()+"product";
 
     //Make ajax call
     $.ajax({
@@ -226,7 +230,9 @@ function displayProductList(data) {
             + '<td>' + e.category + '</td>'
             + '<td>' + e.mrp + '</td>'
             + '<td>' + e.name + '</td>'
+            if(getRole()=="supervisor"){
             + '<td>' + buttonHtml + '</td>'
+            }
             + '</tr>';
         $tbody.append(row);
     }
@@ -235,7 +241,7 @@ function displayProductList(data) {
 function displayEditProduct(id) {
     //var barcode = $('#'+id)[0].value;
     console.log("the product is being displayed after editing");
-    var url = getProductUrl() + "/" + id ;
+    var url = getProductUrl() + "operator/product/" + id ;
     console.log(" url is : ", url);
    
     $.ajax({
@@ -247,6 +253,15 @@ function displayEditProduct(id) {
         },
         error: handleAjaxError
     });
+}
+
+function disableButtons(){
+	var role = getRole();
+	if(role == "operator"){
+	document.getElementById("product-form").hidden = true;
+	document.getElementById("upload-data").disabled = true;
+	}
+	// document.getElementById("add-brand").disabled = true;
 }
 
 function resetUploadDialog() {
@@ -308,6 +323,7 @@ function init() {
     });
 }
 
+$(document).ready(disableButtons);
 $(document).ready(init);
 $(document).ready(getProductList);
 $(document).ready(processDropDown);

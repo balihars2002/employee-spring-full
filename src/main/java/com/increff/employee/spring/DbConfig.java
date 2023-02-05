@@ -14,12 +14,13 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import static com.increff.employee.constant.AppConstant.PACKAGE_POJO;
+
 @EnableTransactionManagement
 @Configuration
 public class DbConfig {
 
-	public static final String PACKAGE_POJO = "com.increff.employee.pojo";
-	
+
 	@Value("${jdbc.driverClassName}")
 	private String jdbcDriver;
 	@Value("${jdbc.url}")

@@ -9,6 +9,7 @@ function getOrderUrl(){
 function addToggle(event){
 	$('#add-order-modal').modal('toggle');
 }
+
 // BUTTON ACTION
 function addOrderHelp(form,col){
 	var serialisedArray = form.serializeArray();
@@ -56,32 +57,6 @@ function resetAddOrderDialog(){
 	$("#add-order-table tbody tr:not(:first-child)").remove();
 	$form.trigger("reset");
 }
-// function updateOrder(event){
-// 	$('#edit-order-modal').modal('toggle');
-// 	//Get the ID
-// 	var id = $("#order-edit-form input[name=id]").val();	
-// 	var url = getOrderUrl() + "/" + id;
-
-// 	//Set the values to update
-// 	var $form = $("#order-edit-form");
-// 	var json = toJson($form);
-
-// 	$.ajax({
-// 	   url: url,
-// 	   type: 'PUT',
-// 	   data: json,
-// 	   headers: {
-//        	'Content-Type': 'application/json'
-//        },	   
-// 	   success: function(response) {
-// 	   		getOrderList();   
-// 	   },
-// 	   error: handleAjaxError
-// 	});
-
-// 	return false;
-// }
-
 
 function getOrderList(){
 	var url = getOrderUrl();
@@ -98,75 +73,20 @@ function getOrderList(){
 	});
 }
 
-// function deleteOrder(id){
-// 	var url = getOrderUrl() + "/" + id;
+function deleteOrder(id){
+	var url = getOrderUrl() + "/" + id;
 
-// 	$.ajax({
-// 	   url: url,
-// 	   type: 'DELETE',
-// 	   success: function(data) {
-// 	   		getOrderList();  
-// 	   },
-// 	   error: handleAjaxError
-// 	});
-// }
-
-// FILE UPLOAD METHODS
-var fileData = [];
-var errorData = [];
-var processCount = 0;
+	$.ajax({
+	   url: url,
+	   type: 'DELETE',
+	   success: function(data) {
+	   		getOrderList();  
+	   },
+	   error: handleAjaxError
+	});
+}
 
 
-// function processData(){
-// 	var file = $('#orderFile')[0].files[0];
-// 	readFileData(file, readFileDataCallback);
-// }
-
-// function readFileDataCallback(results){
-// 	fileData = results.data;
-// 	uploadRows();
-// }
-
-// function uploadRows(){
-// 	//Update progress
-// 	updateUploadDialog();
-// 	//If everything processed then return
-// 	if(processCount==fileData.length){
-// 		return;
-// 	}
-	
-// 	//Process next row
-// 	var row = fileData[processCount];
-// 	processCount++;
-	
-// 	var json = JSON.stringify(row);
-// 	var url = getOrderUrl();
-
-// 	//Make ajax call
-// 	$.ajax({
-// 	   url: url,
-// 	   type: 'POST',
-// 	   data: json,
-// 	   headers: {
-//        	'Content-Type': 'application/json'
-//        },	   
-// 	   success: function(response) {
-// 	   		uploadRows();  
-// 	   },
-// 	   error: function(response){
-// 	   		row.error=response.responseText
-// 	   		errorData.push(row);
-// 	   		uploadRows();
-// 	   }
-// 	});
-
-// }
-
-// function downloadErrors(){
-// 	writeFileData(errorData);
-// }
-
-//UI DISPLAY METHODS
 
 function displayOrderList(data){
 	console.log("into the display order ");
@@ -176,76 +96,34 @@ function displayOrderList(data){
 		var e = data[i];
 		var buttonHtml = '<button class="fa fa-trash" style="border:0px;" onclick="deleteOrder(' + e.id + ')"></button>'
 		 buttonHtml += ' <button class="fa fa-pencil" style="border:0px;"  onclick="displayEditOrder(' + e.id + ')"></button>'
-		 buttonHtml += ' <button class="fa fa-eye" style="border:0px;" onclick="viewOrder(' + e.id + ')"></button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
-		// + '<td>' + e.localDateTime + '</td>'
 		+ '<td>' + e.date + '</td>'
+		+ '<td>' + e.updatedDate + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);
 	}
 }
-
-function viewOrder(id){
-	var url = getOrderUrl() + "/" + id;
-	console.log(" into the view order function ");
-
-	$.ajax({
-		url: url,
-		type: 'GET',
-		success: function(data) {
-				displayOrder(data);   
-		},
-		error: handleAjaxError
-	 });	
-
+function displayEditOrder(id) {
+    $(location).prop('href', '/employee/ui/orderItem/' + id)
 }
-function displayEditOrder(id){
-	var url = getOrderUrl() + "/" + id;
-	console.log(" into the get edit order function ");
-	console.log(" the url int the get inv is :", url);
-	$.ajax({
-	   url: url,
-	   type: 'GET',
-	   success: function(data) {
-	   		displayOrder(data);   
-	   },
-	   error: handleAjaxError
-	});	
+function viewOrder(){
+		var url = getOrderUrl() + "/" + id;
+		console.log(" into the view order function ");
+	
+		$.ajax({
+			url: url,
+			type: 'GET',
+			success: function(data) {
+					displayOrder(data);   
+			},
+			error: handleAjaxError
+		 });	
+	
 }
 
-// function resetUploadDialog(){
-// 	//Reset file name
-// 	var $file = $('#orderFile');
-// 	$file.val('');
-// 	$('#orderFileName').html("Choose File");
-// 	//Reset various counts
-// 	processCount = 0;
-// 	fileData = [];
-// 	errorData = [];
-// 	//Update counts	
-// 	updateUploadDialog();
-// }
-
-// function updateUploadDialog(){
-// 	$('#rowCount').html("" + fileData.length);
-// 	$('#processCount').html("" + processCount);
-// 	$('#errorCount').html("" + errorData.length);
-// }
-
-// function updateFileName(){
-// 	var $file = $('#orderFile');
-// 	var fileName = $file.val();
-// 	$('#orderFileName').html(fileName);
-// }
-
-// function displayUploadData(){
-//  	resetUploadDialog(); 	
-// 	$('#upload-order-modal').modal('toggle');
-// }
-
-function displayInventory(data){
+function displayOrder(data){
 	$("#order-edit-form input[name=id]").val(data.id);	
 	// $("#order-edit-form input[name=barcode]").val(data.barcode);	
 	// $("#order-edit-form input[name=brand]").val(data.brand);	
@@ -253,6 +131,7 @@ function displayInventory(data){
 	// $("#order-edit-form input[name=productId]").val(data.productId);
 	// $("#order-edit-form input[name=orderId]").val(data.orderId);	
 	$("#order-edit-form input[name=date]").val(data.date);
+	$("#order-edit-form input[name=updatedDate]").val(data.updatedDate);
 	// $("#order-edit-form input[name=localDateTime]").val(data.localDateTime);
 	$('#edit-order-modal').modal('toggle');
 }
@@ -261,30 +140,34 @@ function addRow(){
 	console.log("the add row function called");
 	$("#add-order-row").clone().insertAfter("tr.add-order-row:last");
 	console.log("new row has been added");
+    $('.delete-new-row').click(deleteRow);
+
 }
-// function deleteRow(){
-// 	console.log("into the delete row function");
-// 	$("#add-order-row").closest("add-order-row").remove();
-//     e.preventDefault();
-// 	console.log("exiting the delete row fucntion");
-// }
-// function deleteRow(){
-// 	console.log("into the delete row");
-// 	$("#add-order-table").on('click','.btnDelete',function(){
-// 		$(this).closest('tr').remove();
-// 	 });
-// 	 console.log("exiting the delete row");
-// }
-// function addRow() {
-//     const node = document.getElementById("myList2").lastChild;
-//     const clone = node.cloneNode(true);
-//     document.getElementById("myList1").appendChild(clone);
-//   }
+
+function deleteRow(){
+	console.log("into the delete row");
+	var count = $('#add-order-table tr').length;
+	console.log(" row count :: ", count);
+	if( count > 1 ){
+		$("#add-order-table").on('click','.delete-new-row',function(){
+			
+			$(this).closest('tr').remove();
+			
+		});
+	}
+	else{
+		alert("Order cannot be empty");
+		throw new Error("cannot be empty");	
+	}
+	 console.log("exiting the delete row");
+}
+
 //INITIALIZATION CODE
 function init(){
 	$('#add-order').click(addOrder);
 	$('#add-order-button').click(addToggle);
     $('#add-new-row').click(addRow);
+    // $('.delete-new-row').click(deleteRow);
 	// $('#btnDelete').click(deleteRow);
 	// $('#update-order').click(updateOrder);
 	 $('#refresh-data').click(getOrderList);

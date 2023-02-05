@@ -1,35 +1,32 @@
 package com.increff.employee.pojo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.sun.istack.NotNull;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 //@Table(uniqueConstraints = {@UniqueConstraint(columnNames = )})
 public class OrderPojo {
 
     @Id
-   // @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     @TableGenerator(name = "order_id", pkColumnValue = "order_id")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "order_id")
     private Integer id;
     @NotNull
-    private LocalDateTime dateTime;
+    private LocalDateTime orderAddDateTime;
+    private LocalDateTime orderUpdateDateTime;
 
     private String date;
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    private String updatedDate;
+
+    public LocalDateTime getOrderAddDateTime() {
+        return orderAddDateTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setOrderAddDateTime(LocalDateTime orderAddDateTime) {
+        this.orderAddDateTime = orderAddDateTime;
     }
 
     public Integer getId() {
@@ -48,4 +45,19 @@ public class OrderPojo {
         this.date = date;
     }
 
+    public LocalDateTime getOrderUpdateDateTime() {
+        return orderUpdateDateTime;
+    }
+
+    public void setOrderUpdateDateTime(LocalDateTime orderUpdateDateTime) {
+        this.orderUpdateDateTime = orderUpdateDateTime;
+    }
+
+    public String getUpdatedDate() {
+        return updatedDate;
+    }
+
+    public void setUpdatedDate(String updatedDate) {
+        this.updatedDate = updatedDate;
+    }
 }

@@ -1,8 +1,12 @@
 
-
+function getRole(){
+	var role = $("meta[name=userRole]").attr("content")
+	console.log(" role :: ",role);
+	return role;
+}
 function getBrandUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/brand";
+	return baseUrl + "/api/";
 }
 	
 //BUTTON ACTION
@@ -10,7 +14,7 @@ function addBrand(event){
 	//Set the values to update
 	var $form = $("#brand-form");
 	var json = toJson($form);
-	var url = getBrandUrl();
+	var url = getBrandUrl()+"brand";
 
 	$.ajax({
 	   url: url,
@@ -20,7 +24,7 @@ function addBrand(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
-	   		getOrderList();  
+	   		getBrandList();  
 	   },
 	   error: handleAjaxError
 	});
@@ -28,11 +32,11 @@ function addBrand(event){
 	return false;
 }
 
-function updateOrder(event){
+function updateBrand(event){
 	$('#edit-brand-modal').modal('toggle');
 	//Get the ID
 	var id = $("#brand-edit-form input[name=id]").val();	
-	var url = getBrandUrl() + "/" + id;
+	var url = getBrandUrl() + "brand/" + id;
 
 	//Set the values to update
 	var $form = $("#brand-edit-form");
@@ -46,7 +50,7 @@ function updateOrder(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
-	   		getOrderList();   
+	   		getBrandList();   
 	   },
 	   error: handleAjaxError
 	});
@@ -55,8 +59,8 @@ function updateOrder(event){
 }
 
 
-function getOrderList(){
-	var url = getBrandUrl();
+function getBrandList(){
+	var url = getBrandUrl() + "operator/brand";
 	$.ajax({
 	   url: url,
 	   type: 'GET',
@@ -68,13 +72,13 @@ function getOrderList(){
 }
 
 function deleteBrand(id){
-	var url = getBrandUrl() + "/" + id;
+	var url = getBrandUrl() + "/operator/brand" + id;
 
 	$.ajax({
 	   url: url,
 	   type: 'DELETE',
 	   success: function(data) {
-	   		getOrderList();  
+	   		getBrandList();  
 	   },
 	   error: handleAjaxError
 	});
@@ -137,13 +141,14 @@ function downloadErrors(){
 
 //UI DISPLAY METHODS
 
-function displayBrandList(data){
+function displayBrandList(data){ 	
+	
 	var $tbody = $('#brand-table').find('tbody');
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
 		// var buttonHtml = '<button class="fa fa-trash" style="border:0px;" aria-hidden="true"  onclick="deleteBrand(' + e.id + ')"></button>'
-		var buttonHtml = ' <button class="fa fa-pencil" style="border:0px;" aria-hidden="true" onclick="displayEditBrand(' + e.id + ')"></button>'
+		var buttonHtml = ' <button class="fa fa-pencil" id="edit-button" style="border:0.5px;border-color:grey" aria-hidden="true" onclick="displayEditBrand(' + e.id + ')"></button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.brand + '</td>'
@@ -152,10 +157,24 @@ function displayBrandList(data){
 		+ '</tr>';
         $tbody.append(row);
 	}
+	if(getRole()=="operator"){
+		deleteEditButton();
+	}
 }
 
+function deleteEditButton(){
+	var help = document.getElementById("brand-table");
+
+		var rowcount = help.rows;
+		console.log("the number of rows ::",rowcount);
+		console.log(help);
+		for(let i=0;i<rowcount.length ;i++){
+			rowcount[i].deleteCell(3);
+	}
+}
 function displayEditBrand(id){
-	var url = getBrandUrl() + "/" + id;
+	var url = getBrandUrl() + "operator/brand/" + id;
+	console.log(" url is :",url);
 	$.ajax({
 	   url: url,
 	   type: 'GET',
@@ -177,6 +196,15 @@ function resetUploadDialog(){
 	errorData = [];
 	//Update counts	
 	updateUploadDialog();
+}
+
+function disableButtons(){
+	var role = getRole();
+	if(role == "operator"){
+	document.getElementById("brand-form").hidden = true;
+	// document.getElementById("upload-data").disabled = true;
+	}
+	// document.getElementById("add-brand").disabled = true;
 }
 
 function updateUploadDialog(){
@@ -203,18 +231,21 @@ function displayBrand(data){
 	$('#edit-brand-modal').modal('toggle');
 }
 
-
 //INITIALIZATION CODE
 function init(){
 	$('#add-brand').click(addBrand);
-	$('#update-brand').click(updateOrder);
-	$('#refresh-data').click(getOrderList);
+	$('#update-brand').click(updateBrand);
+	$('#refresh-data').click(getBrandList);
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
     $('#brandFile').on('change', updateFileName)
+
+	
 }
 
+// $(document).ready(getRole);
+$(document).ready(disableButtons);
 $(document).ready(init);
-$(document).ready(getOrderList);
+$(document).ready(getBrandList);
 

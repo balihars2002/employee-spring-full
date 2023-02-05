@@ -1,4 +1,4 @@
-<!doctype html>
+<!-- <!doctype html>
 
 <html lang="en">
 
@@ -43,13 +43,68 @@
 	
 	
 
-</div> <!-- Col -->
-</div> <!-- Row -->
+</div> 
+</div> 
 
-</div> <!-- Container-->
+</div> 
 
 <footer th:replace="snippets.html :: name_footer"></footer>
 
+</body>
+
+</html> -->
+<!doctype html>
+
+<html lang="en">
+
+<head th:replace="snippets.html :: name_head">
+   
+    <!-- <style>
+        
+     </style> -->
+</head>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" th:href="@{/static/login.css}">
+
+<body>
+    
+    <nav th:replace="snippets.html :: name_site_navbar"></nav>
+    <div style="background-image: '@{/static/invmanage.jpg}'">
+    <div class="wrapper login">
+        <!-- <img src="https://scx1.b-cdn.net/csz/news/800/2017/theoreticala.jpg" alt=”an” width="400" height="200"> -->
+        <div class="container">
+            <div class="col-left">
+                <div class="login-text">
+                    <h2>Welcome!</h2>
+                    <p>Create your account`.<br>For Free!</p> <a href="@{/signup.html}" class="btn">Sign Up</a>
+                </div>
+            </div>
+            <div class="col-right">
+                <div class="login-form">
+                    <h2>Login</h2>
+                    <form class="form" id="login-form" method="POST" th:action="@{/session/login}">
+                        <p> 
+                            <label for="email" class="col-sm-10 col-form-label">Username/Email address<span>*</span></label> 
+                            <input type="text" class="form-control" name="email" id="email" placeholder="Username or Email" required>
+                         </p>
+                        <p>
+                             <label for="password" class="col-sm-10 col-form-label">Password<span>*</span></label> 
+                            <input type="password" class="form-control" name="password" id="password" placeholder="Password" required> 
+                        </p>
+                        <p>
+                             <input type="submit" id="login" value="Sign In">
+                         </p>
+                        <!-- <p> 
+                            <a href="">Forgot password?</a> 
+                        </p> -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <footer th:replace="snippets.html :: name_footer"></footer>
 </body>
 
 </html>

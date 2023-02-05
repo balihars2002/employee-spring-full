@@ -6,10 +6,12 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
+
 
 import org.springframework.stereotype.Repository;
 import com.increff.employee.pojo.BrandPojo;
+import org.springframework.transaction.annotation.Transactional;
+
 @Repository
 public class BrandDao extends AbstractDao{
     private final static String DELETE_ID = "delete from BrandPojo p where id=:id";

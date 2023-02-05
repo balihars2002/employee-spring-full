@@ -1,0 +1,15 @@
+package com.increff.employee.model.data;
+
+import com.increff.employee.model.form.ProductForm;
+
+public class ProductData extends ProductForm {
+    private Integer id;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+}

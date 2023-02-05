@@ -25,12 +25,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.time.format.DateTimeFormatter;
 
+import static com.increff.employee.constant.AppConstant.PACKAGE_CONTROLLER;
+
 @Configuration
 @EnableWebMvc
 @EnableSwagger2
 public class ControllerConfig extends WebMvcConfigurerAdapter {
 
-	public static final String PACKAGE_CONTROLLER = "com.increff.employee.controller";
 
 
 	private ApplicationContext applicationContext;

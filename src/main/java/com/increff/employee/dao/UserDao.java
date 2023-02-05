@@ -4,11 +4,12 @@ import java.util.List;
 
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.transaction.Transactional;
+
 
 import org.springframework.stereotype.Repository;
 
 import com.increff.employee.pojo.UserPojo;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public class UserDao extends AbstractDao {
