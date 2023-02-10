@@ -13,7 +13,7 @@ body {
 }
 
 .wrapper {
-    margin: 0 auto;
+    margin: -82px auto;
     width: 100%;
     max-width: 1140px;
     min-height: 100vh;
@@ -42,7 +42,7 @@ body {
 .login .col-left {
     width: 60%;
     clip-path: polygon(0 0, 0% 100%, 100% 0);
-    background: #2aa15f;
+    background: darkslategray;
 }
 
 .login .col-right {
@@ -102,7 +102,7 @@ body {
 }
 
 .login .login-text .btn:hover {
-    color: #2aa15f;
+    color: darkslategray;
     box-shadow: inset 150px 0 0 0 #ffffff;
 }
 
@@ -130,7 +130,7 @@ body {
 }
 
 .login .login-form p a {
-    color: #2aa15f;
+    color: darkslategray;
     font-size: 14px;
     text-decoration: none;
 }
@@ -171,19 +171,23 @@ body {
     display: inline-block;
     width: 100%;
     margin-top: 5px;
-    color: #2aa15f;
+    color: darkslategray;
     font-size: 16px;
     letter-spacing: 1px;
     cursor: pointer;
     background: transparent;
-    border: 1px solid #2aa15f;
+    border: 1px solid darkslategray;
     border-radius: 30px;
-    box-shadow: inset 0 0 0 0 #2aa15f;
+    box-shadow: inset 0 0 0 0 darkslategray;
     transition: .3s;
 }
 
 .login .login-form button:hover,
 .login .login-form input[type=submit]:hover {
     color: #ffffff;
-    box-shadow: inset 250px 0 0 0 #2aa15f;
+    box-shadow: inset 250px 0 0 0 darkslategray;
 }
+
+
+
+/* used darklatesgrey instead of #2aa15f (original green colour) */

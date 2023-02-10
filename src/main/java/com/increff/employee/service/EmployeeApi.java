@@ -2,7 +2,6 @@ package com.increff.employee.service;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.increff.employee.dao.EmployeeDao;
 import com.increff.employee.pojo.EmployeePojo;
 import com.increff.employee.util.StringUtil;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EmployeeApi {
@@ -17,7 +17,7 @@ public class EmployeeApi {
 	@Autowired
 	private EmployeeDao dao;
 
-	@Transactional(rollbackOn = ApiException.class)
+	@Transactional(rollbackFor = ApiException.class)
 	public void add(EmployeePojo p) throws ApiException {
 		normalize(p);
 		if(StringUtil.isEmpty(p.getName())) {
@@ -31,7 +31,7 @@ public class EmployeeApi {
 		dao.delete(id);
 	}
 
-	@Transactional(rollbackOn = ApiException.class)
+	@Transactional(rollbackFor = ApiException.class)
 	public EmployeePojo get(int id) throws ApiException {
 		return getCheck(id);
 	}
@@ -41,7 +41,7 @@ public class EmployeeApi {
 		return dao.selectAll();
 	}
 
-	@Transactional(rollbackOn  = ApiException.class)
+	@Transactional(rollbackFor  = ApiException.class)
 	public void update(int id, EmployeePojo p) throws ApiException {
 		normalize(p);
 		EmployeePojo ex = getCheck(id);

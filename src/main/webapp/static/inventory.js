@@ -26,6 +26,7 @@ function addInventory(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
+		
 	   		getInventoryList();  
 	   },
 	   error: handleAjaxError
@@ -162,16 +163,29 @@ function displayInventoryList(data){
 		+ '<td>' + e.mrp + '</td>'
 		+ '<td>' + e.name + '</td>'
 		+ '<td>' + e.quantity + '</td>'
-		if(getRole()=="supervisor"){
 		+ '<td>' + buttonHtml + '</td>'
-		}
 		+ '</tr>';
         $tbody.append(row);
+	}
+	if(getRole()=="operator"){
+		deleteEditButton();
+	}
+}
+
+
+function deleteEditButton(){
+	var help = document.getElementById("inventory-table");
+
+		var rowcount = help.rows;
+		console.log("the number of rows ::",rowcount);
+		console.log(help);
+		for(let i=0;i<rowcount.length ;i++){
+			rowcount[i].deleteCell(7);
 	}
 }
 
 function displayEditInventory(id){
-	var url = getInventoryUrl() + "operator/inventory" + id;
+	var url = getInventoryUrl() + "operator/inventory/" + id;
 	console.log(" into the get edit inventory function ");
 	console.log(" the url int the get inv is :", url);
 	//console.log("the inventory is :",data);

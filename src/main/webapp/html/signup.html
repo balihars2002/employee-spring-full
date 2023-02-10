@@ -1,53 +1,52 @@
- <!doctype html>
+ <!-- <!doctype html>
 
 <html lang="en">
 
-<head th:replace="snippets.html :: name_head">
-</head>
+<head th:replace="snippets.html :: name_head"> </head>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <link rel="stylesheet" th:href="@{/static/signup.css}">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
 <body>
     
     <nav th:replace="snippets.html :: name_site_navbar"></nav>
-    <div style="background-image: '@{/static/invmanage.jpg}'">
     <div class="wrapper login">
         <div class="container">
             <div class="col-left">
                 <div class="login-text">
                     <h2>Welcome!</h2>
-                    <p>Create your account`.<br>For Free!</p> <a href="" class="btn">Sign Up</a>
+                    <p>Create your account`.<br>For Free!</p>
+                    
                 </div>
             </div>
             <div class="col-right">
                 <div class="login-form">
                     <h2>Create an Account</h2>
-                    <form class="form" id="signup-form">
+                    <form class="form" id="user-form">
                         <p> 
-                            <label for="email" class="col-sm-10 col-form-label">Username/Email address<span>*</span></label> 
-                            <input type="text" class="form-control" name="email" id="email" placeholder="Username or Email" required>
+                            <label for="inputEmail" class="col-sm-10 col-form-label">Username/Email address<span>*</span></label> 
+                            <input type="text" class="form-control" name="email" id="inputEmail" placeholder="Username or Email" required>
                          </p>
                         <p>
-                             <label for="password" class="col-sm-10 col-form-label">Password<span>*</span></label> 
-                            <input type="password" class="form-control" name="password" id="password" placeholder="Password" required> 
+                             <label for="inputPassword" class="col-sm-10 col-form-label">Password<span>*</span></label> 
+                            <input type="password" class="form-control" name="password" id="inputPassword" placeholder="Password" required> 
                         </p>
                         <p>
-                             <input type="submit" id="signup" id="add-user" value="signup">
+                             <input type="submit" id="add-user" value="signup">
                          </p>
-                         <!-- <p>
-                            <a href="@{/login.html}" class="btn">Back to Login</a>
-                         </p> -->
-                       
+                        
                     </form>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
 <footer th:replace="snippets.html :: name_footer"></footer>
-<script th:src="@{/static/user.js}"/></script>
-</body>
+<script th:src="@{/static/user.js}"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+</body> -->
 
 </html> 
 

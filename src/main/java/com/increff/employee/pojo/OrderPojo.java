@@ -1,33 +1,25 @@
 package com.increff.employee.pojo;
 
-import com.sun.istack.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Entity
-//@Table(uniqueConstraints = {@UniqueConstraint(columnNames = )})
 public class OrderPojo {
 
     @Id
-    @TableGenerator(name = "order_id", pkColumnValue = "order_id")
+    @TableGenerator(name = "order_id", pkColumnValue = "order_id", table = "table_sequence")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "order_id")
     private Integer id;
-    @NotNull
-    private LocalDateTime orderAddDateTime;
-    private LocalDateTime orderUpdateDateTime;
-
+    private ZonedDateTime orderAddDateTime;
+    private ZonedDateTime orderUpdateDateTime;
     private String date;
-
     private String updatedDate;
 
-    public LocalDateTime getOrderAddDateTime() {
-        return orderAddDateTime;
-    }
 
-    public void setOrderAddDateTime(LocalDateTime orderAddDateTime) {
-        this.orderAddDateTime = orderAddDateTime;
-    }
 
     public Integer getId() {
         return id;
@@ -45,13 +37,7 @@ public class OrderPojo {
         this.date = date;
     }
 
-    public LocalDateTime getOrderUpdateDateTime() {
-        return orderUpdateDateTime;
-    }
 
-    public void setOrderUpdateDateTime(LocalDateTime orderUpdateDateTime) {
-        this.orderUpdateDateTime = orderUpdateDateTime;
-    }
 
     public String getUpdatedDate() {
         return updatedDate;
@@ -59,5 +45,21 @@ public class OrderPojo {
 
     public void setUpdatedDate(String updatedDate) {
         this.updatedDate = updatedDate;
+    }
+
+    public ZonedDateTime getOrderAddDateTime() {
+        return orderAddDateTime;
+    }
+
+    public void setOrderAddDateTime(ZonedDateTime orderAddDateTime) {
+        this.orderAddDateTime = orderAddDateTime;
+    }
+
+    public ZonedDateTime getOrderUpdateDateTime() {
+        return orderUpdateDateTime;
+    }
+
+    public void setOrderUpdateDateTime(ZonedDateTime orderUpdateDateTime) {
+        this.orderUpdateDateTime = orderUpdateDateTime;
     }
 }

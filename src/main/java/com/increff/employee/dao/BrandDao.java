@@ -23,7 +23,8 @@ public class BrandDao extends AbstractDao{
     private EntityManager em;
 
     @Transactional
-    public void insert(BrandPojo p) {
+    public void
+    insert(BrandPojo p) {
         em.persist(p);
     }
 
@@ -50,11 +51,7 @@ public class BrandDao extends AbstractDao{
         query.setParameter("category",category);
         return getSingle(query);
     }
-    public BrandPojo getBrandFromId(Integer id) {
-        TypedQuery<BrandPojo> query = getQuery(POJO_FROM_ID, BrandPojo.class);
-        query.setParameter("id",id);
-        return getSingle(query);
-    }
+
     public void update(BrandPojo p) {
     }
 

@@ -25,10 +25,6 @@ public class ProductApi {
     public void deleteServiceById(Integer id) {
         productDao.delete(id);
     }
-    @Transactional
-    public void deleteServiceByBarcode(String barcode) {
-        productDao.delete(barcode);
-    }
 
     @Transactional
     public List<ProductPojo> selectAllService() {
@@ -37,23 +33,43 @@ public class ProductApi {
 
     @Transactional
     public ProductPojo getPojoFromBarcode(String barcode) throws ApiException{
-        return productDao.selectPojoByBarcode(barcode);
+        ProductPojo productPojo = productDao.selectPojoByBarcode(barcode);
+        if(productPojo == null){
+            throw new ApiException("Product with given barcode does not exist.");
+        }
+        return productPojo;
     }
     @Transactional
     public ProductPojo getPojoFromId(Integer id) throws ApiException{
-        return productDao.selectPojoById(id);
+        ProductPojo productPojo1 = productDao.selectPojoById(id);
+        if(productPojo1 == null)
+        {
+            throw new ApiException("The product with given id does not exist.");
+        }
+        return productPojo1;
     }
-//
+
     @Transactional(rollbackFor  = ApiException.class)
     public void update(ProductPojo productPojo) throws ApiException {
-      productDao.update(productPojo);
+        ProductPojo productPojo1 = givePojoById(productPojo.getId());
+        productPojo1.setName(productPojo.getName());
+        productPojo1.setBarcode(productPojo.getBarcode());
+        productPojo1.setMrp(productPojo.getMrp());
+        productDao.update(productPojo1);
+
     }
-    public ProductPojo givePojoById(Integer id){
-            return productDao.selectPojoById(id);
+
+    @Transactional
+    public ProductPojo givePojoById(Integer id) throws ApiException{
+        ProductPojo productPojo = productDao.selectPojoById(id);
+//        if(productPojo == null){
+//            throw new ApiException("Product with given ProductId doesnot exist.");
+//        }
+            return productPojo;
       }
-    public ProductPojo givePojoByBarcode(String barcode){
-            return productDao.selectPojoByBarcode(barcode);
-        }
+
+
+    @Transactional
     public ProductPojo getCheckByBarcode(String barcode) throws ApiException {
         ProductPojo p = productDao.selectPojoByBarcode(barcode);
             if(p == null){

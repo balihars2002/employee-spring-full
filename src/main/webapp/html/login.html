@@ -66,18 +66,21 @@
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 <link rel="stylesheet" th:href="@{/static/login.css}">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
 <body>
-    
+    <!-- style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-U6C4om3PPlJGGUjBfKFbo-4LcBxmT4h6FJYlB11l9w&s');" -->
+    <!-- style="background-image: url('https://b.rgbimg.com/users/x/xy/xymonau/600/odpqZ2c.jpg');" -->
+    <!-- style="background-image: url('https://b.rgbimg.com/users/x/xy/xymonau/600/odpqZ2c.jpg');" -->
     <nav th:replace="snippets.html :: name_site_navbar"></nav>
-    <div style="background-image: '@{/static/invmanage.jpg}'">
+    <div >
     <div class="wrapper login">
         <!-- <img src="https://scx1.b-cdn.net/csz/news/800/2017/theoreticala.jpg" alt=”an” width="400" height="200"> -->
         <div class="container">
             <div class="col-left">
                 <div class="login-text">
                     <h2>Welcome!</h2>
-                    <p>Create your account`.<br>For Free!</p> <a href="@{/signup.html}" class="btn">Sign Up</a>
+                    <p>Create your account`.<br>For Free!</p> <a th:href="@{/site/init}" class="btn">Sign Up</a>
                 </div>
             </div>
             <div class="col-right">
@@ -105,6 +108,8 @@
     </div>
 </div>
     <footer th:replace="snippets.html :: name_footer"></footer>
+    <script th:src="@{/static/login.js}"> </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>
 
 </html>

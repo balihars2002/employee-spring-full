@@ -1,6 +1,6 @@
 package com.increff.employee.model.form;
 
-public class SchedulerForm {
+public class DailySalesForm {
     private String date;
 
     public String getDate() {

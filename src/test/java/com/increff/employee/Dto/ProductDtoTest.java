@@ -1,6 +1,7 @@
 package com.increff.employee.Dto;
 
 import com.increff.employee.AbstractUnitTest;
+import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.ProductApi;
 import com.increff.employee.dto.BrandDto;
 import com.increff.employee.dto.ProductDto;
@@ -16,7 +17,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class ProductTestDto extends AbstractUnitTest {
+public class ProductDtoTest extends AbstractUnitTest {
     @Autowired
     ProductDto productDto;
 
@@ -46,27 +47,54 @@ public class ProductTestDto extends AbstractUnitTest {
         assertEquals("category",list.get(0).getCategory());
     }
 
-    @Test
+    @Test(expected = ApiException.class)
     public void addProductTest1() throws ApiException {
-//        BrandForm brandForm = new BrandForm();
-//        brandForm.setBrand("brand");
-//        brandForm.setCategory("category");
-//        brandDto.add(brandForm);
+        BrandForm brandForm = new BrandForm();
+        brandForm.setBrand("brand");
+        brandForm.setCategory("category");
+        brandDto.add(brandForm);
         ProductForm productForm = new ProductForm();
         productForm.setName("name");
         productForm.setBarcode("barcode");
         productForm.setMrp(10.5);
-        productForm.setBrand("brand");
+        productForm.setBrand("brands");
         productForm.setCategory("category");
-        Boolean temp = false;
-        try{
-            productDto.addDto(productForm);
-        }
-        catch (Exception e) {
-            temp = true;
-        }
-        List<ProductData> list = productDto.getAllDto();
-        assertEquals((Boolean) true ,temp);
+        productDto.addDto(productForm);
     }
 
+    @Test
+    public void deleteTest() throws ApiException {
+        BrandForm brandForm = new BrandForm();
+        brandForm.setBrand("brand");
+        brandForm.setCategory("category");
+        brandDto.add(brandForm);
+        ProductForm productForm = new ProductForm();
+        productForm.setName("name");
+        productForm.setBarcode("barcode");
+        productForm.setMrp(10.5);
+        productForm.setBrand("brands");
+        productForm.setCategory("category");
+        productDto.addDto(productForm);
+        List<ProductPojo> productPojoList = productApi.selectAllService();
+        Integer id = productPojoList.get(0).getId();
+        productDto.delete(id);
+        List<ProductPojo> productPojoList1 = productApi.selectAllService();
+        assertEquals(0,productPojoList1.size());
+    }
+
+    @Test
+    public void getCheckFromServiceTest() throws ApiException{
+        BrandForm brandForm = new BrandForm();
+        brandForm.setBrand("brand");
+        brandForm.setCategory("category");
+        brandDto.add(brandForm);
+        ProductForm productForm = new ProductForm();
+        productForm.setName("name");
+        productForm.setBarcode("barcode");
+        productForm.setMrp(10.5);
+        productForm.setBrand("brands");
+        productForm.setCategory("category");
+        productDto.addDto(productForm);
+
+    }
 }

@@ -13,11 +13,15 @@ import org.springframework.stereotype.Service;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.increff.employee.dto.DtoHelper.*;
+import static com.increff.employee.dto.HelperDto.*;
 
 @Service
 public class OrderItemDto{
@@ -41,7 +45,8 @@ public class OrderItemDto{
 //            throw new ApiException("Not sufficient quantity of product available in inventory");
 //        }
         InventoryPojo inventoryPojo = getUpdatedInventoryPojo(orderItemPojo.getProductId(),orderItemForm.getQuantity(),false);
-        inventoryApi.updateInv(inventoryPojo);
+        Integer quantity = inventoryPojo.getQuantity();
+        inventoryApi.updateInv(inventoryPojo,quantity);
         orderItemApi.add(orderItemPojo);
     }
 
@@ -87,23 +92,9 @@ public class OrderItemDto{
     }
 
     public void updateOrderItem(Integer id,OrderItemForm orderItemForm) throws ApiException {
+        orderItemApi.update(id,orderItemForm.getQuantity(),orderItemForm.getBarcode());
         OrderItemPojo orderItemPojo = orderItemApi.getPojoFromId(id);
-        ProductPojo productPojo = productApi.getPojoFromBarcode(orderItemForm.getBarcode());
-        orderItemPojo.setProductId(productPojo.getId());
-        orderItemPojo.setQuantity(orderItemForm.getQuantity());
-        orderItemApi.update(orderItemPojo);
-        OrderPojo orderPojo =  orderApi.selectById(orderItemPojo.getOrderId());
-//        if(orderPojo != null){
-//            System.out.println("the orderpojo is not null");
-//        }
-//        else{
-//            System.out.println("the order pojo is null");
-//        }
-        long millis = System.currentTimeMillis();
-        DateFormat simple = new SimpleDateFormat("dd MMM yyyy HH:mm:ss ");
-        Date date = new Date(millis);
-        orderPojo.setUpdatedDate(simple.format(date));
-        orderApi.update(orderPojo);
+        orderApi.update(orderItemPojo.getOrderId());
     }
 
 

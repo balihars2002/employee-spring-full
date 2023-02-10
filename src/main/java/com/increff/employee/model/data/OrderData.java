@@ -1,12 +1,13 @@
 package com.increff.employee.model.data;
 
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 public class OrderData{
     private Integer id;
-  //  private LocalDateTime orderAddDateTime;
-    private LocalDateTime orderUpdateDateTime;
+    private ZonedDateTime orderAddDateTime;
+    private ZonedDateTime orderUpdateDateTime;
     private String updatedDate;
     private String date;
     private List<OrderItemData> orderItemDataList;
@@ -19,11 +20,19 @@ public class OrderData{
         this.updatedDate = updatedDate;
     }
 
-    public LocalDateTime getOrderUpdateDateTime() {
+    public ZonedDateTime getOrderAddDateTime() {
+        return orderAddDateTime;
+    }
+
+    public void setOrderAddDateTime(ZonedDateTime orderAddDateTime) {
+        this.orderAddDateTime = orderAddDateTime;
+    }
+
+    public ZonedDateTime getOrderUpdateDateTime() {
         return orderUpdateDateTime;
     }
 
-    public void setOrderUpdateDateTime(LocalDateTime orderUpdateDateTime) {
+    public void setOrderUpdateDateTime(ZonedDateTime orderUpdateDateTime) {
         this.orderUpdateDateTime = orderUpdateDateTime;
     }
 

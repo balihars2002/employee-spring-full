@@ -7,7 +7,7 @@ public class UserPojo {
 
 	@Id
 	// @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@TableGenerator(name = "user_id", pkColumnValue = "user_id")
+	@TableGenerator(name = "user_id", pkColumnValue = "user_id", table = "table_sequence")
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "user_id")
 	private int id;
 	//private String name;

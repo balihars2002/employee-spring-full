@@ -94,8 +94,9 @@ function displayOrderList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button class="fa fa-trash" style="border:0px;" onclick="deleteOrder(' + e.id + ')"></button>'
-		 buttonHtml += ' <button class="fa fa-pencil" style="border:0px;"  onclick="displayEditOrder(' + e.id + ')"></button>'
+		var buttonHtml = '<button class="fa fa-trash" title="delete order" style="border:0px;" onclick="deleteOrder(' + e.id + ')"></button>'
+		 buttonHtml += ' <button class="fa fa-pencil" title="edit order" style="border:0px;"  onclick="displayEditOrder(' + e.id + ')"></button>'
+		 buttonHtml += ' <button class="fa fa-file-text" title="download invoice" style="border:0px;"  onclick="displayEditOrder(' + e.id + ')"></button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.date + '</td>'

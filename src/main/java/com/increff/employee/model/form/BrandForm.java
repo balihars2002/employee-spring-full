@@ -1,6 +1,7 @@
 package com.increff.employee.model.form;
 
-import com.sun.istack.NotNull;
+
+import org.jetbrains.annotations.NotNull;
 
 public class BrandForm {
     @NotNull

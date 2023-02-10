@@ -1,8 +1,6 @@
 package com.increff.employee.model.data;
 
-import java.time.LocalDate;
-
-public class SchedulerData {
+public class DailySalesData {
     private String date;
     private Integer invoiced_orders_count;
     private Integer invoiced_items_count;

@@ -24,6 +24,13 @@ function addBrand(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
+		Toastify({
+			text: "Brand added Successfully",
+			style: {
+				background: "linear-gradient(to right,  #008000, #008000)",
+			  },
+			duration: 3500
+			}).showToast();
 	   		getBrandList();  
 	   },
 	   error: handleAjaxError
@@ -50,6 +57,13 @@ function updateBrand(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
+		Toastify({
+			text: "Brand updated Successfully",
+			style: {
+				background: "linear-gradient(to right,  #008000, #008000)",
+			  },
+			duration: 3500
+			}).showToast();
 	   		getBrandList();   
 	   },
 	   error: handleAjaxError
@@ -78,6 +92,13 @@ function deleteBrand(id){
 	   url: url,
 	   type: 'DELETE',
 	   success: function(data) {
+		Toastify({
+		text: "Brand deleted Successfully",
+		style: {
+			background: "linear-gradient(to right,  #008000, #008000)",
+		  },
+		duration: 3500
+		}).showToast();
 	   		getBrandList();  
 	   },
 	   error: handleAjaxError

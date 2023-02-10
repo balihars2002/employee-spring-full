@@ -10,10 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-	private static Logger logger = Logger.getLogger(SecurityConfig.class);
+	private final static Logger logger = Logger.getLogger(SecurityConfig.class);
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -25,8 +24,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/ui/**")//
 				.and().authorizeRequests()//
 				.antMatchers("/api/operator/**").hasAnyAuthority("supervisor","operator")//
+//				.antMatchers("/api/user").hasAnyAuthority("supervisor","operator")//
+				.antMatchers("/api/site/**").hasAnyAuthority("supervisor","operator")//
 				.antMatchers("/api/**").hasAuthority("supervisor")//
-				.antMatchers("/ui/operator/**").hasAnyAuthority("supervisor","operator")//
 				.antMatchers("/ui/**").hasAnyAuthority("supervisor","operator")//
 				// Ignore CSRF and CORS
 				.and().csrf().disable().cors().disable();

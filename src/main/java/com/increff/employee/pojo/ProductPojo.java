@@ -6,8 +6,7 @@ import javax.persistence.*;
 @Entity
 public class ProductPojo {
     @Id
-
-    @TableGenerator(name = "product_id", pkColumnValue = "product_id")
+    @TableGenerator(name = "product_id", pkColumnValue = "product_id", table = "table_sequence")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "product_id")
     private Integer id;
     private String barcode;

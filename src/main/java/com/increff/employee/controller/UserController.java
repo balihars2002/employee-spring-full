@@ -1,8 +1,9 @@
-package com.increff.employee.controller.supervisor;
+package com.increff.employee.controller;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.increff.employee.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,26 +22,29 @@ import io.swagger.annotations.ApiOperation;
 
 @Api
 @RestController
-public class AdminController {
+public class UserController {
 
 	@Autowired
 	private UserApi service;
 
 	@ApiOperation(value = "Adds a user")
-	@RequestMapping(path = "/api/admin/user", method = RequestMethod.POST)
+	@RequestMapping(path = "/api/user", method = RequestMethod.POST)
 	public void addUser(@RequestBody UserForm form) throws ApiException {
+		if(StringUtil.isEmpty(form.getRole())){
+			form.setRole("operator");
+		}
 		UserPojo p = convert(form);
 		service.add(p);
 	}
 
 	@ApiOperation(value = "Deletes a user")
-	@RequestMapping(path = "/api/admin/user/{id}", method = RequestMethod.DELETE)
+	@RequestMapping(path = "/api/user/{id}", method = RequestMethod.DELETE)
 	public void deleteUser(@PathVariable int id) {
 		service.delete(id);
 	}
 
 	@ApiOperation(value = "Gets list of all users")
-	@RequestMapping(path = "/api/admin/user", method = RequestMethod.GET)
+	@RequestMapping(path = "/api/user", method = RequestMethod.GET)
 	public List<UserData> getAllUser() {
 		List<UserPojo> list = service.getAll();
 		List<UserData> list2 = new ArrayList<UserData>();

@@ -7,7 +7,7 @@ public class OrderItemPojo {
     @Id
    // @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    @TableGenerator(name = "orderItem_id", pkColumnValue = "orderItem_id")
+    @TableGenerator(name = "orderItem_id", pkColumnValue = "orderItem_id", table = "table_sequence")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "orderItem_id")
     private Integer id;
     private Integer orderId;

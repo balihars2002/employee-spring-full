@@ -1,7 +1,7 @@
 
 function getUserUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/admin/user";
+	return baseUrl + "/api/user";
 }
 
 //BUTTON ACTIONS
@@ -10,7 +10,8 @@ function addUser(event){
 	var $form = $("#user-form");
 	var json = toJson($form);
 	var url = getUserUrl();
-
+	console.log(" json :: ",json);
+	console.log(" url :: ",url);
 	$.ajax({
 	   url: url,
 	   type: 'POST',
@@ -19,6 +20,14 @@ function addUser(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
+		Toastify({
+			text: "User added Successfully",
+			style: {
+				background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
+			  },
+			duration: 3000
+			}).showToast();
+		   // $('.alert').alert()
 	   		getUserList();    
 	   },
 	   error: handleAjaxError
@@ -46,6 +55,13 @@ function deleteUser(id){
 	   url: url,
 	   type: 'DELETE',
 	   success: function(data) {
+		Toastify({
+			text: "User deleted Successfully",
+			style: {
+				background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
+			  },
+			duration: 3000
+			}).showToast();
 	   		getUserList();    
 	   },
 	   error: handleAjaxError

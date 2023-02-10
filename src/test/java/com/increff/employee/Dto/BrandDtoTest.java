@@ -117,12 +117,27 @@ public class BrandDtoTest extends AbstractUnitTest {
         List<BrandData> brandDataList1 = brandDto.getAllList();
         assertEquals(1,brandDataList1.size());
     }
+
+    @Test
+    public void  deleteTest() throws ApiException {
+        BrandForm brandForm1 = new BrandForm();
+        brandForm1.setCategory("category1");
+        brandForm1.setBrand("brand1");
+        brandForm1.setDisabled(false);
+        brandDto.add(brandForm1);
+        List<BrandData> brandDataList = brandDto.getAllList();
+        Integer id = brandDataList.get(0).getId();
+        brandDto.delete(id);
+        brandDataList = brandDto.getAllList();
+        assertEquals(0,brandDataList.size());
+    }
+
     @Test
     public void normalizeBrandTest() throws ApiException {
         BrandPojo pojo = new BrandPojo();
         pojo.setCategory("caTegOrY");
         pojo.setBrand("BraND");
-        brandDto.normalizeBrand(pojo);
+        brandDto.normalizeBrandPojo(pojo);
         assertEquals("brand",pojo.getBrand());
         assertEquals("category",pojo.getCategory());
     }

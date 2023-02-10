@@ -5,12 +5,11 @@ import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.service.BrandApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.increff.employee.dto.DtoHelper.convertBrandPojoToData;
+import static com.increff.employee.dto.HelperDto.convertBrandPojoToData;
 
 @Service
 public class BrandReportDto {

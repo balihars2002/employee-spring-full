@@ -41,7 +41,7 @@
 	      <th scope="col">Order ID</th>
           <th scope="col">Order Time</th>
           <th scope="col">Updated Time</th>
-          <!-- <th scope="col">Actions</th> -->
+          <th scope="col">Actions</th>
 	    </tr>
 	  </thead>
 	  <tbody>
@@ -56,12 +56,13 @@
 <!-- add order modal -->
 
 <div class="modal" style="width:1250px;" id="add-order-modal" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-    <div class="modal-dialog d-flex justify-content-center">
-        <div class="modal-content w-1200" style="padding:2%;">
+    <div class="modal-dialog d-flex justify-content-center" style="min-width: 60%;">
+        <div class="modal-content" style="padding:2%;">
             <div class="modal-header">
                 <h3 class="modal-title" id="exampleModalLabel2">Place Order</h3>
                 <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">&times;</button>
             </div>
+			<br>
 			<table  style="padding-top: 10px;">
 					<tr>
 						<td>
@@ -69,26 +70,27 @@
 						</td>	
 					</tr>
 			</table>
+			<br>
 			<form id="order-form" >
 				<table id="add-order-table" class="add-order-table">
 					<tr id="add-order-row" class="add-order-row">
 						<td>
 							<div class="form-outline mb-4">
 								<label class="form-label" for="barcode">Barcode</label>
-								<input type="text" id="barcode" class="form-control" name="barcode"/>
+								<input type="text" id="barcode" class="form-control" name="barcode" placeholder="enter barcode"/>
 							</div>
 						</td>
 						<td>
 							<div class="form-outline mb-4">
 								<label class="form-label" for="mrp">Mrp</label>
-								<input type="mrp" id="mrp" class="form-control" name="mrp"/>
+								<input type="mrp" id="mrp" class="form-control" name="mrp" placeholder="enter mrp"/>
 							</div>
 			
 						</td>
 						<td>
 							<div class="form-outline mb-4">
 								<label class="form-label" for="quantity">Quantity</label>
-								<input type="name" id="quantity" class="form-control" name="quantity"/>
+								<input type="name" id="quantity" class="form-control" name="quantity" placeholder="enter quantity"/>
 							</div>
 						</td>
 						<td>

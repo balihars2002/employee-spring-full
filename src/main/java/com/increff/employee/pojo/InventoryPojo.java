@@ -1,15 +1,12 @@
 package com.increff.employee.pojo;
 
-import com.mysql.cj.BindValue;
-import com.sun.istack.NotNull;
-import io.swagger.models.auth.In;
 
 import javax.persistence.*;
 
 @Entity
 public class InventoryPojo {
     @Id
-    @TableGenerator(name = "inventory_id", pkColumnValue = "inventory_id")
+    @TableGenerator(name = "inventory_id", pkColumnValue = "inventory_id", table = "table_sequence")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "inventory_id")
     private Integer id;
     //@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -9,7 +9,7 @@ function getRole(){
 }
 function getBrandUrl() {
     var baseUrl = $("meta[name=baseUrl]").attr("content")
-    return baseUrl + "/api/brand";
+    return baseUrl + "/api/operator/brand";
 }
 
 //BUTTON ACTIONS
@@ -28,6 +28,13 @@ function addProduct(event) {
             'Content-Type': 'application/json'
         },
         success: function (response) {
+            Toastify({
+                text: "Product added Successfully",
+                style: {
+                    background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
+                  },
+                duration: 3000
+                }).showToast();
             getProductList();
             $form.trigger("reset");
         },
@@ -57,6 +64,14 @@ function updateTheProduct(event) {
             'Content-Type': 'application/json'
         },
         success: function (response) {
+            console.log("tostification");
+            Toastify({
+                text: "Product updated Successfully",
+                style: {
+                    background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
+                  },
+                duration: 3000
+                }).showToast();
             getProductList();
         },
         error: handleAjaxError
@@ -90,6 +105,13 @@ function deleteProduct(id) {
         url: url,
         type: 'DELETE',
         success: function (data) {
+            Toastify({
+                text: "Product deleted Successfully",
+                style: {
+                    background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
+                  },
+                duration: 3000
+                }).showToast();
             getProductList();
         },
         error: handleAjaxError
@@ -221,8 +243,8 @@ function displayProductList(data) {
     for (var i in data) {
         var e = data[i];
         console.log("data: ", data);
-        var buttonHtml = '<button class="fa fa-trash" onclick="deleteProduct(' +e.id + ')" id = "' +e.id + '" value="' + e.barcode + '">delete</button>'
-        buttonHtml += ' <button class="fa fa-pencil" onclick="displayEditProduct(' + e.id + ')">edit</button>'
+        var buttonHtml = '<button class="fa fa-trash" title="delete product" onclick="deleteProduct(' +e.id + ')" id = "' +e.id + '" value="' + e.barcode + '"></button>'
+        buttonHtml += ' <button class="fa fa-pencil" title="edit product" onclick="displayEditProduct(' + e.id + ')"></button>'
         var row = '<tr>'
             + '<td>' + e.id + '</td>'
             + '<td>' + e.barcode + '</td>'
@@ -230,12 +252,24 @@ function displayProductList(data) {
             + '<td>' + e.category + '</td>'
             + '<td>' + e.mrp + '</td>'
             + '<td>' + e.name + '</td>'
-            if(getRole()=="supervisor"){
             + '<td>' + buttonHtml + '</td>'
-            }
             + '</tr>';
         $tbody.append(row);
     }
+    if(getRole()=="operator"){
+		deleteEditButton();
+	}
+}
+
+function deleteEditButton(){
+	var help = document.getElementById("product-table");
+
+		var rowcount = help.rows;
+		console.log("the number of rows ::",rowcount);
+		console.log(help);
+		for(let i=0;i<rowcount.length ;i++){
+			rowcount[i].deleteCell(6);
+	}
 }
 
 function displayEditProduct(id) {

@@ -25,7 +25,7 @@ public class OperatorInventoryController {
     }
 
     @ApiOperation(value = "Get a Product Quantity in Inventory by Id")
-    @RequestMapping(path = "/inventory/{id}",method = RequestMethod.GET)
+    @RequestMapping(path = "/{id}",method = RequestMethod.GET)
 
     public InventoryData get(@PathVariable Integer id) throws ApiException {
         return inventoryDto.getDataFromId(id);

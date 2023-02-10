@@ -7,8 +7,7 @@ import javax.persistence.*;
 public class BrandPojo {
 
     @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @TableGenerator(name = "brand_id", pkColumnValue = "brand_id")
+    @TableGenerator(name = "brand_id", pkColumnValue = "brand_id", table = "table_sequence")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "brand_id")
     private Integer id;
     private String brand;

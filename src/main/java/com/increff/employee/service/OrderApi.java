@@ -8,6 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -27,8 +31,13 @@ public class OrderApi {
     }
 
     @Transactional(rollbackFor = ApiException.class)
-    public void update(OrderPojo existing) throws ApiException {
-        orderDao.update(existing);
+    public void update(Integer id) throws ApiException {
+        OrderPojo orderPojo = selectById(id);
+        ZoneId india = ZoneId.of("Asia/Kolkata");
+        ZonedDateTime addedDateTime = ZonedDateTime.of(LocalDateTime.now(),india);
+        String formattedZdt = addedDateTime.format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
+        orderPojo.setUpdatedDate(formattedZdt);
+        orderDao.update(orderPojo);
     }
 
     @Transactional

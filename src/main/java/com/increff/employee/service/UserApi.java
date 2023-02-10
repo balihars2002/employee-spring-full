@@ -13,7 +13,7 @@ public class UserApi {
 	@Autowired
 	private UserDao dao;
 
-	@Transactional
+	@Transactional(rollbackFor = ApiException.class)
 	public void add(UserPojo p) throws ApiException {
 		normalize(p);
 		UserPojo existing = dao.select(p.getEmail());
@@ -23,7 +23,7 @@ public class UserApi {
 		dao.insert(p);
 	}
 
-	@Transactional(rollbackFor = ApiException.class)
+	@Transactional
 	public UserPojo get(String email) throws ApiException {
 		return dao.select(email);
 	}

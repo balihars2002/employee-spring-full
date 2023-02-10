@@ -33,7 +33,7 @@
     
     <ul class="navbar-nav ml-auto">
        <li class="nav-item">
-        <a class="btn btn-primary" th:href="@{/site/login}">Login</a>
+        <a class="btn btn-primary" style="background-color:darkslategray;border:0px;" th:href="@{/site/login}">Login</a>
       </li>
     </ul>
  
@@ -92,12 +92,12 @@
       <!-- <li class="nav-item">
         <a class="nav-link" th:href="@{/ui/employee}">Employees</a>
       </li> -->
-      <li class="nav-item" id="admin">
-        <a class="nav-link" th:href="@{/ui/admin}">Admin</a>
+      <li class="nav-item" id="user">
+        <a class="nav-link" th:href="@{/ui/user}">Admin</a>
       </li>
-      <li class="nav-item" id="signup">
+      <!-- <li class="nav-item" id="signup">
         <a class="nav-link" th:href="@{/ui/signup}">signup</a>
-      </li>
+      </li> -->
     </ul>
    <!-- <ul>
       <li class="navbar-nav ml-auto">
@@ -111,19 +111,44 @@
          </div> 
          </li>
     </ul>  -->
-   <ul class="navbar-nav ml-auto">
+    <!-- <ul class="navbar-nav ml-auto">
+    <div class="dropdown" style="float:right;">
+      <img class="" src="https://media.geeksforgeeks.org/img-practice/user_web-1598433228.svg" alt="baliharsingh99880 Avatar">
+      <div class="dropdown-content">
+        <a href="#"> [[${info.getEmail()}]] </a>
+        <a class="nav-link" th:href="@{/session/logout}">Logout</a>
+      </div>
+    </div>
+  </ul> -->
+  <ul class="navbar-nav ml-auto">
+  <div class="dropdown" style="float:right;">
+    <img class="" src="https://media.geeksforgeeks.org/img-practice/user_web-1598433228.svg" alt="baliharsingh99880 Avatar">
+    <div class="dropdown-content">
+      <a href="#">[[${info.getEmail()}]]</a>
+      <a th:href="@{/session/logout}">Logout</a>
+      <!-- <a href="#">Link 3</a> -->
+    </div>
+  </div>
+</ul>
+   <!-- <ul class="navbar-nav ml-auto">
 	    
       <li id="userProfileId" class="header-main__left-list-item p-relative" aria-expanded="false" data-expandable="false">
-      <div class="dropdown">
+      <div class="dropdown" style="float:right;">
         <div>
         <img class="" src="https://media.geeksforgeeks.org/img-practice/user_web-1598433228.svg" alt="baliharsingh99880 Avatar">
       </div>
       <div class="dropdown-content">
+        <a href=""> [[${info.getEmail()}]] </a>
         <a class="nav-link" th:href="@{/session/logout}">Logout</a>
       </div>
     </div> 
     </li>
-  </ul>
+    <li class="navbar-text">
+      &nbsp;
+      [[${info.getRole()}]] 
+      &nbsp;
+   </li>
+  </ul> -->
     
         
   </div>

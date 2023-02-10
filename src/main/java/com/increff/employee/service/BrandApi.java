@@ -23,21 +23,6 @@ public class BrandApi {
         brandDao.delete(id);
     }
 
-    @Transactional(rollbackFor = ApiException.class)
-    public BrandPojo get(Integer id) throws ApiException{
-        return getCheck(id);
-    }
-
-    @Transactional
-    public List<BrandPojo> getAll() {
-        return brandDao.selectAll();
-    }
-
-    @Transactional(rollbackFor  = ApiException.class)
-    public void update(BrandPojo existing) throws ApiException {
-        brandDao.update(existing);
-    }
-
     @Transactional
     public BrandPojo getCheck(Integer id) throws ApiException {
         BrandPojo p = brandDao.select(id);
@@ -46,11 +31,35 @@ public class BrandApi {
         }
         return p;
     }
-    public BrandPojo getBrandCat(String brandName, String categoryName){
-        return brandDao.selectPojoToCheckDuplicate(brandName,categoryName);
-    }
-    public BrandPojo getBrandCatFromId(Integer id) throws ApiException{
-        return brandDao.getBrandFromId(id);
+
+    @Transactional
+    public List<BrandPojo> getAll() {
+        return brandDao.selectAll();
     }
 
+    @Transactional(rollbackFor  = ApiException.class)
+    public void update(Integer id,BrandPojo brandPojo) throws ApiException {
+        BrandPojo brandPojo1 = getCheck(id);
+        checkBrandCat(brandPojo.getBrand(),brandPojo.getCategory());
+        brandPojo1.setBrand(brandPojo.getBrand());
+        brandPojo1.setCategory(brandPojo.getCategory());
+        brandDao.update(brandPojo1);
+    }
+
+    @Transactional
+    public BrandPojo getBrandCat(String brandName, String categoryName) throws ApiException{
+        BrandPojo brandPojo =  brandDao.selectPojoToCheckDuplicate(brandName,categoryName);
+        if(brandPojo == null){
+            throw new ApiException("Brand and Category does not exist.");
+        }
+        return brandPojo;
+    }
+    @Transactional
+    public BrandPojo checkBrandCat(String brandName, String categoryName) throws ApiException{
+        BrandPojo brandPojo =  brandDao.selectPojoToCheckDuplicate(brandName,categoryName);
+        if(brandPojo != null){
+            throw new ApiException("Brand and Category already exist.");
+        }
+        return brandPojo;
+    }
 }

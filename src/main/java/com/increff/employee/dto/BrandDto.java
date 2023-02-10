@@ -14,18 +14,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BrandDto extends DtoHelper{
+public class BrandDto extends HelperDto {
 
     @Autowired
     private BrandApi brandApi;
 
     public void add(BrandForm form) throws ApiException {
+        //validate if form is not empty
         validateBrandForm(form);
+        //convert brandForm to brandPojo
         BrandPojo brandPojo = convertBrandFormToPojo(form);
-        normalizeBrand(brandPojo);
-
-        //check duplicacy of brand name and category
+        //normalize brand and category
+        normalizeBrandPojo(brandPojo);
+        //check duplicate of brand name and category
          getCheckBrand(brandPojo.getBrand(),brandPojo.getCategory());
+         //add brand
          brandApi.add(brandPojo);
     }
     public void delete(Integer id) {
@@ -33,42 +36,31 @@ public class BrandDto extends DtoHelper{
     }
 
     public BrandData get(Integer id) throws ApiException{
-        return convertBrandPojoToData(brandApi.get(id));
+        return convertBrandPojoToData(brandApi.getCheck(id));
     }
     public List<BrandData> getAllList() {
-        List<BrandPojo> list = brandApi.getAll();
-        List<BrandData> list2 = new ArrayList<BrandData>();
-        for(BrandPojo p : list){
-            list2.add(convertBrandPojoToData(p));
+        List<BrandPojo> brandPojoList = brandApi.getAll();
+        List<BrandData> brandDataList = new ArrayList<BrandData>();
+        for(BrandPojo brandPojo : brandPojoList){
+            brandDataList.add(convertBrandPojoToData(brandPojo));
         }
-        return list2;
+        return brandDataList;
     }
     public void updateList(Integer id, BrandForm brandform) throws ApiException {
-        BrandPojo brandPojo= convertBrandFormToPojo(brandform);
-        BrandPojo brandPojo1 = brandApi.getBrandCat(brandPojo.getBrand(),brandPojo.getCategory());
-        if(brandPojo1 != null){
-            throw new ApiException("Brand and Category already exist");
-        }
-        normalizeBrand(brandPojo);
-        BrandPojo updated = getCheckFromService(id);
-        updated.setCategory(brandPojo.getCategory());
-        updated.setBrand(brandPojo.getBrand());
-        brandApi.update(updated);
+        BrandPojo brandPojo = convertBrandFormToPojo(brandform);
+//        BrandPojo brandPojo1 = brandApi.getBrandCat(brandPojo.getBrand(),brandPojo.getCategory());
+        normalizeBrandPojo(brandPojo);
+//        BrandPojo updated = getCheckFromService(id);
+//        updated.setCategory(brandPojo.getCategory());
+//        updated.setBrand(brandPojo.getBrand());
+        brandApi.update(id,brandPojo);
 
     }
     public BrandPojo getCheckFromService(Integer id) throws ApiException {
-        BrandPojo p = brandApi.getCheck(id);
-        if (p == null) {
-            throw new ApiException("Brand with given ID does not exit, id: " + id);
-        }
-        return p;
+        return brandApi.getCheck(id);
     }
     public BrandPojo getCheckBrand(String brandName, String categoryName) throws ApiException{
-        BrandPojo brandPojo= brandApi.getBrandCat(brandName,categoryName);
-        if(brandPojo != null){
-            throw new ApiException("Brand and Category already exist.");
-        }
-        return brandPojo;
+        return brandApi.checkBrandCat(brandName,categoryName);
     }
 
     public void validateBrandForm(BrandForm form) throws ApiException{

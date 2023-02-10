@@ -1,8 +1,8 @@
 package com.increff.employee.controller.supervisor;
 
 import com.increff.employee.dto.OrderDto;
-import com.increff.employee.dto.SchedulerDto;
-import com.increff.employee.model.data.SchedulerData;
+import com.increff.employee.dto.DailySalesDto;
+import com.increff.employee.model.data.DailySalesData;
 import com.increff.employee.service.ApiException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,16 +16,16 @@ import java.util.List;
 @Api
 @RestController
 @RequestMapping("/api")
-public class SchedulerController {
+public class DailySalesController {
     @Autowired
     private OrderDto orderDto;
 
     @Autowired
-    private SchedulerDto schedulerDto;
+    private DailySalesDto schedulerDto;
 
     @ApiOperation(value = "Gets all Scheduler Data")
     @RequestMapping(path = "/scheduler",method = RequestMethod.GET)
-    public List<SchedulerData> get() throws ApiException {
+    public List<DailySalesData> get() throws ApiException {
          return schedulerDto.getAllData();
     }
 

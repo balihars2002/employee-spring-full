@@ -12,6 +12,7 @@ import com.increff.employee.service.InventoryApi;
 import com.increff.employee.service.ProductApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.ArrayList;
@@ -53,27 +54,31 @@ public class InventoryDto {
           List<InventoryPojo> list= inventoryApi.selectAllFromService();
           List<InventoryData> list1 = new ArrayList<InventoryData>();
           for(InventoryPojo p:list){
-              list1.add(convertInventoryPojoToData(p));
+              InventoryData inventoryData = convertInventoryPojoToData(p);
+              if(inventoryData.getId() != null) {
+                  list1.add(inventoryData);
+              }
           }
           return list1;
       }
+
+
       public void updateInv(Integer id,InventoryForm inventoryForm) throws ApiException{
           InventoryPojo inventoryPojo1 = inventoryApi.getPojoFromId(id);
           if(inventoryPojo1 == null){
               throw new ApiException("The product does not exist");
           }
-          inventoryPojo1.setQuantity(inventoryForm.getQuantity());
-          inventoryApi.updateInv(inventoryPojo1);
+          inventoryApi.updateInv(inventoryPojo1,inventoryForm.getQuantity());
       }
 
-      public void increaseOrDecreaseInventory(Integer id,Integer changeQuantityBy,Boolean increase){
+
+      public void increaseOrDecreaseInventory(Integer id,Integer changeQuantityBy,Boolean increase) throws ApiException {
             if(increase) {
                 changeQuantityBy = -changeQuantityBy;
             }
-           InventoryPojo inventoryPojo = inventoryApi.getPojoFromProductId(id);
-            int initialQuantity = inventoryPojo.getQuantity();
-            inventoryPojo.setQuantity(initialQuantity - changeQuantityBy);
-            inventoryApi.updateInv(inventoryPojo);
+            InventoryPojo inventoryPojo = inventoryApi.getPojoFromId(id);
+            Integer initialQuantity = inventoryPojo.getQuantity();
+            inventoryApi.updateInv(inventoryPojo,(initialQuantity - changeQuantityBy));
       }
       public InventoryData getDataFromId(Integer id) throws ApiException {
         InventoryPojo inventoryPojo = inventoryApi.getPojoFromId(id);
@@ -82,64 +87,31 @@ public class InventoryDto {
         }
         return convertInventoryPojoToData(inventoryPojo);
     }
-//    @Transactional(rollbackOn = ApiException.class)
-//    public void increaseQuantity(String barcode,int addQuantity) throws ApiException{
-//        //InventoryPojo inventoryPojo = convertFormToPojo(inventoryForm);
-//        ProductPojo productPojo= productService.getPojoFromBarcode(barcode);
-//        InventoryPojo inventoryPojo1 = inventoryService.getPojoFromId(productPojo.getProId());
-//        if(inventoryPojo1 == null){
-//            throw new ApiException("The product does not exist");
-//        }
-//        int initialQuantity = inventoryPojo1.getQuantity();
-//        inventoryPojo1.setQuantity(initialQuantity + addQuantity);
-//        inventoryService.updateInv(inventoryPojo1);
-//    }
 
-//        @Transactional(rollbackOn = ApiException.class)
-//      public void updateInv(String barcode,int quanTity) throws ApiException{
-//          ProductPojo productPojo= productService.givePojoByBarcode(barcode);
-//          int product_id= productPojo.getProId();
-//          InventoryPojo inventoryPojo= new InventoryPojo();
-//          inventoryPojo.setQuantity(quanTity);
-//
-//          inventoryPojo.setId(product_id);
-//          inventoryService.updateInv(inventoryPojo);
-//      }
       public InventoryData convertInventoryPojoToData(InventoryPojo inventoryPojo) throws ApiException{
-          InventoryData d = new InventoryData();
+          InventoryData data = new InventoryData();
           ProductPojo productPojo= productApi.givePojoById(inventoryPojo.getProductId());
-          //  get brand and category from id
+          if(productPojo == null){
+              inventoryApi.deleteService(inventoryPojo.getId());
+              return data;
+          }
           BrandPojo brandPojo = brandApi.getCheck(productPojo.getBrand_category());
-          d.setId(inventoryPojo.getId());
-          d.setProductId(productPojo.getId());
-          d.setQuantity(inventoryPojo.getQuantity());
-          d.setMrp(productPojo.getMrp());
-          d.setName(productPojo.getName());
-          d.setBarcode(productPojo.getBarcode());
-          d.setBrand(brandPojo.getBrand());
-          d.setCategory(brandPojo.getCategory());
-          return d;
+          data.setId(inventoryPojo.getId());
+          data.setProductId(productPojo.getId());
+          data.setQuantity(inventoryPojo.getQuantity());
+          data.setMrp(productPojo.getMrp());
+          data.setName(productPojo.getName());
+          data.setBarcode(productPojo.getBarcode());
+          data.setBrand(brandPojo.getBrand());
+          data.setCategory(brandPojo.getCategory());
+          return data;
       }
         public InventoryPojo convertFormToPojo(InventoryForm form) throws ApiException{
             ProductPojo productPojo = productApi.getPojoFromBarcode(form.getBarcode());
-            if(productPojo == null){
-                throw new ApiException("The Product with Id does not exist.");
-            }
             InventoryPojo inventoryPojo = new InventoryPojo();
             inventoryPojo.setProductId(productPojo.getId());
             inventoryPojo.setQuantity(form.getQuantity());
             return inventoryPojo;
         }
 
-//       public InventoryPojo convertFormToPojo(InventoryForm f) throws ApiException{
-//         InventoryPojo p= new InventoryPojo();
-//
-//         p.setQuantity(f.getInvQuantity());
-//         p.setId(f.getInvId());
-//         return p;
-//       }
-
-//    public void inventorynormalise(InventoryForm f){
-//
-//    }
 }

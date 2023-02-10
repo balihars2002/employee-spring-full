@@ -1,8 +1,10 @@
 package com.increff.employee.controller;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,6 +18,7 @@ import com.increff.employee.service.UserApi;
 
 import io.swagger.annotations.ApiOperation;
 
+
 @Controller
 public class InitController extends AbstractUiController {
 
@@ -24,6 +27,13 @@ public class InitController extends AbstractUiController {
 	@Autowired
 	private InfoData info;
 
+//	@Value("${app.supervisors}")
+//	private String email;
+
+	@Value("#{'${app.supervisors}'.split(',')}")
+	private List<String> emails;
+
+
 	@ApiOperation(value = "Initializes application")
 	@RequestMapping(path = "/site/init", method = RequestMethod.GET)
 	public ModelAndView showPage(UserForm form) throws ApiException {
@@ -31,18 +41,24 @@ public class InitController extends AbstractUiController {
 		return mav("init.html");
 	}
 
-	@ApiOperation(value = "Initializes application")
+	@ApiOperation(value = "Registers User")
 	@RequestMapping(path = "/site/init", method = RequestMethod.POST)
 	public ModelAndView initSite(UserForm form) throws ApiException {
-		List<UserPojo> list = service.getAll();
-		if (list.size() > 0) {
-			info.setMessage("Application already initialized. Please use existing credentials");
-		} else {
-			form.setRole("admin");
-			UserPojo p = convert(form);
+		boolean flag = false;
+		for(String email:emails) {
+			System.out.println(email);
+			if (email.equals(form.getEmail())) {
+				form.setRole("supervisor");
+				flag = true;
+			}
+		}
+		if(!flag){
+			form.setRole("operator");
+		}
+		UserPojo p = convert(form);
 			service.add(p);
 			info.setMessage("Application initialized");
-		}
+//		}
 		return mav("init.html");
 
 	}

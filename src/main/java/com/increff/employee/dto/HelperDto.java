@@ -12,19 +12,17 @@ import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.ApiException;
-import com.increff.employee.service.BrandApi;
 import com.increff.employee.service.InventoryApi;
-import com.increff.employee.service.ProductApi;
 import com.increff.employee.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class DtoHelper {
+public class HelperDto {
 
     @Autowired
     private static InventoryApi inventoryApi;
 
-    @Autowired
-    private static BrandApi brandApi;
+//    @Autowired
+//    private static BrandApi brandApi;
 
     public static BrandData convertBrandPojoToData(BrandPojo pojo) {
         BrandData d = new BrandData();
@@ -42,19 +40,8 @@ public class DtoHelper {
 
     public static InventoryData convertInventoryPojoToData(InventoryPojo inventoryPojo) throws ApiException {
         InventoryData d = new InventoryData();
-        ProductApi productApi = null;
-        ProductPojo productPojo= productApi.givePojoById(inventoryPojo.getProductId());
-        //  get brand and category from id
-        BrandApi brandApi = null;
-        BrandPojo brandPojo = brandApi.getCheck(productPojo.getBrand_category());
         d.setId(inventoryPojo.getId());
-        d.setProductId(productPojo.getId());
         d.setQuantity(inventoryPojo.getQuantity());
-        d.setMrp(productPojo.getMrp());
-        d.setName(productPojo.getName());
-        d.setBarcode(productPojo.getBarcode());
-        d.setBrand(brandPojo.getBrand());
-        d.setCategory(brandPojo.getCategory());
         return d;
     }
     public static InventoryPojo getUpdatedInventoryPojo(Integer id,Integer changeQuantityBy,Boolean increase){
@@ -67,18 +54,40 @@ public class DtoHelper {
         return inventoryPojo;
     }
 
-    public static void normalizeBrand(BrandPojo brandPojo) {
+    public static void normalizeBrandPojo(BrandPojo brandPojo) {
         brandPojo.setBrand(StringUtil.toLowerCase(brandPojo.getBrand()));
         brandPojo.setCategory(StringUtil.toLowerCase((brandPojo.getCategory())));
     }
-
-    protected static void normalizeProduct(ProductPojo productPojo) {
+    public static void normalizeBrandForm(BrandForm form) {
+        form.setBrand(StringUtil.toLowerCase(form.getBrand()));
+        form.setCategory(StringUtil.toLowerCase((form.getCategory())));
+    }
+    public static void normalizeProductPojo(ProductPojo productPojo) {
         productPojo.setBarcode(StringUtil.toLowerCase(productPojo.getBarcode()));
         productPojo.setName(StringUtil.toLowerCase(productPojo.getName()));
     }
-    protected static void normaliseProduct(ProductForm productForm) {
-        productForm.setBarcode(StringUtil.toLowerCase(productForm.getBarcode()));
-        productForm.setName(StringUtil.toLowerCase(productForm.getName()));
+    public static void normalizeProductForm(ProductForm form) {
+        form.setBarcode(StringUtil.toLowerCase(form.getBarcode()));
+        form.setName(StringUtil.toLowerCase(form.getName()));
+        form.setBrand(StringUtil.toLowerCase(form.getBrand()));
+        form.setCategory(StringUtil.toLowerCase(form.getCategory()));
+    }
+    public static void validateProductForm(ProductForm form) throws ApiException{
+        if(StringUtil.isEmpty(form.getBarcode())){
+            throw new ApiException("Barcode cannot be Empty!");
+        }
+        if(StringUtil.isEmpty(form.getName())){
+            throw new ApiException("Name cannot be Empty!");
+        }
+        if(StringUtil.isEmpty(form.getBrand())){
+            throw new ApiException("Brand cannot be Empty!");
+        }
+        if(StringUtil.isEmpty(form.getCategory())){
+            throw new ApiException("Category cannot be Empty!");
+        }
+        if(form.getMrp() == null || form.getMrp() <= 0){
+            throw new ApiException("Mrp cannot be empty,negative or 0");
+        }
     }
 
     public static ProductData convertProductPojoToData(ProductPojo productPojo) throws ApiException {

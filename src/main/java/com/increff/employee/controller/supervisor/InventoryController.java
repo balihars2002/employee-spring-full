@@ -14,27 +14,27 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 @Api
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/inventory")
 public class InventoryController {
 
     @Autowired
     private InventoryDto inventoryDto;
 
     @ApiOperation(value = "Add a Product in Inventory")
-    @RequestMapping(path = "/inventory",method = RequestMethod.POST)
+    @RequestMapping(path = "",method = RequestMethod.POST)
     public void addInInv(@RequestBody InventoryForm inventoryForm) throws ApiException{
         inventoryDto.addDto(inventoryForm);
     }
 
     @ApiOperation(value = "Deletes a Product by Id")
-    @RequestMapping(path = "/inventory/{id}",method = RequestMethod.DELETE)
+    @RequestMapping(path = "/{id}",method = RequestMethod.DELETE)
     public void delete(@PathVariable Integer id) throws ApiException{
         inventoryDto.deleteInventoryById(id);
     }
 
 
     @ApiOperation(value = "Updates a Product quantity in inventory")
-    @RequestMapping(path = "/inventory/{id}", method = RequestMethod.PUT)
+    @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
     public void update(@PathVariable Integer id,@RequestBody InventoryForm inventoryForm) throws ApiException {
        // ProductPojo p = convert(f);
         inventoryDto.updateInv(id,inventoryForm);

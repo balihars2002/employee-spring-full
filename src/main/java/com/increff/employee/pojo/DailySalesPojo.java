@@ -4,9 +4,9 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-public class SchedulerPojo {
+public class DailySalesPojo {
     @Id
-    @TableGenerator(name = "scheduler_id", pkColumnValue = "scheduler_id")
+    @TableGenerator(name = "scheduler_id", pkColumnValue = "scheduler_id", table = "table_sequence")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "scheduler_id")
     private Integer id;
     private LocalDate localDate;

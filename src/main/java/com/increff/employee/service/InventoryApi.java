@@ -27,13 +27,19 @@ public class InventoryApi {
     }
 
     @Transactional(rollbackFor = ApiException.class)
-    public void updateInv(InventoryPojo inventoryPojo){
-        inventoryDao.update(inventoryPojo);
+    public void updateInv(InventoryPojo inventoryPojo,Integer quantity) throws ApiException {
+        InventoryPojo pojo = getPojoFromId(inventoryPojo.getId());
+        System.out.println("into the update service");
+        pojo.setQuantity(quantity);
     }
 
     @Transactional
-    public InventoryPojo getPojoFromId(Integer id){
-        return inventoryDao.selectPojoById(id);
+    public InventoryPojo getPojoFromId(Integer id) throws ApiException{
+        InventoryPojo inventoryPojo =  inventoryDao.selectPojoById(id);
+        if(inventoryPojo == null){
+            throw new ApiException("Inventory with given Id does not exist.");
+        }
+        return inventoryPojo;
     }
 
     @Transactional
