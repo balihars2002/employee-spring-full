@@ -15,13 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @Api
 @RestController
 @RequestMapping("/api")
 public class SalesReportController {
-    private static Logger logger = Logger.getLogger(SalesReportController.class);
+    private final static Logger logger = Logger.getLogger(SalesReportController.class);
     @Autowired
     private OrderDto orderDto;
     @Autowired
@@ -35,4 +37,10 @@ public class SalesReportController {
         logger.info("Entered Controller");
         return salesReportDto.get(form);
     }
+
+//    @ApiOperation(value = "Export Product Report to CSV")
+//    @RequestMapping(path = "/salesReport/exportCsv", method = RequestMethod.GET)
+//    public void exportToCSV(HttpServletResponse response) throws IOException {
+//        salesReportDto.generateCsv(response);
+//    }
 }

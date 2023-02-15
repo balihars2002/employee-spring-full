@@ -1,7 +1,5 @@
 package com.increff.employee.model.form;
 
-import java.time.LocalDateTime;
-
 public class SalesReportForm {
 
     private String startingDate;

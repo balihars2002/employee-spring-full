@@ -2,23 +2,14 @@ package com.increff.employee.dto;
 
 import com.increff.employee.model.data.OrderItemData;
 import com.increff.employee.model.form.OrderItemForm;
-import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.OrderItemPojo;
-import com.increff.employee.pojo.OrderPojo;
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static com.increff.employee.dto.HelperDto.*;
@@ -40,14 +31,15 @@ public class OrderItemDto{
 
     public void add(OrderItemForm orderItemForm,Integer orderId) throws ApiException{
         OrderItemPojo orderItemPojo = convertOrderItemFormToPojo(orderItemForm,orderId);
+        orderItemApi.add(orderItemPojo);
 //        Integer getQuantityInInventory = productDto.getQuantityFromInventoryByPID(orderItemPojo.getProductId());
 //        if(getQuantityInInventory < orderItemPojo.getQuantity()){
 //            throw new ApiException("Not sufficient quantity of product available in inventory");
 //        }
-        InventoryPojo inventoryPojo = getUpdatedInventoryPojo(orderItemPojo.getProductId(),orderItemForm.getQuantity(),false);
-        Integer quantity = inventoryPojo.getQuantity();
-        inventoryApi.updateInv(inventoryPojo,quantity);
-        orderItemApi.add(orderItemPojo);
+//        InventoryPojo inventoryPojo = getUpdatedInventoryPojo(orderItemPojo.getProductId(),orderItemPojo.getQuantity(),false);
+//        Integer quantity = inventoryPojo.getQuantity();
+//        inventoryApi.updateInv(inventoryPojo,quantity);
+//        orderItemApi.add(orderItemPojo);
     }
 
     public void deleteByProductId(Integer product_id) {

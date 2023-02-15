@@ -4,7 +4,7 @@ function getBrandUrl(){
 	return baseUrl + "/api/brandReport";
 }
 
-function getOrderList(){
+function getBrandList(){
 	var url = getBrandUrl();
 	$.ajax({
 	   url: url,
@@ -29,11 +29,15 @@ function displayBrandList(data){
         $tbody.append(row);
 	}
 }
-
+function downloadCsvFile(data){
+	var url = getBrandUrl() + "/exportCsv";
+	window.location.href = url;
+}
 //INITIALIZATION CODE
 function init(){
+	$('#download-csv').click(downloadCsvFile);
 }
 
 $(document).ready(init);
-$(document).ready(getOrderList);
+$(document).ready(getBrandList);
 

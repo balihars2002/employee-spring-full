@@ -33,7 +33,7 @@ function addProduct(event) {
                 style: {
                     background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
                   },
-                duration: 3000
+                duration: 2500
                 }).showToast();
             getProductList();
             $form.trigger("reset");
@@ -70,7 +70,7 @@ function updateTheProduct(event) {
                 style: {
                     background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
                   },
-                duration: 3000
+                duration: 2500
                 }).showToast();
             getProductList();
         },
@@ -110,7 +110,7 @@ function deleteProduct(id) {
                 style: {
                     background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
                   },
-                duration: 3000
+                duration: 2500
                 }).showToast();
             getProductList();
         },
@@ -243,8 +243,8 @@ function displayProductList(data) {
     for (var i in data) {
         var e = data[i];
         console.log("data: ", data);
-        var buttonHtml = '<button class="fa fa-trash" title="delete product" onclick="deleteProduct(' +e.id + ')" id = "' +e.id + '" value="' + e.barcode + '"></button>'
-        buttonHtml += ' <button class="fa fa-pencil" title="edit product" onclick="displayEditProduct(' + e.id + ')"></button>'
+        var buttonHtml = '<button class="fa fa-trash"  data-toggle="tooltip" data-html="true" title="delete product" style="border-radius :5px;border-color:grey" onclick="deleteProduct(' +e.id + ')" id = "' +e.id + '" value="' + e.barcode + '"></button>'
+        buttonHtml += ' <button class="fa fa-pencil"  data-toggle="tooltip" data-html="true" title="edit product" style="border-radius :5px;border-color:grey" onclick="displayEditProduct(' + e.id + ')"></button>'
         var row = '<tr>'
             + '<td>' + e.id + '</td>'
             + '<td>' + e.barcode + '</td>'

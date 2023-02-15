@@ -1,9 +1,6 @@
 package com.increff.employee.controller.supervisor;
 
-import java.util.List;
-
 import com.increff.employee.dto.InventoryDto;
-import com.increff.employee.model.data.InventoryData;
 import com.increff.employee.model.form.InventoryForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -25,7 +25,7 @@ function addUser(event){
 			style: {
 				background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
 			  },
-			duration: 3000
+			duration: 2500
 			}).showToast();
 		   // $('.alert').alert()
 	   		getUserList();    
@@ -60,7 +60,7 @@ function deleteUser(id){
 			style: {
 				background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
 			  },
-			duration: 3000
+			duration: 2500
 			}).showToast();
 	   		getUserList();    
 	   },

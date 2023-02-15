@@ -4,6 +4,7 @@ package com.increff.employee.pojo;
 import javax.persistence.*;
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"barcode","brand_category"})})
 public class ProductPojo {
     @Id
     @TableGenerator(name = "product_id", pkColumnValue = "product_id", table = "table_sequence")

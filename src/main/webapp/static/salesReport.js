@@ -214,11 +214,15 @@ function displayBrand(data){
     $("#brand-edit-form input[name=revenue]").val(data.revenue);	
 	$('#edit-brand-modal').modal('toggle');
 }
-
+function downloadCsvFile(data){
+	var url = getBrandUrl() + "/exportCsv";
+	window.location.href = url;
+}
 
 //INITIALIZATION CODE
 function init(){
 	$('#get-sales-report').click(addBrand);
+	$('#download-csv').click(downloadCsvFile);
 	// $('#update-brand').click(updateOrder);
 	$('#refresh-data').click(getOrderList);
 	$('#upload-data').click(displayUploadData);

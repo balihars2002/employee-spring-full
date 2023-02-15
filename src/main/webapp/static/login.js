@@ -10,9 +10,9 @@
 //     Toastify({
 //         text: "Successfully Logged in as ",
 //         style: {
-//             background: "linear-gradient(to right,  #008000, #008000)",
+//             background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
 //           },
-//         duration: 3500
+//         duration: 2500
 //         }).showToast();
 // }
 

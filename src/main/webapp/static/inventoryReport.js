@@ -31,8 +31,14 @@ function displayInventoryList(data){
 	}
 }
 
+function downloadCsvFile(data){
+	var url = getInventoryUrl() + "/exportCsv";
+	window.location.href = url;
+}
+
 //INITIALIZATION CODE
 function init(){
+	$('#download-csv').click(downloadCsvFile);
 }
 
 $(document).ready(init);

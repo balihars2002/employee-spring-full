@@ -27,13 +27,23 @@ function addBrand(event){
 		Toastify({
 			text: "Brand added Successfully",
 			style: {
-				background: "linear-gradient(to right,  #008000, #008000)",
+				background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
 			  },
-			duration: 3500
+			duration: 2500
 			}).showToast();
 	   		getBrandList();  
 	   },
-	   error: handleAjaxError
+	   error: function(response){
+		console.log(response.responseText);
+		Toastify({
+			text: JSON.parse(response.responseText).message,
+			style: {
+				background: "linear-gradient(to right,  #e74c3c, #e74c3c)",
+			  },
+			duration: 2500
+			}).showToast();
+		handleAjaxError
+	   }
 	});
 
 	return false;
@@ -60,9 +70,9 @@ function updateBrand(event){
 		Toastify({
 			text: "Brand updated Successfully",
 			style: {
-				background: "linear-gradient(to right,  #008000, #008000)",
+				background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
 			  },
-			duration: 3500
+			duration: 2500
 			}).showToast();
 	   		getBrandList();   
 	   },
@@ -95,9 +105,9 @@ function deleteBrand(id){
 		Toastify({
 		text: "Brand deleted Successfully",
 		style: {
-			background: "linear-gradient(to right,  #008000, #008000)",
+			background: "linear-gradient(to right,  #5cb85c,  #5cb85c)",
 		  },
-		duration: 3500
+		duration: 2500
 		}).showToast();
 	   		getBrandList();  
 	   },
@@ -168,8 +178,7 @@ function displayBrandList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		// var buttonHtml = '<button class="fa fa-trash" style="border:0px;" aria-hidden="true"  onclick="deleteBrand(' + e.id + ')"></button>'
-		var buttonHtml = ' <button class="fa fa-pencil" id="edit-button" style="border:0.5px;border-color:grey" aria-hidden="true" onclick="displayEditBrand(' + e.id + ')"></button>'
+		var buttonHtml = ' <button class="fa fa-pencil" id="edit-button"  data-toggle="tooltip" data-html="true" title="edit brand" style="border-radius :5px;border-color:grey" aria-hidden="true" onclick="displayEditBrand(' + e.id + ')"></button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.brand + '</td>'

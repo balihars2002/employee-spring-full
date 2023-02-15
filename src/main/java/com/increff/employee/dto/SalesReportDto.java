@@ -10,11 +10,14 @@ import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.service.*;
 import com.increff.employee.spring.SecurityConfig;
+import com.increff.employee.util.CsvFileGenerator;
 import com.increff.employee.util.StringUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +39,8 @@ public class SalesReportDto {
     private OrderItemApi orderItemApi;
     @Autowired
     private BrandApi brandApi;
+    @Autowired
+    private CsvFileGenerator csvFileGenerator;
 
     private final static Logger logger = Logger.getLogger(SecurityConfig.class);
 
@@ -63,10 +68,11 @@ public class SalesReportDto {
     }
     public List<SalesReportData> getReport(LocalDate startDate, LocalDate endDate, String brand, String category) throws ApiException{
         List<OrderPojo> orderPojoList = orderApi.selectInDate(startDate, endDate);
+        System.out.println("the size of the list of orders : " + orderPojoList.size());
         HashMap<List<String>,Integer> mapQuantity = new HashMap<List<String>,Integer>();
         HashMap<List<String>,Double> mapRevenue = new HashMap<List<String>,Double>();
 
-//        logger.info(brand + " " + category);
+        logger.info(brand + " " + category);
 
         for(OrderPojo pojo:orderPojoList){
 
@@ -174,6 +180,14 @@ public class SalesReportDto {
         }
         return salesReportDataList;
     }
+
+//    public void generateCsv(HttpServletResponse response) throws IOException {
+//        response.setContentType("text/csv");
+//        response.addHeader("Content-Disposition", "attachment; filename=\"salesReport.csv\"");
+//        List<SalesReportData> salesReportDataList =
+//        csvFileGenerator.writeSalesToCsv(salesList, response.getWriter());
+//        salesList.clear();
+//    }
 
     public List<OrderItemData> convertPojoListToDataList(List<OrderItemPojo> orderItemPojoList) throws ApiException {
         List<OrderItemData> list = new ArrayList<OrderItemData>();

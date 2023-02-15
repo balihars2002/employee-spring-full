@@ -1,8 +1,6 @@
 package com.increff.employee.controller.supervisor;
 
 
-import java.util.List;
-
 import com.increff.employee.dto.BrandDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.increff.employee.model.data.BrandData;
 import com.increff.employee.model.form.BrandForm;
 import com.increff.employee.service.ApiException;
 

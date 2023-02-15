@@ -1,7 +1,5 @@
 package com.increff.employee.model.data;
 
-import io.swagger.models.auth.In;
-
 public class OrderItemData {
     private Integer id;
     private String barcode;

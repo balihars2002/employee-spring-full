@@ -1,6 +1,7 @@
 package com.increff.employee.service;
 
 import com.increff.employee.dao.OrderItemDao;
+import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.ProductPojo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,21 @@ public class OrderItemApi {
     private OrderItemDao orderItemDao;
     @Autowired
     private ProductApi productApi;
+    @Autowired
+    private InventoryApi inventoryApi;
 
     @Transactional(rollbackFor = ApiException.class)
-    public void add(OrderItemPojo orderItemPojo){
+    public void add(OrderItemPojo orderItemPojo) throws ApiException {
+        InventoryPojo inventoryPojo = inventoryApi.getPojoFromProductId(orderItemPojo.getProductId());
+        Integer availableQuantity = inventoryPojo.getQuantity();
+        if(availableQuantity < orderItemPojo.getQuantity()){
+            throw new ApiException("Not sufficient quantity of product available in inventory");
+        }
+//        inventoryPojo.setQuantity(availableQuantity - orderItemPojo.getQuantity());
+        inventoryApi.updateInv(inventoryPojo,(availableQuantity - orderItemPojo.getQuantity()));
+//        InventoryPojo inventoryPojo = getUpdatedInventoryPojo(orderItemPojo.getProductId(),orderItemPojo.getQuantity(),false);
+//        Integer quantity = inventoryPojo.getQuantity();
+//        inventoryApi.updateInv(inventoryPojo,quantity);
         orderItemDao.insert(orderItemPojo);
     }
 

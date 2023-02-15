@@ -1,5 +1,4 @@
 
-
 function getOrderItemUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/orderItem";
@@ -25,7 +24,9 @@ function addOrderItem(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
+		
 	   		getOrderItemList();  
+			
 	   },
 	   error: handleAjaxError
 	});
@@ -51,6 +52,13 @@ function updateOrderItem(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
+		Toastify({
+			text: "Order updated Successfully",
+			style: {
+				background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
+			  },
+			duration: 2500
+			}).showToast();
 	   		getOrderItemList();   
 	   },
 	   error: handleAjaxError
@@ -79,6 +87,13 @@ function deleteOrderItem(id){
 	   url: url,
 	   type: 'DELETE',
 	   success: function(data) {
+		Toastify({
+			text: "OrderItem deleted Successfully",
+			style: {
+				background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
+			  },
+			duration: 2500
+			}).showToast();
 	   		getOrderItemList();  
 	   },
 	   error: handleAjaxError

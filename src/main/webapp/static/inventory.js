@@ -26,7 +26,13 @@ function addInventory(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
-		
+		Toastify({
+			text: "Product added to Inventory Successfully",
+			style: {
+				background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
+			  },
+			duration: 2500
+			}).showToast();
 	   		getInventoryList();  
 	   },
 	   error: handleAjaxError
@@ -53,6 +59,13 @@ function updateInventory(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
+		Toastify({
+			text: "Product quantity in Inventory updated Successfully",
+			style: {
+				background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
+			  },
+			duration: 2500
+			}).showToast();
 	   		getInventoryList();   
 	   },
 	   error: handleAjaxError
@@ -84,6 +97,13 @@ function deleteInventory(id){
 	   url: url,
 	   type: 'DELETE',
 	   success: function(data) {
+		Toastify({
+			text: "Product removed from Inventory Successfully",
+			style: {
+				background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
+			  },
+			duration: 2500
+			}).showToast();
 	   		getInventoryList();  
 	   },
 	   error: handleAjaxError
@@ -153,8 +173,8 @@ function displayInventoryList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button class="fa fa-trash" style="border:0.5px;border-color=grey" onclick="deleteInventory(' + e.id + ')"></button>'
-		buttonHtml += ' <button class="fa fa-pencil" style="border:0.5px;border-color=grey" onclick="displayEditInventory(' + e.id + ')"></button>'
+		var buttonHtml = '<button class="fa fa-trash"  data-toggle="tooltip" data-html="true" title="delete inventory" style="border-radius :5px;border-color:grey" onclick="deleteInventory(' + e.id + ')"></button>'
+		buttonHtml += ' <button class="fa fa-pencil"  data-toggle="tooltip" data-html="true" title="edit inventory" style="border-radius :5px;border-color:grey" onclick="displayEditInventory(' + e.id + ')"></button>'
 		var row = '<tr>'
 		+ '<td>' + e.productId + '</td>'
 		+ '<td>' + e.brand + '</td>'

@@ -3,16 +3,12 @@ package com.increff.employee.Dto;
 import com.increff.employee.dto.BrandDto;
 import com.increff.employee.dto.InventoryReportDto;
 import com.increff.employee.dto.ProductDto;
-import com.increff.employee.model.data.InventoryData;
 import com.increff.employee.model.form.BrandForm;
 import com.increff.employee.model.form.ProductForm;
-import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.service.ApiException;
 import com.increff.employee.service.InventoryApi;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.List;
 
 public class InventoryReportDtoTest {
 

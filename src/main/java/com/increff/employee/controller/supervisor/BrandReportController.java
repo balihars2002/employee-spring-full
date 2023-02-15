@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 @Api
@@ -27,5 +29,11 @@ public class BrandReportController {
     @RequestMapping(path = "/brandReport",method = RequestMethod.GET)
     public List<BrandData> getAll() {
         return brandReportDto.getAllList();
+    }
+
+    @ApiOperation(value = "Export Product Report to CSV")
+    @RequestMapping(path = "/brandReport/exportCsv", method = RequestMethod.GET)
+    public void exportToCSV(HttpServletResponse response) throws IOException {
+        brandReportDto.generateCsv(response);
     }
 }

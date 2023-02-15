@@ -1,26 +1,25 @@
 package com.increff.employee.dto;
 
+import com.increff.employee.flowApi.OrderFlowApi;
 import com.increff.employee.model.data.OrderData;
 import com.increff.employee.model.data.OrderItemData;
-import com.increff.employee.model.data.ProductData;
-import com.increff.employee.model.data.SalesReportData;
+import com.increff.employee.model.form.InvoiceForm;
 import com.increff.employee.model.form.OrderForm;
-import com.increff.employee.model.form.OrderItemForm;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
 import com.increff.employee.pojo.ProductPojo;
-import com.increff.employee.service.ApiException;
-import com.increff.employee.service.OrderApi;
-import com.increff.employee.service.OrderItemApi;
-import com.increff.employee.service.ProductApi;
+import com.increff.employee.service.*;
 import com.increff.employee.spring.SecurityConfig;
-import com.increff.employee.util.StringUtil;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -41,27 +40,38 @@ public class OrderDto {
     private OrderItemApi orderItemApi;
     @Autowired
     private ProductApi productApi;
+    @Autowired
+    private OrderFlowApi orderFlowApi;
+    @Autowired
+    private InventoryApi inventoryApi;
+
+    @Value("${invoice.url}")
+    private String invoiceUrl;
 
     private final static Logger logger = Logger.getLogger(SecurityConfig.class);
 
 
     public void add(OrderForm orderForm) throws ApiException{
         OrderPojo orderPojo = convertFormToPojo(orderForm);
-        orderApi.add(orderPojo);
-        Integer id = orderPojo.getId();
-        for(OrderItemForm orderItemForm:orderForm.getOrderItemFormList()){
-            OrderItemPojo orderItemPojo = convertOrderItemFormToPojo(orderItemForm,id);
-            ProductPojo productPojo = productApi.getPojoFromBarcode(orderItemForm.getBarcode());
-            orderItemPojo.setProductId(productPojo.getId());
-            orderItemPojo.setSellingPrice(productPojo.getMrp());
-            orderItemApi.add(orderItemPojo);
-        }
+        orderFlowApi.add(orderPojo,orderForm.getOrderItemFormList());
+//        orderApi.add(orderPojo);
+//        Integer id = orderPojo.getId();
+//        for(OrderItemForm orderItemForm:orderForm.getOrderItemFormList()){
+//            OrderItemPojo orderItemPojo = convertOrderItemFormToPojo(orderItemForm,id);
+//            ProductPojo productPojo = productApi.getPojoFromBarcode(orderItemForm.getBarcode());
+//            orderItemPojo.setProductId(productPojo.getId());
+//            orderItemPojo.setSellingPrice(productPojo.getMrp());
+//            orderItemApi.add(orderItemPojo);
+//        }
     }
 
     public void delete(Integer id) {
         orderApi.delete(id);
     }
 
+    public void generateInvoice(Integer id) throws ApiException {
+        orderApi.generateInvoice(id);
+    }
 //    public void updateList(OrderForm form) throws ApiException {
 ////        OrderPojo orderPojo = orderApi.selectById()
 ////        BrandPojo brandPojo1 = brandService.getBrandCat(brandPojo.getBrand(),brandPojo.getCategory());
@@ -111,6 +121,8 @@ public class OrderDto {
         OrderPojo orderPojo = new OrderPojo();
 //        ZonedDateTime addedDateTime = ZonedDateTime.now();
        // LocalDateTime localDateTime = LocalDateTime.now();
+        LocalDate localDate = LocalDate.now();
+
         ZoneId india = ZoneId.of("Asia/Kolkata");
         ZonedDateTime addedDateTime = ZonedDateTime.of(LocalDateTime.now(),india);
         String formattedZdt = addedDateTime.format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
@@ -119,6 +131,7 @@ public class OrderDto {
         // Creating date from milliseconds
         // using Date() constructor
        // Date date = new Date(millis);
+        orderPojo.setLocalDate(localDate);
         orderPojo.setDate(formattedZdt);
         orderPojo.setOrderAddDateTime(addedDateTime);
         //orderPojo.setDate(simple.format(date));
@@ -126,7 +139,38 @@ public class OrderDto {
     }
 
 
-
+//    public ResponseEntity<byte[]> getPDF(Integer id) throws Exception {
+//        InvoiceForm invoiceForm = generateInvoiceForOrder(id);
+//        RestTemplate restTemplate = new RestTemplate();
+//        byte[] contents = Base64.getDecoder().decode(restTemplate.postForEntity(invoiceUrl, invoiceForm, byte[].class).getBody());
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_PDF);
+//        String filename = "invoice.pdf";
+//        headers.setContentDispositionFormData(filename, filename);
+//        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+//        ResponseEntity<byte[]> response = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+//        return response;
+//    }
+//    public InvoiceForm generateInvoiceForOrder(Integer orderId) throws ApiException
+//    {
+//        InvoiceForm invoiceForm = new InvoiceForm();
+//        OrderPojo orderPojo = orderApi.selectById(orderId);
+//        invoiceForm.setOrderId(orderPojo.getId());
+//        invoiceForm.setPlacedDate(orderPojo.getCreatedAt().toString());
+//        List<OrderItemPojo> orderItemPojoList = orderService.selectByOrderId(orderPojo.getId());
+//        List<OrderItem> orderItemList = new ArrayList<>();
+//        for(OrderItemPojo p: orderItemPojoList) {
+//            OrderItem orderItem = new OrderItem();
+//            orderItem.setOrderItemId(p.getId());
+//            String productName = productService.getCheck(p.getProductId()).getName();
+//            orderItem.setProductName(productName);
+//            orderItem.setQuantity(p.getQuantity());
+//            orderItem.setSellingPrice(p.getSellingPrice());
+//            orderItemList.add(orderItem);
+//        }
+//        invoiceForm.setOrderItemList(orderItemList);
+//        return invoiceForm;
+//    }
 
 
 

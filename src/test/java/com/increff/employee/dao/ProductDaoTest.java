@@ -1,11 +1,8 @@
 package com.increff.employee.dao;
 
 import com.increff.employee.AbstractUnitTest;
-import com.increff.employee.dto.BrandDto;
-import com.increff.employee.dto.ProductDto;
 import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.pojo.ProductPojo;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

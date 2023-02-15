@@ -2,8 +2,9 @@
 
 <html lang="en">
 
-<head th:replace="snippets.html :: name_head"></head>
+<head th:replace="snippets.html :: name_head">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 	<!-- <link rel="stylesheet" type="text/css" href="brand.css"> -->
@@ -17,8 +18,10 @@
 
 <div class="container">
 
-<h3>Brands </h3>
+<h3 style="text-align: center;text-shadow:3px;font-weight: bold;font-family: 'Times New Roman', Times, serif;padding-top: 15px;">BRANDS</h3>
+
 <hr>
+
  <!-- Top row with form-->
  <div class="row">
 	 <div class="col-12">
@@ -35,11 +38,11 @@
 			      <input type="text" class="form-control" name="category" id="inputCategory" placeholder="enter category">
 			    </div>
 			  </div>
-			  <button type="button" class="btn btn-primary" id="add-brand">Add</button>
+			  <button type="button" class="btn btn-primary" style="border-radius: 5px;" id="add-brand">Add</button>
 			  &nbsp;
-			  <button type="button"  class="btn btn-primary" id="upload-data">Upload File</button>
+			  <button type="button"   class="btn btn-warning" id="upload-data">Upload File</button>
 			  &nbsp;
-			  <button type="button" class="btn btn-primary" id="refresh-data">Refresh</button>
+			  <button type="button" class="btn btn-success" id="refresh-data">Refresh</button>
 			 </form>
 	 </div>	
 </div> 

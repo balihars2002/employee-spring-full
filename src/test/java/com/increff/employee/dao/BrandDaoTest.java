@@ -2,11 +2,9 @@ package com.increff.employee.dao;
 
 import com.increff.employee.AbstractUnitTest;
 import com.increff.employee.pojo.BrandPojo;
-import org.dom4j.swing.BranchTreeNode;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 

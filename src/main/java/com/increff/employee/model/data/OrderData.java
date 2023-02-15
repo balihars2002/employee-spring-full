@@ -1,6 +1,5 @@
 package com.increff.employee.model.data;
 
-import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -11,6 +10,15 @@ public class OrderData{
     private String updatedDate;
     private String date;
     private List<OrderItemData> orderItemDataList;
+    private Boolean isInvoiceGenerated=false;
+
+    public Boolean getInvoiceGenerated() {
+        return isInvoiceGenerated;
+    }
+
+    public void setInvoiceGenerated(Boolean invoiceGenerated) {
+        isInvoiceGenerated = invoiceGenerated;
+    }
 
     public String getUpdatedDate() {
         return updatedDate;

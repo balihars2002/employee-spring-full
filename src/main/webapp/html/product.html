@@ -2,8 +2,9 @@
 
 <html lang="en">
 
-<head th:replace="snippets.html :: name_head"></head>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<head th:replace="snippets.html :: name_head">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 <body>
 
@@ -11,20 +12,19 @@
 
 <div class="container">
 
-<h3>Products</h3>
-<br>
+	<h3 style="text-align: center;text-shadow:3px;font-weight: bold;font-family: 'Times New Roman', Times, serif;padding-top: 15px;">PRODUCTS</h3><br>
  <!-- Top row with form-->
 
  <div class="row">
 	 <div class="col-12">
-		<form class="form-inline" id="product-form">
+		<form class="form-inline" style="padding: 27px;" id="product-form">
 			<table>
-				<tr>
+				<tr class="table-row" style="padding: 20px;">
 					<td>
 						<div class="form-group">
-							<label for="inputBarcode" class="col-sm-2 col-form-label">Barcode</label>
+							<label for="inputBarcode" class="col-sm-2 col-form-label" id="brand-dropdown">Barcode</label>
 							<div class="col-sm-10">
-							  <input type="text" class="form-control" name="barcode" id="inputBarcode" placeholder="enter barcode">
+							  <input type="text" class="form-control"  name="barcode" id="inputBarcode" placeholder="enter barcode">
 							</div>
 						  </div>
 					</td>
@@ -62,12 +62,12 @@
 							</div>
 						  </div>
 					</td>
-					<td>
-						<button type="button" class="btn btn-primary" id="add-product">Add</button>
+					<td style="text-align-last: center;">
+						<button type="button" class="btn btn-primary ml-2" id="add-product">Add</button>
 						&nbsp;
-						<button type="button" class="btn btn-primary" id="refresh-data">Refresh</button>
+						<button type="button" class="btn btn-warning ml-2" id="upload-data">Upload</button>
 						&nbsp;
-						<button type="button" class="btn btn-primary" id="upload-data">Upload</button>
+						<button type="button" class="btn btn-success ml-2" id="refresh-data">Refresh</button>
 					</td>
 				</tr>
 			</table>

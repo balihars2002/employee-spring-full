@@ -47,7 +47,9 @@ public class BrandDto extends HelperDto {
         return brandDataList;
     }
     public void updateList(Integer id, BrandForm brandform) throws ApiException {
+        validateBrandForm(brandform);
         BrandPojo brandPojo = convertBrandFormToPojo(brandform);
+        getCheckBrand(brandPojo.getBrand(),brandPojo.getCategory());
 //        BrandPojo brandPojo1 = brandApi.getBrandCat(brandPojo.getBrand(),brandPojo.getCategory());
         normalizeBrandPojo(brandPojo);
 //        BrandPojo updated = getCheckFromService(id);

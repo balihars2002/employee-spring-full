@@ -40,6 +40,14 @@ public class OrderApi {
         orderDao.update(orderPojo);
     }
 
+    @Transactional(rollbackFor = ApiException.class)
+    public void generateInvoice(Integer id) throws ApiException{
+        OrderPojo orderPojo = selectById(id);
+        orderPojo.setInvoiceGenerated(true);
+        orderDao.update(orderPojo);
+    }
+
+
     @Transactional
     public OrderPojo selectById(Integer id){
         return (OrderPojo) orderDao.selectBYId(id);

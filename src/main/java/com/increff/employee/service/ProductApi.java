@@ -40,6 +40,13 @@ public class ProductApi {
         return productPojo;
     }
     @Transactional
+    public void getPojoByBarcode(String barcode) throws ApiException{
+        ProductPojo productPojo = productDao.selectPojoByBarcode(barcode);
+        if(productPojo != null) {
+            throw new ApiException("Product with given barcode already exist.");
+        }
+    }
+    @Transactional
     public ProductPojo getPojoFromId(Integer id) throws ApiException{
         ProductPojo productPojo1 = productDao.selectPojoById(id);
         if(productPojo1 == null)
@@ -62,9 +69,9 @@ public class ProductApi {
     @Transactional
     public ProductPojo givePojoById(Integer id) throws ApiException{
         ProductPojo productPojo = productDao.selectPojoById(id);
-//        if(productPojo == null){
-//            throw new ApiException("Product with given ProductId doesnot exist.");
-//        }
+        if(productPojo == null){
+            throw new ApiException("Product with given ProductId does not exist.");
+        }
             return productPojo;
       }
 
@@ -76,6 +83,14 @@ public class ProductApi {
                 throw new ApiException("The product with given barcode does not exist");
         }
         return p;
+    }
+
+    @Transactional
+    public void getCheck(Integer brand_category,String name) throws ApiException {
+        ProductPojo p = productDao.getCheck(brand_category,name);
+        if(p != null){
+            throw new ApiException("The product with same brand,category and name already exists");
+        }
     }
 //
 //

@@ -6,7 +6,6 @@ import java.util.List;
 import com.increff.employee.flowApi.ProductFlowAPi;
 import com.increff.employee.model.form.ProductForm;
 import com.increff.employee.pojo.BrandPojo;
-import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.model.data.ProductData;
 import com.increff.employee.service.ApiException;
@@ -32,9 +31,11 @@ public class ProductDto extends HelperDto {
     private final static Logger logger = Logger.getLogger(SecurityConfig.class);
 
     public void addDto(ProductForm productForm) throws ApiException {
-        normalizeProductForm(productForm);
         validateProductForm(productForm);
+        normalizeProductForm(productForm);
+        productApi.getPojoByBarcode(productForm.getBarcode());
         ProductPojo productPojo= convertFormToPojo(productForm);
+        productApi.getCheck(productPojo.getBrand_category(),productPojo.getName());
         productFlowAPi.insert(productPojo);
     }
     public ProductPojo getCheckFromService(String barcode) throws ApiException{
@@ -62,11 +63,13 @@ public class ProductDto extends HelperDto {
         return list1;
     }
     public void updateProduct(Integer id, ProductForm productForm) throws ApiException {
+        validateProductEditForm(productForm);
         ProductPojo productPojo1 = productApi.getPojoFromId(id);
-        normalizeProductPojo(productPojo1);
         productPojo1.setBarcode(productForm.getBarcode());
         productPojo1.setMrp(productForm.getMrp());
         productPojo1.setName(productForm.getName());
+        normalizeProductPojo(productPojo1);
+
         productApi.update(productPojo1);
 
     }

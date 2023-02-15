@@ -8,6 +8,7 @@ import com.increff.employee.service.ApiException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -43,6 +44,17 @@ public class OrderController {
         return  orderDto.viewOrderItemsInOrder(id);
     }
 
+    @ApiOperation(value = "Generated Invoice")
+    @RequestMapping(path = "/order/{id}", method = RequestMethod.PUT)
+    public void generateInvoice(@PathVariable Integer id) throws ApiException {
+          orderDto.generateInvoice(id);
+    }
+
+//    @ApiOperation(value = "Download Invoice")
+//    @GetMapping(path = "/order/invoice/{id}")
+//    public ResponseEntity<byte[]> getPDF(@PathVariable Integer id) throws Exception{
+//        return orderDto.getPDF(id);
+//    }
 //    @ApiOperation(value = "Updates a Product quantity in inventory")
 //    @RequestMapping(path = "/inventory/{id}", method = RequestMethod.PUT)
 //    public void update(@PathVariable Integer id,@RequestBody InventoryForm inventoryForm) throws ApiException {

@@ -1,8 +1,6 @@
 package com.increff.employee.service;
 
 import com.increff.employee.AbstractUnitTest;
-import com.increff.employee.model.data.BrandData;
-import com.increff.employee.model.form.BrandForm;
 import com.increff.employee.pojo.BrandPojo;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

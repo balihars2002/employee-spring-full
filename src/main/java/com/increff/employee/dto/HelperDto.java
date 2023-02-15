@@ -89,6 +89,17 @@ public class HelperDto {
             throw new ApiException("Mrp cannot be empty,negative or 0");
         }
     }
+    public static void validateProductEditForm(ProductForm form) throws ApiException{
+        if(StringUtil.isEmpty(form.getBarcode())){
+            throw new ApiException("Barcode cannot be Empty!");
+        }
+        if(StringUtil.isEmpty(form.getName())){
+            throw new ApiException("Name cannot be Empty!");
+        }
+        if(form.getMrp() == null || form.getMrp() <= 0){
+            throw new ApiException("Mrp cannot be empty,negative or 0");
+        }
+    }
 
     public static ProductData convertProductPojoToData(ProductPojo productPojo) throws ApiException {
         ProductData productData = new ProductData();
@@ -108,21 +119,15 @@ public class HelperDto {
     }
 
     public static OrderItemPojo convertOrderItemFormToPojo(OrderItemForm orderItemForm, Integer id) throws ApiException{
-//        ProductPojo productPojo = productApi.getPojoFromBarcode(orderItemForm.getBarcode());
         OrderItemPojo orderItemPojo = new OrderItemPojo();
         orderItemPojo.setOrderId(id);
-//        orderItemPojo.setProductId(productPojo.getId());
         orderItemPojo.setQuantity(orderItemForm.getQuantity());
-//        orderItemPojo.setSellingPrice(productPojo.getMrp());
         return orderItemPojo;
     }
 
     public static OrderItemData convertOrderItemPojoToData(OrderItemPojo orderItemPojo) throws ApiException {
         OrderItemData orderItemData = new OrderItemData();
-        // orderItemData.setId(orderItemPojo.getId());
         orderItemData.setId(orderItemPojo.getId());
-//        ProductPojo productPojo = productApi.getPojoFromId(orderItemPojo.getProductId());
-//        orderItemData.setBarcode(productPojo.getBarcode());
         orderItemData.setQuantity(orderItemPojo.getQuantity());
         orderItemData.setSellingPrice(orderItemPojo.getSellingPrice());
         orderItemData.setProductId(orderItemPojo.getProductId());

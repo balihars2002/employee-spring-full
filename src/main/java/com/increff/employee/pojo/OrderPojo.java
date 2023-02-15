@@ -1,10 +1,8 @@
 package com.increff.employee.pojo;
 
 
-import org.jetbrains.annotations.NotNull;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
 @Entity
@@ -18,8 +16,24 @@ public class OrderPojo {
     private ZonedDateTime orderUpdateDateTime;
     private String date;
     private String updatedDate;
+    private Boolean isInvoiceGenerated=false;
+    private LocalDate localDate;
 
+    public LocalDate getLocalDate() {
+        return localDate;
+    }
 
+    public void setLocalDate(LocalDate localDate) {
+        this.localDate = localDate;
+    }
+
+    public Boolean getInvoiceGenerated() {
+        return isInvoiceGenerated;
+    }
+
+    public void setInvoiceGenerated(Boolean invoiceGenerated) {
+        isInvoiceGenerated = invoiceGenerated;
+    }
 
     public Integer getId() {
         return id;
