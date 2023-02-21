@@ -38,9 +38,9 @@ public class ProductDto extends HelperDto {
         productApi.getCheck(productPojo.getBrand_category(),productPojo.getName());
         productFlowAPi.insert(productPojo);
     }
-    public ProductPojo getCheckFromService(String barcode) throws ApiException{
-        return productApi.getCheckByBarcode(barcode);
-    }
+//    public ProductPojo getCheckFromService(String barcode) throws ApiException{
+//        return productApi.getPojoFromBarcode(barcode);
+//    }
 
     public void delete(Integer id) throws ApiException {
         ProductPojo productPojo = productApi.getPojoFromId(id);

@@ -1,4 +1,8 @@
 
+function getProductUrl() {
+    var baseUrl = $("meta[name=baseUrl]").attr("content")
+    return baseUrl + "/api/";
+}
 
 function getInventoryUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
@@ -42,6 +46,7 @@ function addInventory(event){
 }
 
 function updateInventory(event){
+	event.preventDefault();
 	$('#edit-inventory-modal').modal('toggle');
 	//Get the ID
 	var id = $("#inventory-edit-form input[name=id]").val();	
@@ -219,6 +224,43 @@ function displayEditInventory(id){
 	});	
 }
 
+function processDropDown() {
+    var url = getProductUrl()+"operator/product";
+    var productData = null;
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (data) {
+            fillDropDown(data);
+        },
+        error: handleAjaxError
+    });
+}
+
+
+function fillDropDown(data) {
+    let barcodeArr = []
+    data.forEach((e) => {
+        barcodeArr.push(e.barcode);
+    });
+
+    barcodeArr = [...new Set(barcodeArr)];
+    
+    // BRAND
+    var $barcodeDropdown = $('#barcode-dropdown-menu');
+    $barcodeDropdown.empty();
+    var $editBarcodeDropdown = $('#edit-barcode-dropdown-menu');
+    $editBarcodeDropdown.empty();
+
+    var firstRowBarcode = '<option value="none" selected disabled>Select Barcode</option>';
+    $barcodeDropdown.append(firstRowBarcode);
+
+    barcodeArr.forEach((barcode) => {
+        var row = '<option value="' + barcode + '">' + barcode + '</option>';
+        $barcodeDropdown.append(row);
+        $editBarcodeDropdown.append(row);
+    })
+}
 
 function disableButtons(){
 	var role = getRole();
@@ -260,11 +302,11 @@ function displayUploadData(){
 }
 
 function displayInventory(data){
+	$("#edit-barcode-dropdown-menu").val(data.barcode);
 	$("#inventory-edit-form input[name=id]").val(data.id);
 	$("#inventory-edit-form input[name=productId]").val(data.productId);	
 	$("#inventory-edit-form input[name=brand]").val(data.brand);
-	$("#inventory-edit-form input[name=category]").val(data.category);	
-	$("#inventory-edit-form input[name=barcode]").val(data.barcode);	
+	$("#inventory-edit-form input[name=category]").val(data.category);		
 	$("#inventory-edit-form input[name=mrp]").val(data.mrp);
 	$("#inventory-edit-form input[name=name]").val(data.name);
 	$("#inventory-edit-form input[name=quantity]").val(data.quantity);
@@ -275,16 +317,21 @@ function displayInventory(data){
 //INITIALIZATION CODE
 function init(){
 	$('#add-inventory').click(addInventory);
-	$('#update-inventory').click(updateInventory);
+	$('#inventory-edit-form').submit(updateInventory);
 	$('#refresh-data').click(getInventoryList);
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
 	$('#download-errors').click(downloadErrors);
     $('#inventoryFile').on('change', updateFileName)
+	$("#barcode-dropdown").change(function () {
+        var selected = $(this).children("option:selected").val();
+        alert("You have selected - " + selected);
+    });
 }
 
 
 $(document).ready(disableButtons);
 $(document).ready(init);
 $(document).ready(getInventoryList);
+$(document).ready(processDropDown);
 

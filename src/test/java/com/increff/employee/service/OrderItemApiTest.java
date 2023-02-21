@@ -1,17 +1,25 @@
-package com.increff.employee.dao;
+package com.increff.employee.service;
 
 import com.increff.employee.AbstractUnitTest;
+import com.increff.employee.dao.*;
 import com.increff.employee.pojo.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
-public class OrderItemDaoTest extends AbstractUnitTest {
+public class OrderItemApiTest extends AbstractUnitTest {
 
+    //TODO: update function test
+    @Autowired
+    private OrderItemApi orderItemApi;
+    @Autowired
+    private OrderItemDao orderItemDao;
     @Autowired
     private OrderDao orderDao;
     @Autowired
@@ -20,8 +28,6 @@ public class OrderItemDaoTest extends AbstractUnitTest {
     private BrandDao brandDao;
     @Autowired
     private ProductDao productDao;
-    @Autowired
-    private OrderItemDao orderItemDao;
     private final ZonedDateTime addZoneTime = ZonedDateTime.now().minusDays(1);
     private final ZonedDateTime updateZoneTime = ZonedDateTime.now();
     private final LocalDate addDate = LocalDate.now().minusDays(1);
@@ -33,134 +39,89 @@ public class OrderItemDaoTest extends AbstractUnitTest {
     }
 
     @Test
-    public void addTest(){
+    public void addTest() throws ApiException {
         Integer orderId = addOrder();
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
         addOrderItem(orderId,productId,1,8.0);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectAll();
+        List<OrderItemPojo> orderItemPojoList = orderItemApi.selectAll();
         assertEquals(orderId,orderItemPojoList.get(0).getOrderId());
         assertEquals(productId,orderItemPojoList.get(0).getProductId());
         assertEquals((Integer) 1,orderItemPojoList.get(0).getQuantity());
         assertEquals((Double) 8.0 ,orderItemPojoList.get(0).getSellingPrice());
     }
-
-    @Test
-    public void deleteByProductIdTest(){
+    @Test(expected = ApiException.class)
+    public void addTest1() throws ApiException {
         Integer orderId = addOrder();
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
-        addOrderItem(orderId,productId,1,8.0);
-        orderItemDao.deleteByProductId(productId);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectAll();
+        addOrderItem(orderId,productId,3,2.0);
+    }
+
+    @Test
+    public void deleteByProductIdTest() throws ApiException {
+        Integer orderId = addOrder();
+        Integer brandId = addBrand("brand","category",false);
+        Integer productId = addProduct("barcode","name",10.0, brandId);
+        addInventory(productId,3);
+        addOrderItem(orderId,productId,2,8.0);
+        orderItemApi.deleteByProductId(productId);
+        List<OrderItemPojo> orderItemPojoList = orderItemApi.selectAll();
         assertEquals(0,orderItemPojoList.size());
     }
 
     @Test
-    public void deleteByProductIdTest1(){
+    public void selectAllTest() throws ApiException {
         Integer orderId = addOrder();
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
-        addInventory(productId,2);
-        addOrderItem(orderId,productId,1,8.0);
-        orderItemDao.deleteByProductId(productId+1);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectAll();
+        addInventory(productId,3);
+        addOrderItem(orderId,productId,2,8.0);
+        List<OrderItemPojo> orderItemPojoList = orderItemApi.selectAll();
         assertEquals(1,orderItemPojoList.size());
     }
 
     @Test
-    public void deleteByOrderIdTest(){
+    public void selectSomeTest() throws ApiException {
         Integer orderId = addOrder();
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
-        addInventory(productId,2);
-        addOrderItem(orderId,productId,1,8.0);
-        orderItemDao.deleteByOrderId(orderId);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectAll();
+        addInventory(productId,3);
+        addOrderItem(orderId,productId,2,8.0);
+        List<OrderItemPojo> orderItemPojoList = orderItemApi.selectSome(orderId);
+        assertEquals(1,orderItemPojoList.size());
+    }
+
+    @Test
+    public void selectSomeTest1() throws ApiException {
+        Integer orderId = addOrder();
+        Integer brandId = addBrand("brand","category",false);
+        Integer productId = addProduct("barcode","name",10.0, brandId);
+        addInventory(productId,3);
+        addOrderItem(orderId,productId,2,8.0);
+        List<OrderItemPojo> orderItemPojoList = orderItemApi.selectSome(orderId+1);
         assertEquals(0,orderItemPojoList.size());
     }
 
     @Test
-    public void deleteByOrderIdTest1(){
+    public void getPojoFromIdTest() throws ApiException {
         Integer orderId = addOrder();
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
-        addInventory(productId,2);
-        addOrderItem(orderId,productId,1,8.0);
-        orderItemDao.deleteByOrderId(orderId+1);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectAll();
-        assertEquals(1,orderItemPojoList.size());
+        addInventory(productId,3);
+        addOrderItem(orderId,productId,2,8.0);
+        OrderItemPojo orderItemPojo = orderItemApi.getPojoFromId(orderId);
     }
 
-
-    @Test
-    public void selectAllTest(){
-        Integer orderId = addOrder();
-        Integer brandId = addBrand("brand","category",false);
-        Integer productId = addProduct("barcode","name",10.0, brandId);
-        addInventory(productId,2);
-        addOrderItem(orderId,productId,1,8.0);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectAll();
-        assertEquals(1,orderItemPojoList.size());
-    }
-
-    @Test
-    public void selectSomeTest(){
-        Integer orderId = addOrder();
-        Integer brandId = addBrand("brand","category",false);
-        Integer productId = addProduct("barcode","name",10.0, brandId);
-        addInventory(productId,2);
-        addOrderItem(orderId,productId,1,8.0);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectSome(orderId);
-        assertEquals(1,orderItemPojoList.size());
-    }
-
-    @Test
-    public void selectSomeTest1(){
-        Integer orderId = addOrder();
-        Integer brandId = addBrand("brand","category",false);
-        Integer productId = addProduct("barcode","name",10.0, brandId);
-        addInventory(productId,2);
-        addOrderItem(orderId,productId,1,8.0);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectSome(orderId+1);
-        assertEquals(0,orderItemPojoList.size());
-    }
-
-    @Test
-    public void getPojoFromIdTest(){
-        Integer orderId = addOrder();
-        Integer brandId = addBrand("brand","category",false);
-        Integer productId = addProduct("barcode","name",10.0, brandId);
-        addInventory(productId,2);
-        addOrderItem(orderId,productId,1,8.0);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectAll();
-        OrderItemPojo orderItemPojo = orderItemDao.getPojoFromId(orderItemPojoList.get(0).getId());
-        assertEquals(orderId,orderItemPojoList.get(0).getOrderId());
-        assertEquals(productId,orderItemPojoList.get(0).getProductId());
-        assertEquals((Integer) 1,orderItemPojoList.get(0).getQuantity());
-        assertEquals((Double) 8.0 ,orderItemPojoList.get(0).getSellingPrice());
-    }
-
-    @Test
-    public void updateTest(){
-        Integer orderId = addOrder();
-        Integer brandId = addBrand("brand","category",false);
-        Integer productId = addProduct("barcode","name",10.0, brandId);
-        addInventory(productId,2);
-        addOrderItem(orderId,productId,1,8.0);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectAll();
-        orderItemDao.update(orderItemPojoList.get(0));
-    }
-
-    public void addOrderItem(Integer orderId,Integer productId,Integer quantity,Double sellingPrice){
+    public void addOrderItem(Integer orderId,Integer productId,Integer quantity,Double sellingPrice) throws ApiException {
         OrderItemPojo orderItemPojo = new OrderItemPojo();
         orderItemPojo.setOrderId(orderId);
         orderItemPojo.setQuantity(quantity);
         orderItemPojo.setSellingPrice(sellingPrice);
         orderItemPojo.setProductId(productId);
-        orderItemDao.insert(orderItemPojo);
+        orderItemApi.add(orderItemPojo);
     }
 
     public Integer addOrder(){

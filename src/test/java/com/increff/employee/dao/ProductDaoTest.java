@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ProductDaoTest extends AbstractUnitTest {
 
@@ -66,7 +67,7 @@ public class ProductDaoTest extends AbstractUnitTest {
         List<ProductPojo> productPojoList = productDao.selectAll();
         productDao.delete(productPojoList.get(0).getId());
         List<ProductPojo> productPojoList1 = productDao.selectAll();
-        assertEquals(Optional.of((Integer) 0), productPojoList1.size());
+        assertEquals(0, productPojoList1.size());
     }
 
     @Test
@@ -184,6 +185,15 @@ public class ProductDaoTest extends AbstractUnitTest {
         productDao.update(productPojo);
         productPojoList = productDao.selectAll();
         assertEquals("updatedName",productPojoList.get(0).getName());
+    }
+
+    @Test
+    public void getCheckTest(){
+        Integer id = addBrand("brand","category",false);
+        addProduct("barcode","name",(Double)10.0,(Integer) id);
+        ProductPojo productPojo = productDao.getCheck(id,"name");
+        boolean flag = productPojo != null;
+        assertTrue(flag);
     }
 
     public void addProduct(String barcode,String name,Double mrp,Integer id){

@@ -55,8 +55,13 @@ public class InitController extends AbstractUiController {
 			form.setRole("operator");
 		}
 		UserPojo p = convert(form);
+		if(service.get(p.getEmail()) != null){
+			info.setMessage("User with given email already Exists");
+		}
+		else {
 			service.add(p);
-			info.setMessage("Application initialized");
+			info.setMessage("User added successfully");
+		}
 //		}
 		return mav("init.html");
 

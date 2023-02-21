@@ -5,6 +5,7 @@ import com.increff.employee.model.data.OrderData;
 import com.increff.employee.model.data.OrderItemData;
 import com.increff.employee.model.form.InvoiceForm;
 import com.increff.employee.model.form.OrderForm;
+import com.increff.employee.model.form.OrderItemForm;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
 import com.increff.employee.pojo.ProductPojo;
@@ -51,18 +52,11 @@ public class OrderDto {
     private final static Logger logger = Logger.getLogger(SecurityConfig.class);
 
 
-    public void add(OrderForm orderForm) throws ApiException{
+    public void add(List<OrderItemForm> orderItemFormList) throws ApiException{
+        OrderForm orderForm = new OrderForm();
+        orderForm.setOrderItemFormList(orderItemFormList);
         OrderPojo orderPojo = convertFormToPojo(orderForm);
-        orderFlowApi.add(orderPojo,orderForm.getOrderItemFormList());
-//        orderApi.add(orderPojo);
-//        Integer id = orderPojo.getId();
-//        for(OrderItemForm orderItemForm:orderForm.getOrderItemFormList()){
-//            OrderItemPojo orderItemPojo = convertOrderItemFormToPojo(orderItemForm,id);
-//            ProductPojo productPojo = productApi.getPojoFromBarcode(orderItemForm.getBarcode());
-//            orderItemPojo.setProductId(productPojo.getId());
-//            orderItemPojo.setSellingPrice(productPojo.getMrp());
-//            orderItemApi.add(orderItemPojo);
-//        }
+        orderFlowApi.add(orderPojo,orderItemFormList);
     }
 
     public void delete(Integer id) {
@@ -110,174 +104,58 @@ public class OrderDto {
     public OrderData convertPojoToData(OrderPojo orderPojo) throws ApiException {
         OrderData orderData = new OrderData();
         orderData.setId(orderPojo.getId());
-
         List<OrderItemData> orderItemDataList = orderItemDto.viewAlLOrderItemsWithGivenOrderId(orderPojo.getId());
         orderData.setOrderItemDataList(orderItemDataList);
-        orderData.setDate(orderPojo.getDate());
-        orderData.setUpdatedDate(orderPojo.getUpdatedDate());
+        String addZoneDate = orderPojo.getOrderAddDateTime().format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
+        System.out.println(orderPojo.getOrderUpdateDateTime());
+        String updateZoneDate = orderPojo.getOrderUpdateDateTime().format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
+//        String addZoneDate = "hello";
+//        String updateZoneDate = "world";
+        orderData.setDate(addZoneDate);
+        orderData.setUpdatedDate(updateZoneDate);
         return orderData;
     }
     public OrderPojo convertFormToPojo(OrderForm orderForm){
         OrderPojo orderPojo = new OrderPojo();
-//        ZonedDateTime addedDateTime = ZonedDateTime.now();
-       // LocalDateTime localDateTime = LocalDateTime.now();
         LocalDate localDate = LocalDate.now();
-
         ZoneId india = ZoneId.of("Asia/Kolkata");
         ZonedDateTime addedDateTime = ZonedDateTime.of(LocalDateTime.now(),india);
-        String formattedZdt = addedDateTime.format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
-        // long millis = System.currentTimeMillis();
-       // DateFormat simple = new SimpleDateFormat("dd MMM yyyy HH:mm:ss ");
-        // Creating date from milliseconds
-        // using Date() constructor
-       // Date date = new Date(millis);
-        orderPojo.setLocalDate(localDate);
-        orderPojo.setDate(formattedZdt);
+        orderPojo.setAddDate(localDate);
         orderPojo.setOrderAddDateTime(addedDateTime);
-        //orderPojo.setDate(simple.format(date));
+        orderPojo.setOrderUpdateDateTime(addedDateTime);
         return orderPojo;
     }
 
 
-//    public ResponseEntity<byte[]> getPDF(Integer id) throws Exception {
-//        InvoiceForm invoiceForm = generateInvoiceForOrder(id);
-//        RestTemplate restTemplate = new RestTemplate();
-//        byte[] contents = Base64.getDecoder().decode(restTemplate.postForEntity(invoiceUrl, invoiceForm, byte[].class).getBody());
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_PDF);
-//        String filename = "invoice.pdf";
-//        headers.setContentDispositionFormData(filename, filename);
-//        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
-//        ResponseEntity<byte[]> response = new ResponseEntity<>(contents, headers, HttpStatus.OK);
-//        return response;
-//    }
-//    public InvoiceForm generateInvoiceForOrder(Integer orderId) throws ApiException
-//    {
-//        InvoiceForm invoiceForm = new InvoiceForm();
-//        OrderPojo orderPojo = orderApi.selectById(orderId);
-//        invoiceForm.setOrderId(orderPojo.getId());
-//        invoiceForm.setPlacedDate(orderPojo.getCreatedAt().toString());
-//        List<OrderItemPojo> orderItemPojoList = orderService.selectByOrderId(orderPojo.getId());
-//        List<OrderItem> orderItemList = new ArrayList<>();
-//        for(OrderItemPojo p: orderItemPojoList) {
-//            OrderItem orderItem = new OrderItem();
-//            orderItem.setOrderItemId(p.getId());
-//            String productName = productService.getCheck(p.getProductId()).getName();
-//            orderItem.setProductName(productName);
-//            orderItem.setQuantity(p.getQuantity());
-//            orderItem.setSellingPrice(p.getSellingPrice());
-//            orderItemList.add(orderItem);
-//        }
-//        invoiceForm.setOrderItemList(orderItemList);
-//        return invoiceForm;
-//    }
+    public ResponseEntity<byte[]> getPDF(Integer id) throws Exception {
+        orderApi.generateInvoice(id);
+        InvoiceForm invoiceForm = generateInvoiceForOrder(id);
+        RestTemplate restTemplate = new RestTemplate();
+        byte[] contents = Base64.getDecoder().decode(restTemplate.postForEntity(invoiceUrl, invoiceForm, byte[].class).getBody());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        String filename = "invoice.pdf";
+        headers.setContentDispositionFormData(filename, filename);
+        headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
+        ResponseEntity<byte[]> response = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+        return response;
+    }
+
+    public InvoiceForm generateInvoiceForOrder(Integer orderId) throws ApiException
+    {
+        InvoiceForm invoiceForm = new InvoiceForm();
+        OrderPojo orderPojo = orderApi.selectById(orderId);
+        invoiceForm.setOrderId(orderPojo.getId());
+        invoiceForm.setId(orderId);
+        invoiceForm.setTotalCost(1.0);
+        List<OrderItemData> orderItemDataList = orderItemDto.viewAlLOrderItemsWithGivenOrderId(orderId);
+        invoiceForm.setOrderItemDataList(orderItemDataList);
+        LocalDate localDate = LocalDate.now();
+        invoiceForm.setAddDate(localDate.toString());
+        System.out.println("current date :: " + localDate.toString());
+        return invoiceForm;
+    }
 
 
 
-
-//    public List<SalesReportData> getReport(LocalDate startDate, LocalDate endDate, String brand, String category) throws ApiException{
-//        logger.info("Entered Order DTO");
-//
-//        List<OrderPojo> orderPojoList = orderApi.selectInDate(startDate, endDate);
-//        HashMap<List<String>,Integer> mapQuantity = new HashMap<List<String>,Integer>();
-//        HashMap<List<String>,Double> mapRevenue = new HashMap<List<String>,Double>();
-//
-////        logger.info(brand + " " + category);
-//
-//        for(OrderPojo pojo:orderPojoList){
-//            List<OrderItemData> orderItemDataList = orderItemDto.viewAlLOrderItemsWithGivenOrderId(pojo.getId());
-//            for(OrderItemData data: orderItemDataList) {
-//                if (data.getProductId() != null) {
-//                    logger.info("into atleast 1 order item");
-////                    ProductData productData = productDto.getDataFromId(data.getProductId());
-//                    ProductPojo productPojo = productApi.givePojoById(data.getProductId());
-//                    ProductData productData = convertProductPojoToData(productPojo);
-//                    if (!StringUtil.isEmpty(category) && !StringUtil.isEmpty(brand)) {
-//                        if (brand.equals(productData.getBrand()) && category.equals(productData.getCategory())) {
-////                        logger.info("Entered 1");
-//                            List<String> tempList = new ArrayList<>();
-//                            tempList.add(productData.getBrand());
-//                            tempList.add(productData.getCategory());
-//
-//                            if (mapQuantity.containsKey(tempList)) {
-//                                Integer t = mapQuantity.get(tempList);
-//                                mapQuantity.put(tempList, t + data.getQuantity());
-//                                Double d = mapRevenue.get(tempList);
-//                                Double mrp = productData.getMrp();
-//                                mapRevenue.put(tempList, d + data.getQuantity() * mrp);
-//                            } else {
-//                                mapQuantity.put(tempList, data.getQuantity());
-//                                mapRevenue.put(tempList, productData.getMrp() * data.getQuantity());
-//                            }
-//                        }
-//                    } else if (!StringUtil.isEmpty(category)) {
-//                        if (category.equals(productData.getCategory())) {
-//                            logger.info("Entered 2");
-//                            List<String> tempList = new ArrayList<>();
-//                            tempList.add(productData.getBrand());
-//                            tempList.add(productData.getCategory());
-//
-//                            if (mapQuantity.containsKey(tempList)) {
-//                                Integer t = mapQuantity.get(tempList);
-//                                mapQuantity.put(tempList, t + data.getQuantity());
-//                                Double d = mapRevenue.get(tempList);
-//                                Double mrp = productData.getMrp();
-//                                mapRevenue.put(tempList, d + data.getQuantity() * mrp);
-//                            } else {
-//                                mapQuantity.put(tempList, data.getQuantity());
-//                                mapRevenue.put(tempList, productData.getMrp() * data.getQuantity());
-//                            }
-//                        }
-//                    } else if (!StringUtil.isEmpty(brand)) {
-//                        if (brand.equals(productData.getBrand())) {
-//                            logger.info("Entered 3");
-//                            List<String> tempList = new ArrayList<>();
-//                            tempList.add(productData.getBrand());
-//                            tempList.add(productData.getCategory());
-//
-//                            if (mapQuantity.containsKey(tempList)) {
-//                                Integer t = mapQuantity.get(tempList);
-//                                mapQuantity.put(tempList, t + data.getQuantity());
-//                                Double d = mapRevenue.get(tempList);
-//                                Double mrp = productData.getMrp();
-//                                mapRevenue.put(tempList, d + data.getQuantity() * mrp);
-//                            } else {
-//                                mapQuantity.put(tempList, data.getQuantity());
-//                                mapRevenue.put(tempList, productData.getMrp() * data.getQuantity());
-//                            }
-//                        }
-//                    } else {
-//                        logger.info("Entered 4");
-//                        List<String> tempList = new ArrayList<>();
-//                        tempList.add(productData.getBrand());
-//                        tempList.add(productData.getCategory());
-//
-//                        if (mapQuantity.containsKey(tempList)) {
-//                            Integer t = mapQuantity.get(tempList);
-//                            mapQuantity.put(tempList, t + data.getQuantity());
-//                            Double d = mapRevenue.get(tempList);
-//                            Double mrp = productData.getMrp();
-//                            mapRevenue.put(tempList, d + data.getQuantity() * mrp);
-//                        } else {
-//                            mapQuantity.put(tempList, data.getQuantity());
-//                            mapRevenue.put(tempList, productData.getMrp() * data.getQuantity());
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        List<SalesReportData> salesReportDataList = new ArrayList<>();
-//        for(Map.Entry m : mapQuantity.entrySet()){
-//            SalesReportData salesReportData1 = new SalesReportData();
-//            List<String> tempList = (List<String>) m.getKey();
-//            salesReportData1.setBrand(tempList.get(0));
-//            salesReportData1.setCategory(tempList.get(1));
-//            salesReportData1.setQuantity((Integer) m.getValue());
-//            Double d = mapRevenue.get(tempList);
-//            salesReportData1.setRevenue(d);
-//            salesReportDataList.add(salesReportData1);
-//            //  System.out.println(m.getKey()+" "+m.getValue());
-//        }
-//        return salesReportDataList;
-//    }
 }

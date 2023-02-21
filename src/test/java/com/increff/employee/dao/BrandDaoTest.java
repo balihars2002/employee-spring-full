@@ -33,15 +33,6 @@ public class BrandDaoTest extends AbstractUnitTest {
         assertEquals((Boolean) false ,brandPojoList.get(0).getDisabled());
     }
 
-    @Test(expected = Exception.class)
-    public void insertTest1(){
-        BrandPojo brandPojo = new BrandPojo();
-        brandPojo.setBrand("brand");
-        brandPojo.setCategory("category");
-        brandPojo.setDisabled(false);
-        brandDao.insert(brandPojo);
-    }
-
     @Test
     public void deleteTest(){
         List<BrandPojo> brandPojoList = brandDao.selectAll();

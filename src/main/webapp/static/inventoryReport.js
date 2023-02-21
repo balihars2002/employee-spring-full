@@ -32,7 +32,9 @@ function displayInventoryList(data){
 }
 
 function downloadCsvFile(data){
+	console.log(" into the function ");
 	var url = getInventoryUrl() + "/exportCsv";
+	console.log( " url :: ",url);
 	window.location.href = url;
 }
 

@@ -1,6 +1,7 @@
 package com.increff.employee.dao;
 
 import com.increff.employee.pojo.OrderPojo;
+import com.increff.employee.service.ApiException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,39 +27,46 @@ public class OrderDao extends AbstractDao {
     @PersistenceContext
     private EntityManager em;
 
-    @Transactional
+    @Transactional(rollbackFor = ApiException.class)
     public void insert(OrderPojo orderPojo){
         em.persist(orderPojo);
     }
 
+    @Transactional(rollbackFor = ApiException.class)
     public Integer delete(Integer id) {
         Query query = em.createQuery(DELETE_BY_ID);
         query.setParameter("id", id);
         return query.executeUpdate();
     }
-
+    @Transactional
     public List<OrderPojo> selectAll(){
         TypedQuery<OrderPojo> query = getQuery(SELECT_ALL,OrderPojo.class);
         return query.getResultList();
     }
 
+    @Transactional
     public List<OrderPojo> selectInDate(LocalDate startDate, LocalDate endDate){
         TypedQuery<OrderPojo> query = getQuery(REPORT_FULL,OrderPojo.class);
         query.setParameter("startDate", startDate);
         query.setParameter("endDate", endDate);
         return query.getResultList();
     }
+
+    @Transactional
     public OrderPojo selectBYId(Integer id){
         TypedQuery<OrderPojo> query = getQuery(SELECT_BY_ID,OrderPojo.class);
         query.setParameter("id", id);
         return getSingle(query);
     }
 
+    @Transactional
     public List<OrderPojo> getOrdersForScheduler(LocalDate date){
         TypedQuery<OrderPojo> query = getQuery(PER_DAY_ORDERS,OrderPojo.class);
         query.setParameter("date", date);
         return query.getResultList();
     }
+
+    @Transactional(rollbackFor = ApiException.class)
     public void update(OrderPojo pojo){
 
     }

@@ -7,6 +7,15 @@ public class OrderItemData {
     private Double sellingPrice;
     private Integer productId;
     private Integer orderId;
+    private String productName;
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
 
     public Integer getOrderId() {
         return orderId;

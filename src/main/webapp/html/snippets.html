@@ -15,7 +15,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-white mb-1" th:fragment="name_site_navbar">
   <a class="navbar-brand" th:href="@{/}">
-    <img th:src="@{/static/logo1.png}" class="d-inline-block align-top" alt="">
+    <img th:src="@{/static/logo1.png}" class="d-inline-block align-top" style="width: 80%;" alt="">
   </a>
 
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,7 +42,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light  mb-1" th:fragment="name_app_navbar">
   <a class="navbar-brand" th:href="@{/}">
-    <img th:src="@{/static/logo1.png}" class="d-inline-block align-top" alt="">
+    <img th:src="@{/static/logo1.png}" class="d-inline-block align-top" style="width: 80%;" alt="">
   </a>
 
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,19 +65,26 @@
       <li class="nav-item" id="order">
         <a class="nav-link" th:href="@{/ui/order}">Order</a>
       </li>
-      
-      <!-- <li class="nav-item">
-     <div class="dropdown">
-        <div>Reports</div>
-        <div class="dropdown-content">
-          <a class="nav-link" th:href="@{/ui/brandReport}">Brand Report</a>
+<!--       
+      <a class="nav-link" th:href="@{/ui/brandReport}">Brand Report</a>
           <a class="nav-link" th:href="@{/ui/inventoryReport}">Inventory Report</a>
-          <a class="nav-link" th:href="@{/ui/salesReport}">Sales Report</a>
-        
+          <a class="nav-link" th:href="@{/ui/salesReport}">Sales Report</a> -->
+          <!-- <span>&#8964;</span> -->
+     <div class="dropdown" style="padding: 7.5px">
+        <div class="nav-item">Reports</div>
+        <div class="dropdown-content">
+            <li class="nav-item" id="brand-report">
+              <a class="nav-link" th:href="@{/ui/brandReport}">Brand Report</a>
+            </li>
+            <li class="nav-item" id="inventory-report">
+              <a class="nav-link" th:href="@{/ui/inventoryReport}">Inventory Report</a>
+            </li>
+            <li class="nav-item" id="sales-report">
+              <a class="nav-link" th:href="@{/ui/salesReport}">Sales Report</a>
+            </li>
         </div>
       </div> 
-      </li> -->
-      <li class="nav-item" id="brand-report">
+      <!-- <li class="nav-item" id="brand-report">
         <a class="nav-link" th:href="@{/ui/brandReport}">Brand Report</a>
       </li>
       <li class="nav-item" id="inventory-report">
@@ -85,7 +92,7 @@
       </li>
       <li class="nav-item" id="sales-report">
         <a class="nav-link" th:href="@{/ui/salesReport}">Sales Report</a>
-      </li>
+      </li> -->
       <li class="nav-item" id="daily-sales">
         <a class="nav-link" th:href="@{/ui/scheduler}">Daily Sales</a>
       </li>
@@ -121,8 +128,8 @@
     </div>
   </ul> -->
   <ul class="navbar-nav ml-auto">
-  <div class="dropdown" style="float:right;">
-    <img class="" src="https://media.geeksforgeeks.org/img-practice/user_web-1598433228.svg" alt="baliharsingh99880 Avatar">
+  <div class="dropdown" style="float: right; padding-left: 90%; ">
+    <img style="width:90%;" src="https://cdn-icons-png.flaticon.com/512/401/401156.png" alt="Avatar">
     <div class="dropdown-content">
       <a href="#">[[${info.getEmail()}]]</a>
       <a th:href="@{/session/logout}">Logout</a>

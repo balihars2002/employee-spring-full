@@ -1,33 +1,30 @@
-package com.increff.employee.dao;
+package com.increff.employee.service;
 
 import com.increff.employee.AbstractUnitTest;
+import com.increff.employee.dao.OrderDao;
 import com.increff.employee.pojo.OrderPojo;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class OrderDaoTest extends AbstractUnitTest {
+public class OrderApiTest extends AbstractUnitTest {
 
+
+    //TODO: update test
+    @Autowired
+    private OrderApi orderApi;
     @Autowired
     private OrderDao orderDao;
-    @Autowired
-    private InventoryDao inventoryDao;
-    @Autowired
-    private BrandDao brandDao;
-    @Autowired
-    private ProductDao productDao;
-    @Autowired
-    private OrderItemDao orderItemDao;
 
     private final ZonedDateTime addZoneTime = ZonedDateTime.now().minusDays(1);
     private final ZonedDateTime updateZoneTime = ZonedDateTime.now();
     private final LocalDate addDate = LocalDate.now().minusDays(1);
+
 
     @Before
     public void beforeTest(){
@@ -49,12 +46,44 @@ public class OrderDaoTest extends AbstractUnitTest {
     @Test
     public void deleteTest(){
         Integer id = addOrder();
+        orderApi.delete(id);
         List<OrderPojo> orderPojoList = orderDao.selectAll();
-        OrderPojo orderPojo = orderPojoList.get(0);
-        id = orderPojo.getId();
-        orderDao.delete(id);
-        List<OrderPojo> orderPojoList1 = orderDao.selectAll();
-        assertEquals(0,orderPojoList1.size());
+        assertEquals(0,orderPojoList.size());
+    }
+
+    @Test
+    public void updateTest(){
+        Integer id = addOrder();
+        List<OrderPojo> orderPojoList = orderDao.selectAll();
+
+    }
+
+    @Test
+    public void generateInvoiceTest() throws ApiException {
+        Integer id = addOrder();
+        orderApi.generateInvoice(id);
+        List<OrderPojo> orderPojoList = orderApi.selectAll();
+        assertEquals((Boolean) true,orderPojoList.get(0).getInvoiceGenerated());
+    }
+
+    @Test
+    public void generateInvoiceTest1() throws ApiException {
+        Integer id = addOrder();
+        orderApi.generateInvoice(id+1);
+        List<OrderPojo> orderPojoList = orderApi.selectAll();
+        assertEquals((Boolean) false,orderPojoList.get(0).getInvoiceGenerated());
+    }
+
+    @Test
+    public void selectByIdTest(){
+        Integer id = addOrder();
+        List<OrderPojo> orderPojoList = orderApi.selectAll();
+        OrderPojo orderPojo = orderApi.selectById(orderPojoList.get(0).getId());
+        assertEquals(id,orderPojo.getId());
+        assertEquals(addDate,orderPojo.getAddDate());
+        assertEquals(addZoneTime,orderPojo.getOrderAddDateTime());
+        assertEquals(updateZoneTime,orderPojo.getOrderUpdateDateTime());
+        assertEquals((Boolean) false,orderPojo.getInvoiceGenerated());
     }
 
     @Test
@@ -66,7 +95,7 @@ public class OrderDaoTest extends AbstractUnitTest {
     }
 
     @Test
-    public void selectInDate(){
+    public void selectInDateTest(){
         Integer id = addOrder();
         LocalDate startDate = LocalDate.now().minusDays(2);
         LocalDate endDate = LocalDate.now();
@@ -84,22 +113,11 @@ public class OrderDaoTest extends AbstractUnitTest {
     }
 
     @Test
-    public void selectByIdTest(){
-        Integer id = addOrder();
-        OrderPojo orderPojo = orderDao.selectBYId(id);
-        assertEquals(id,orderPojo.getId());
-        assertEquals(addDate,orderPojo.getAddDate());
-        assertEquals(addZoneTime,orderPojo.getOrderAddDateTime());
-        assertEquals(updateZoneTime,orderPojo.getOrderUpdateDateTime());
-        assertEquals((Boolean) false,orderPojo.getInvoiceGenerated());
-    }
-
-    @Test
     public void getOrdersForSchedulerTest(){
-         Integer id = addOrder();
-         LocalDate localDate = LocalDate.now().minusDays(1);
-         List<OrderPojo> orderPojoList = orderDao.getOrdersForScheduler(localDate);
-         assertEquals(1,orderPojoList.size());
+        Integer id = addOrder();
+        LocalDate localDate = LocalDate.now().minusDays(1);
+        List<OrderPojo> orderPojoList = orderDao.getOrdersForScheduler(localDate);
+        assertEquals(1,orderPojoList.size());
     }
 
     @Test
@@ -110,15 +128,6 @@ public class OrderDaoTest extends AbstractUnitTest {
         assertEquals(1,orderPojoList.size());
     }
 
-    @Test
-    public void updateTest(){
-        Integer id = addOrder();
-        List<OrderPojo> orderPojoList = orderDao.selectAll();
-        OrderPojo orderPojo = orderPojoList.get(0);
-        orderDao.update(orderPojo);
-    }
-
-
     public Integer addOrder(){
         OrderPojo orderPojo = new OrderPojo();
         orderPojo.setOrderAddDateTime(addZoneTime);
@@ -128,30 +137,4 @@ public class OrderDaoTest extends AbstractUnitTest {
         List<OrderPojo> orderPojoList = orderDao.selectAll();
         return orderPojoList.get(0).getId();
     }
-
-//    public void addInventory(Integer id, Integer quantity){
-//        InventoryPojo inventoryPojo = new InventoryPojo();
-//        inventoryPojo.setQuantity(quantity);
-//        inventoryPojo.setProductId(id);
-//        inventoryDao.insert(inventoryPojo);
-//    }
-//    public Integer addProduct(String barcode,String name,Double mrp,Integer id){
-//        ProductPojo productPojo = new ProductPojo();
-//        productPojo.setName(name);
-//        productPojo.setBarcode(barcode);
-//        productPojo.setMrp(mrp);
-//        productPojo.setBrand_category(id);
-//        productDao.insert(productPojo);
-//        List<ProductPojo> productPojoList = productDao.selectAll();
-//        return productPojoList.get(0).getId();
-//    }
-//    public Integer addBrand(String brand,String category,Boolean isDisabled){
-//        BrandPojo brandPojo = new BrandPojo();
-//        brandPojo.setBrand(brand);
-//        brandPojo.setCategory(category);
-//        brandPojo.setDisabled(isDisabled);
-//        brandDao.insert(brandPojo);
-//        List<BrandPojo> brandPojoList = brandDao.selectAll();
-//        return brandPojoList.get(0).getId();
-//    }
 }

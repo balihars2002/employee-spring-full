@@ -22,7 +22,7 @@
 				<tr class="table-row" style="padding: 20px;">
 					<td>
 						<div class="form-group">
-							<label for="inputBarcode" class="col-sm-2 col-form-label" id="brand-dropdown">Barcode</label>
+							<label for="inputBarcode" class="col-sm-2 col-form-label" >Barcode</label>
 							<div class="col-sm-10">
 							  <input type="text" class="form-control"  name="barcode" id="inputBarcode" placeholder="enter barcode">
 							</div>
@@ -30,19 +30,21 @@
 					</td>
 					<td>
 						<div class="form-group">
-							<label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
+							<label class="col-sm-2 col-form-label" for="brand"> Brand  </label>
 							<div class="col-sm-10">
-							  <input type="text" class="form-control" name="brand" id="inputBrand" placeholder="enter brand">
+								<select name="brand" id="brand-dropdown-menu" style="width: 165px;height: 35px;border-radius: 7px;color: grey;">
+								</select>
 							</div>
-						  </div>
+						</div>
 					</td>
 					<td>
 						<div class="form-group">
-							<label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
+							<label class="col-sm-2 col-form-label" for="category"> Category  </label>
 							<div class="col-sm-10">
-							  <input type="text" class="form-control" name="category" id="inputCategory" placeholder="enter category">
+								<select name="category" id="category-dropdown-menu" style="width: 165px;height: 35px;border-radius: 7px;color: grey;" placeholder="select category">
+								</select>
 							</div>
-						  </div>
+						</div>
 					</td>
 				</tr>
 				<tr>
@@ -50,7 +52,7 @@
 						<div class="form-group">
 							<label for="inputMrp" class="col-sm-2 col-form-label">Mrp</label>
 							<div class="col-sm-10">
-							  <input type="text" class="form-control" name="mrp" id="inputMrp" placeholder="enter MRP">
+							  <input type="number" min="0" class="form-control" name="mrp" id="inputMrp" placeholder="enter MRP">
 							</div>
 						  </div>
 					</td>

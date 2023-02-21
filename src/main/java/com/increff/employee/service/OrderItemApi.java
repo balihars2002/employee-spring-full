@@ -29,18 +29,14 @@ public class OrderItemApi {
         if(availableQuantity < orderItemPojo.getQuantity()){
             throw new ApiException("Not sufficient quantity of product available in inventory");
         }
-//        inventoryPojo.setQuantity(availableQuantity - orderItemPojo.getQuantity());
         inventoryApi.updateInv(inventoryPojo,(availableQuantity - orderItemPojo.getQuantity()));
-//        InventoryPojo inventoryPojo = getUpdatedInventoryPojo(orderItemPojo.getProductId(),orderItemPojo.getQuantity(),false);
-//        Integer quantity = inventoryPojo.getQuantity();
-//        inventoryApi.updateInv(inventoryPojo,quantity);
         orderItemDao.insert(orderItemPojo);
     }
 
-    @Transactional
-    public void deleteByOrderId(Integer order_id) {
-        orderItemDao.deleteByOrderId(order_id);
-    }
+//    @Transactional
+//    public void deleteByOrderId(Integer order_id) {
+//        orderItemDao.deleteByOrderId(order_id);
+//    }
 
     @Transactional
     public void deleteByProductId(Integer product_id) {
@@ -49,6 +45,13 @@ public class OrderItemApi {
 
     @Transactional(rollbackFor  = ApiException.class)
     public void update(Integer id,Integer updQuantity,String barcode) throws ApiException {
+        Integer product_id = productApi.getPojoFromBarcode(barcode).getId();
+        InventoryPojo inventoryPojo = inventoryApi.getPojoFromProductId(product_id);
+        Integer availableQuantity = inventoryPojo.getQuantity();
+        if(availableQuantity < updQuantity){
+            throw new ApiException("Not sufficient quantity of product available in inventory");
+        }
+        inventoryApi.updateInv(inventoryPojo,(availableQuantity - updQuantity));
         OrderItemPojo orderItemPojo = getPojoFromId(id);
         ProductPojo productPojo = productApi.getPojoFromBarcode(barcode);
         orderItemPojo.setQuantity(updQuantity);
@@ -67,4 +70,6 @@ public class OrderItemApi {
     public OrderItemPojo getPojoFromId(Integer id){
         return orderItemDao.getPojoFromId(id);
     }
+
+
 }

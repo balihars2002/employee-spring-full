@@ -1,5 +1,6 @@
 package com.increff.employee.dao;
 
+import com.increff.employee.service.ApiException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -23,42 +24,51 @@ public class OrderItemDao extends AbstractDao{
     private static final String SELECT_SOME = "select p from OrderItemPojo p where orderId=:id";
 
     private static final String SELECT_BY_ID = "select p from OrderItemPojo p where id=:id";
+
     @PersistenceContext
     private EntityManager em;
 
-    @Transactional
+    @Transactional(rollbackFor = ApiException.class)
     public void insert(OrderItemPojo orderItemPojo){
         em.persist(orderItemPojo);
     }
 
 
-    public void deleteByProductId(Integer product_id) {
+    @Transactional
+    public void deleteByProductId(Integer productId) {
         Query query = em.createQuery(DELETE_BY_PRODUCT_ID);
-        query.setParameter("product_id", product_id);
-        query.executeUpdate();
-    }
-    public void deleteByOrderId(Integer order_id) {
-        Query query = em.createQuery(DELETE_BY_ORDER_ID);
-        query.setParameter("order_id", order_id);
+        query.setParameter("productId", productId);
         query.executeUpdate();
     }
 
+    @Transactional
+    public void deleteByOrderId(Integer orderId) {
+        Query query = em.createQuery(DELETE_BY_ORDER_ID);
+        query.setParameter("orderId", orderId);
+        query.executeUpdate();
+    }
+
+    @Transactional
     public List<OrderItemPojo> selectAll(){
         TypedQuery<OrderItemPojo> query = getQuery(SELECT_ALL,OrderItemPojo.class);
         return query.getResultList();
     }
+
+    @Transactional
     public List<OrderItemPojo> selectSome(Integer id){
         TypedQuery<OrderItemPojo> query = getQuery(SELECT_SOME,OrderItemPojo.class);
         query.setParameter("id",id);
         return query.getResultList();
     }
 
+    @Transactional
     public OrderItemPojo getPojoFromId(Integer id){
         TypedQuery<OrderItemPojo> query = getQuery(SELECT_BY_ID,OrderItemPojo.class);
         query.setParameter("id",id);
         return getSingle(query);
     }
 
+    @Transactional(rollbackFor = ApiException.class)
     public void update(OrderItemPojo pojo) {
     }
 

@@ -61,6 +61,16 @@ public class ProductApiTest extends AbstractUnitTest {
         assertEquals((Double) 10.0,productPojo.getMrp());
         assertEquals(id,productPojo.getBrand_category());
     }
+    @Test(expected = ApiException.class)
+    public void getPojoByBarcodeTest() throws ApiException{
+        Integer id = addBrand("brand","category",false);
+        addProduct("barcode","name",(Double) 10.0,(Integer) id);
+        productApi.getPojoByBarcode("barcode");
+//        assertEquals("barcode",productPojo.getBarcode());
+//        assertEquals("name",productPojo.getName());
+//        assertEquals((Double) 10.0,productPojo.getMrp());
+//        assertEquals(id,productPojo.getBrand_category());
+    }
 
     @Test(expected = ApiException.class)
     public void getPojoFromBarcodeTest1() throws ApiException{
@@ -108,13 +118,36 @@ public class ProductApiTest extends AbstractUnitTest {
         List<ProductPojo> productPojoList = productApi.selectAllService();
         ProductPojo productPojo = productApi.givePojoById(productPojoList.get(0).getId()+1);
     }
-//    @Test
-//    public void updateTest() throws ApiException{
-//        Integer id = addBrand("brand","category",false);
-//        addProduct("barcode","name",(Double) 10.0,(Integer) id);
-//        List<ProductPojo> productPojoList = productApi.selectAllService();
-//
-//    }
+
+    @Test(expected = ApiException.class)
+    public void getCheckTest() throws ApiException {
+        Integer id = addBrand("brand","category",false);
+        addProduct("barcode","name",(Double) 10.0,(Integer) id);
+        List<ProductPojo> productPojoList = productApi.selectAllService();
+        productApi.getCheck(id,"name");
+    }
+
+    @Test
+    public void getCheckTest1() throws ApiException {
+        Integer id = addBrand("brand","category",false);
+        addProduct("barcode","name",(Double) 10.0,(Integer) id);
+        List<ProductPojo> productPojoList = productApi.selectAllService();
+        productApi.getCheck(id+1,"names");
+    }
+
+    @Test
+    public void updateTest() throws ApiException{
+        Integer id = addBrand("brand","category",false);
+        addProduct("barcode","name",(Double) 10.0,(Integer) id);
+        List<ProductPojo> productPojoList = productApi.selectAllService();
+        ProductPojo productPojo = productPojoList.get(0);
+        productPojo.setName("name1");
+        productPojo.setBarcode("barcode1");
+        productApi.update(productPojo);
+        productPojoList= productApi.selectAllService();
+        assertEquals("name1",productPojoList.get(0).getName());
+        assertEquals("barcode1",productPojoList.get(0).getBarcode());
+    }
 
     public void addProduct(String barcode,String name,Double mrp,Integer id) throws ApiException {
         ProductPojo productPojo = new ProductPojo();

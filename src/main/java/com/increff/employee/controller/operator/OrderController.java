@@ -4,6 +4,7 @@ import com.increff.employee.dto.OrderDto;
 import com.increff.employee.model.data.OrderData;
 import com.increff.employee.model.form.OrderForm;
 import com.increff.employee.model.data.OrderItemData;
+import com.increff.employee.model.form.OrderItemForm;
 import com.increff.employee.service.ApiException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,8 +23,8 @@ public class OrderController {
 
     @ApiOperation(value = "Add an order")
     @RequestMapping(path = "/order", method = RequestMethod.POST)
-    public void add(@RequestBody OrderForm orderForm) throws ApiException {
-        orderDto.add(orderForm);
+    public void add(@RequestBody List<OrderItemForm> orderItemFormList) throws ApiException {
+        orderDto.add(orderItemFormList);
     }
 
     @ApiOperation(value = "Deletes a Brand")
@@ -50,11 +51,12 @@ public class OrderController {
           orderDto.generateInvoice(id);
     }
 
-//    @ApiOperation(value = "Download Invoice")
-//    @GetMapping(path = "/order/invoice/{id}")
-//    public ResponseEntity<byte[]> getPDF(@PathVariable Integer id) throws Exception{
-//        return orderDto.getPDF(id);
-//    }
+    @ApiOperation(value = "Download Invoice")
+    @GetMapping(path = "/order/invoice/{id}")
+    public ResponseEntity<byte[]> getPDF(@PathVariable Integer id) throws Exception{
+        return orderDto.getPDF(id);
+
+    }
 //    @ApiOperation(value = "Updates a Product quantity in inventory")
 //    @RequestMapping(path = "/inventory/{id}", method = RequestMethod.PUT)
 //    public void update(@PathVariable Integer id,@RequestBody InventoryForm inventoryForm) throws ApiException {

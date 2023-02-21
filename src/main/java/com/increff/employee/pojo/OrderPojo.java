@@ -14,17 +14,15 @@ public class OrderPojo {
     private Integer id;
     private ZonedDateTime orderAddDateTime;
     private ZonedDateTime orderUpdateDateTime;
-    private String date;
-    private String updatedDate;
     private Boolean isInvoiceGenerated=false;
-    private LocalDate localDate;
+    private LocalDate addDate;
 
-    public LocalDate getLocalDate() {
-        return localDate;
+    public LocalDate getAddDate() {
+        return addDate;
     }
 
-    public void setLocalDate(LocalDate localDate) {
-        this.localDate = localDate;
+    public void setAddDate(LocalDate addDate) {
+        this.addDate = addDate;
     }
 
     public Boolean getInvoiceGenerated() {
@@ -41,24 +39,6 @@ public class OrderPojo {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-
-
-    public String getUpdatedDate() {
-        return updatedDate;
-    }
-
-    public void setUpdatedDate(String updatedDate) {
-        this.updatedDate = updatedDate;
     }
 
     public ZonedDateTime getOrderAddDateTime() {

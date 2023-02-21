@@ -1,8 +1,17 @@
 
+function getProductUrl() {
+    var baseUrl = $("meta[name=baseUrl]").attr("content")
+    return baseUrl + "/api/";
+}
 
 function getOrderUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/order";
+}
+
+function getOrderItemUrl(){
+	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	return baseUrl + "/api/orderItem";
 }
 
 function getPdfUrl(){
@@ -14,6 +23,35 @@ function addToggle(event){
 	$('#add-order-modal').modal('toggle');
 }
 
+var order= [];
+
+
+function getOrderItem(event){
+
+	event.preventDefault();
+
+	var $form = $("#add-order-form");
+  	var json = toJson($form);
+  	var orderItem = JSON.parse(json);
+
+  	console.log(orderItem);
+
+  	order.push(orderItem);
+	
+	displayOrderItemList(order);
+
+	// var url = getOrderUrl();
+
+	// $.ajax({
+	// 	url: url,
+	// 	type: 'POST',
+	// 	success: function(data) {
+	// 			displayOrder(data);   
+	// 	},
+	// 	error: handleAjaxError
+	//  });
+
+}
 // BUTTON ACTION
 function addOrderHelp(form,col){
 	var serialisedArray = form.serializeArray();
@@ -32,21 +70,19 @@ function addOrderHelp(form,col){
 }
 function addOrder(event){
 
+	console.log(JSON.stringify(order));
+
 	console.log("into the add order function ");
 	var url = getOrderUrl();
-	//Set the values to update
-	var $form = $("#order-form");
-	var help = addOrderHelp($form,3);
-	var json = JSON.stringify(help);
-	console.log("Json : ",json);
 	$.ajax({
 	   url: url,
 	   type: 'POST',
-	   data: json,
+	   data: JSON.stringify(order),
 	   headers: {
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
+
 		Toastify({
 			text: "Order added Successfully",
 			style: {
@@ -112,14 +148,21 @@ function displayOrderList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button class="fa fa-trash"  data-toggle="tooltip" data-html="true" title="delete order" style="border-radius :5px;border-color:grey" onclick="deleteOrder(' + e.id + ')"></button>'
-		 buttonHtml += ' <button class="fa fa-pencil"  data-toggle="tooltip" data-html="true" title="edit order" style="border-radius :5px;border-color:grey"  onclick="displayEditOrder(' + e.id + ')"></button>'
-		 buttonHtml += ' <button class="fa fa-file-text"  data-toggle="tooltip" data-html="true" title="download invoice" style="border-radius :5px;border-color:grey"  onclick="downloadInvoice(' + e.id + ')"></button>'
+		var status;
+		if(e.invoiceGenerated){
+			status = "Invoiced";
+		}
+		else{
+			status = "Ordered";
+		}
+		var buttonHtml = '<button class="fa fa-trash" id="delete"  data-toggle="tooltip" data-html="true" title="delete order" style="border-radius :5px;border-color:grey" onclick="deleteOrder(' + e.id + ')"></button>'
+		 buttonHtml += ' <button class="fa fa-pencil" id="edit"  data-toggle="tooltip" data-html="true" title="edit order" style="border-radius :5px;border-color:grey"  onclick="displayEditOrder(' + e.id + ')"></button>'
+		 buttonHtml += ' <button class="fa fa-file-text" id="invoice" data-toggle="tooltip" data-html="true" title="download invoice" style="border-radius :5px;border-color:grey"  onclick="downloadInvoice(' + e.id + ')"></button>'
 		var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
 		+ '<td>' + e.date + '</td>'
 		+ '<td>' + e.updatedDate + '</td>'
-		+ '<td>' + e.invoiceGenerated + '</td>'
+		+ '<td>' + status + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);
@@ -143,32 +186,9 @@ function viewOrder(){
 	
 }
 
-function downloadInvoice(){
-
-	var url = getPdfUrl() + "/" + id;
-
-	$.ajax({
-		url: url,
-		type: 'GET',
-		success: function(data) {
-			   
-		},
-		error: handleAjaxError
-	 });	
-}
-
-function displayOrder(data){
-	$("#order-edit-form input[name=id]").val(data.id);	
-	// $("#order-edit-form input[name=barcode]").val(data.barcode);	
-	// $("#order-edit-form input[name=brand]").val(data.brand);	
-	// $("#order-edit-form input[name=category]").val(data.category);	
-	// $("#order-edit-form input[name=productId]").val(data.productId);
-	// $("#order-edit-form input[name=orderId]").val(data.orderId);	
-	$("#order-edit-form input[name=date]").val(data.date);
-	$("#order-edit-form input[name=updatedDate]").val(data.updatedDate);
-	$("#order-edit-form input[name=invoiceGenerated]").val(data.invoiceGenerated);
-	// $("#order-edit-form input[name=localDateTime]").val(data.localDateTime);
-	$('#edit-order-modal').modal('toggle');
+function downloadInvoice(id){
+	var url = getOrderUrl() + "/invoice/" + id;
+	window.location.href = url;
 }
 
 function addRow(){
@@ -197,72 +217,89 @@ function deleteRow(){
 	 console.log("exiting the delete row");
 }
 
+
+function processDropDown() {
+    var url = getProductUrl()+"operator/product";
+    var productData = null;
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (data) {
+            fillDropDown(data);
+        },
+        error: handleAjaxError
+    });
+}
+
+
+function fillDropDown(data) {
+	console.log("into the fill dropdown function");
+    let barcodeArr = []
+    data.forEach((e) => {
+        barcodeArr.push(e.barcode);
+    });
+
+    barcodeArr = [...new Set(barcodeArr)];
+    
+    // BRAND
+    var $barcodeDropdown = $('#barcode-dropdown-menu');
+    $barcodeDropdown.empty();
+    var $editBarcodeDropdown = $('#edit-barcode-dropdown-menu');
+    $editBarcodeDropdown.empty();
+
+    var firstRowBarcode = '<option value="none" selected disabled>Select Barcode</option>';
+    $barcodeDropdown.append(firstRowBarcode);
+
+    barcodeArr.forEach((barcode) => {
+        var row = '<option value="' + barcode + '">' + barcode + '</option>';
+        $barcodeDropdown.append(row);
+        $editBarcodeDropdown.append(row);
+    })
+}
+
+function displayOrderItemList(data){
+	var $tbody = $('#order-item-table').find('tbody');
+	// console.log("into the display function");
+	$tbody.empty();
+	for(var i in data){
+		var e = data[i];
+		var buttonHtml = '<button class="fa fa-trash" style="border:3px;border-color:black" aria-hidden="true"  onclick="deleteOrderItem(' + e.id + ')"></button>'
+		var buttonHtml = ' <button class="fa fa-pencil" style="border:8px;border-color:black" aria-hidden="true" onclick="displayEditOrderItem(' + e.id + ')"></button>'
+		var row = '<tr>'
+		+ '<td>' + e.barcode + '</td>'
+		+ '<td>'  + e.mrp + '</td>'
+		+ '<td>'  + e.quantity + '</td>'
+		+ '<td>' + buttonHtml + '</td>'
+		+ '</tr>';
+        $tbody.append(row);
+	}
+}
+
+
+function displayOrder(data){
+	$("#edit-barcode-dropdown-menu").val(data.barcode);
+	$("#order-edit-form input[name=id]").val(data.id);	
+	$("#order-edit-form input[name=date]").val(data.date);
+	$("#order-edit-form input[name=updatedDate]").val(data.updatedDate);
+	$("#order-edit-form input[name=invoiceGenerated]").val(data.invoiceGenerated);
+	$('#edit-order-modal').modal('toggle');
+}
+
+
 //INITIALIZATION CODE
 function init(){
 	$('#add-order').click(addOrder);
 	$('#add-order-button').click(addToggle);
     $('#add-new-row').click(addRow);
-    // $('.delete-new-row').click(deleteRow);
-	// $('#btnDelete').click(deleteRow);
-	// $('#update-order').click(updateOrder);
-	 $('#refresh-data').click(getOrderList);	
-	// $('#upload-data').click(displayUploadData);
-	// $('#process-data').click(processData);
-	// $('#download-errors').click(downloadErrors);
-    // $('#orderFile').on('change', updateFileName)
+	$('#refresh-data').click(getOrderList);
+	$('#add-order-form').submit(getOrderItem);
+	$("#barcode-dropdown").change(function () {
+        var selected = $(this).children("option:selected").val();
+        alert("You have selected - " + selected);
+    });
 }
 
 $(document).ready(init);
 $(document).ready(getOrderList);
+$(document).ready(processDropDown);
 
-
-
-// {
-// 	"addDate": {
-// 	  "chronology": {
-// 		"calendarType": "string",
-// 		"id": "string"
-// 	  },
-// 	  "dayOfMonth": 0,
-// 	  "dayOfWeek": "MONDAY",
-// 	  "dayOfYear": 0,
-// 	  "hour": 0,
-// 	  "minute": 0,
-// 	  "month": "JANUARY",
-// 	  "monthValue": 0,
-// 	  "nano": 0,
-// 	  "second": 0,
-// 	  "year": 0
-// 	},
-// 	"id": 0,
-// 	"lastUpdateDate": {
-// 	  "chronology": {
-// 		"calendarType": "string",
-// 		"id": "string"
-// 	  },
-// 	  "dayOfMonth": 0,
-// 	  "dayOfWeek": "MONDAY",
-// 	  "dayOfYear": 0,
-// 	  "hour": 0,
-// 	  "minute": 0,
-// 	  "month": "JANUARY",
-// 	  "monthValue": 0,
-// 	  "nano": 0,
-// 	  "second": 0,
-// 	  "year": 0
-// 	},
-// 	"orderId": 0,
-// 	"orderItems": [
-// 	  {
-// 		"barcode": "string",
-// 		"id": 0,
-// 		"order_id": 0,
-// 		"product_id": 0,
-// 		"product_name": "string",
-// 		"quantity": 0,
-// 		"selling_price": 0
-// 	  }
-// 	],
-// 	"totalCost": 0,
-// 	"totalItems": 0
-//   }

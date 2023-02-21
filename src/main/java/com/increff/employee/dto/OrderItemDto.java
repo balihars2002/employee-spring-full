@@ -32,14 +32,6 @@ public class OrderItemDto{
     public void add(OrderItemForm orderItemForm,Integer orderId) throws ApiException{
         OrderItemPojo orderItemPojo = convertOrderItemFormToPojo(orderItemForm,orderId);
         orderItemApi.add(orderItemPojo);
-//        Integer getQuantityInInventory = productDto.getQuantityFromInventoryByPID(orderItemPojo.getProductId());
-//        if(getQuantityInInventory < orderItemPojo.getQuantity()){
-//            throw new ApiException("Not sufficient quantity of product available in inventory");
-//        }
-//        InventoryPojo inventoryPojo = getUpdatedInventoryPojo(orderItemPojo.getProductId(),orderItemPojo.getQuantity(),false);
-//        Integer quantity = inventoryPojo.getQuantity();
-//        inventoryApi.updateInv(inventoryPojo,quantity);
-//        orderItemApi.add(orderItemPojo);
     }
 
     public void deleteByProductId(Integer product_id) {
@@ -70,6 +62,7 @@ public class OrderItemDto{
             OrderItemData orderItemData = convertOrderItemPojoToData(pojo);
             ProductPojo productPojo = productApi.getPojoFromId(pojo.getProductId());
             orderItemData.setBarcode(productPojo.getBarcode());
+            orderItemData.setProductName(productPojo.getName());
             list.add(orderItemData);
         }
         return list;

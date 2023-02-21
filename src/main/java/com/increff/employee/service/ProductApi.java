@@ -63,7 +63,6 @@ public class ProductApi {
         productPojo1.setBarcode(productPojo.getBarcode());
         productPojo1.setMrp(productPojo.getMrp());
         productDao.update(productPojo1);
-
     }
 
     @Transactional
@@ -75,15 +74,6 @@ public class ProductApi {
             return productPojo;
       }
 
-
-    @Transactional
-    public ProductPojo getCheckByBarcode(String barcode) throws ApiException {
-        ProductPojo p = productDao.selectPojoByBarcode(barcode);
-            if(p == null){
-                throw new ApiException("The product with given barcode does not exist");
-        }
-        return p;
-    }
 
     @Transactional
     public void getCheck(Integer brand_category,String name) throws ApiException {

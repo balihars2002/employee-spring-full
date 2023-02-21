@@ -34,9 +34,8 @@ public class OrderApi {
     public void update(Integer id) throws ApiException {
         OrderPojo orderPojo = selectById(id);
         ZoneId india = ZoneId.of("Asia/Kolkata");
-        ZonedDateTime addedDateTime = ZonedDateTime.of(LocalDateTime.now(),india);
-        String formattedZdt = addedDateTime.format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
-        orderPojo.setUpdatedDate(formattedZdt);
+        ZonedDateTime updatedDateTime = ZonedDateTime.of(LocalDateTime.now(),india);
+        orderPojo.setOrderUpdateDateTime(updatedDateTime);
         orderDao.update(orderPojo);
     }
 
