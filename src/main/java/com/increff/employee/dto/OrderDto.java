@@ -9,7 +9,7 @@ import com.increff.employee.model.form.OrderItemForm;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
 import com.increff.employee.pojo.ProductPojo;
-import com.increff.employee.service.*;
+import com.increff.employee.api.*;
 import com.increff.employee.spring.SecurityConfig;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.time.LocalDateTime;
 
 import static com.increff.employee.dto.HelperDto.*;
 
@@ -86,7 +84,6 @@ public class OrderDto {
         for(OrderPojo pojo:list1){
             list.add(convertPojoToData(pojo));
         }
-
         return list;
     }
     public List<OrderItemData> viewOrderItemsInOrder(Integer id) throws ApiException {
@@ -106,29 +103,25 @@ public class OrderDto {
         orderData.setId(orderPojo.getId());
         List<OrderItemData> orderItemDataList = orderItemDto.viewAlLOrderItemsWithGivenOrderId(orderPojo.getId());
         orderData.setOrderItemDataList(orderItemDataList);
-        String addZoneDate = orderPojo.getOrderAddDateTime().format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
-        System.out.println(orderPojo.getOrderUpdateDateTime());
-        String updateZoneDate = orderPojo.getOrderUpdateDateTime().format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
-//        String addZoneDate = "hello";
-//        String updateZoneDate = "world";
-        orderData.setDate(addZoneDate);
-        orderData.setUpdatedDate(updateZoneDate);
+        ZonedDateTime addDate = orderPojo.getAddDate();
+        ZonedDateTime updateDate = orderPojo.getUpdateDate();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy - HH:mm:ss");
+        String add = addDate.format(formatter);
+        String update = updateDate.format(formatter);
+        orderData.setOrderAddDate(add);
+        orderData.setOrderUpdatedDate(update);
+        orderData.setInvoiceGenerated(orderPojo.getInvoiceGenerated());
         return orderData;
     }
     public OrderPojo convertFormToPojo(OrderForm orderForm){
         OrderPojo orderPojo = new OrderPojo();
-        LocalDate localDate = LocalDate.now();
-        ZoneId india = ZoneId.of("Asia/Kolkata");
-        ZonedDateTime addedDateTime = ZonedDateTime.of(LocalDateTime.now(),india);
-        orderPojo.setAddDate(localDate);
-        orderPojo.setOrderAddDateTime(addedDateTime);
-        orderPojo.setOrderUpdateDateTime(addedDateTime);
+        LocalDate date = LocalDate.now();
+        orderPojo.setOrderLocalTime(date);
         return orderPojo;
     }
 
 
     public ResponseEntity<byte[]> getPDF(Integer id) throws Exception {
-        orderApi.generateInvoice(id);
         InvoiceForm invoiceForm = generateInvoiceForOrder(id);
         RestTemplate restTemplate = new RestTemplate();
         byte[] contents = Base64.getDecoder().decode(restTemplate.postForEntity(invoiceUrl, invoiceForm, byte[].class).getBody());
@@ -138,6 +131,7 @@ public class OrderDto {
         headers.setContentDispositionFormData(filename, filename);
         headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");
         ResponseEntity<byte[]> response = new ResponseEntity<>(contents, headers, HttpStatus.OK);
+        orderApi.generateInvoice(id);
         return response;
     }
 
@@ -147,15 +141,20 @@ public class OrderDto {
         OrderPojo orderPojo = orderApi.selectById(orderId);
         invoiceForm.setOrderId(orderPojo.getId());
         invoiceForm.setId(orderId);
-        invoiceForm.setTotalCost(1.0);
+
         List<OrderItemData> orderItemDataList = orderItemDto.viewAlLOrderItemsWithGivenOrderId(orderId);
+        double totalAmount = 0.0;
+        for(OrderItemData data: orderItemDataList){
+            totalAmount += (data.getSellingPrice())*(data.getQuantity());
+        }
+        invoiceForm.setTotalCost(totalAmount);
         invoiceForm.setOrderItemDataList(orderItemDataList);
-        LocalDate localDate = LocalDate.now();
-        invoiceForm.setAddDate(localDate.toString());
-        System.out.println("current date :: " + localDate.toString());
+        LocalDate localDate = orderPojo.getOrderLocalTime();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDateTime = localDate.format(dateTimeFormatter);
+        invoiceForm.setAddDate(formattedDateTime);
+        System.out.println(" formatted Date : : " + formattedDateTime);
         return invoiceForm;
     }
-
-
 
 }

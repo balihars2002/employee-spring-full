@@ -6,6 +6,4 @@ public class AppConstant {
     public static final String PACKAGE_CONTROLLER = "com.increff.employee.controller";
 
 
-
-
 }

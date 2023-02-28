@@ -1,7 +1,7 @@
 package com.increff.employee.dao;
 
 import com.increff.employee.pojo.OrderPojo;
-import com.increff.employee.service.ApiException;
+import com.increff.employee.api.ApiException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,13 +14,9 @@ import java.util.List;
 public class OrderDao extends AbstractDao {
 
     private static final String SELECT_ALL = "select p from OrderPojo p";
-
     private static final String DELETE_BY_ID = "delete from OrderPojo p where id=:id";
-
-    private static final String REPORT_FULL = "select p from OrderPojo p where DATE(localDate)>=DATE(:startDate) and DATE(localDate)<=DATE(:endDate)";
-
-    private static final String PER_DAY_ORDERS = "select p from OrderPojo p where DATE(localDate)=DATE(:date)";
-  //  private static final String REPORT_CATEGORY = "select p from OrderPojo p where DATE(dateTime)>=DATE(:startDate) and DATE(dateTime)<=DATE(:endDate) and category=:category";
+    private static final String REPORT_FULL = "select p from OrderPojo p where DATE(orderLocalTime)>=DATE(:startDate) and DATE(orderLocalTime)<=DATE(:endDate)";
+    private static final String PER_DAY_ORDERS = "select p from OrderPojo p where DATE(orderLocalTime)=DATE(:date)";
     private static final String SELECT_BY_ID = "select p from OrderPojo p where id=:id";
 
 

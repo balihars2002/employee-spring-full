@@ -2,10 +2,9 @@ package com.increff.employee.model.form;
 
 
 public class OrderItemForm {
-   // @NotNull
     private String barcode;
     private Integer quantity;
-    private Double mrp;
+    private Double sellingPrice;
 
     public String getBarcode() {
         return barcode;
@@ -23,11 +22,11 @@ public class OrderItemForm {
         this.quantity = quantity;
     }
 
-    public Double getMrp() {
-        return mrp;
+    public Double getSellingPrice() {
+        return sellingPrice;
     }
 
-    public void setMrp(Double mrp) {
-        this.mrp = mrp;
+    public void setSellingPrice(Double sellingPrice) {
+        this.sellingPrice = sellingPrice;
     }
 }

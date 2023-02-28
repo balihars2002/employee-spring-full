@@ -4,14 +4,15 @@ function getProductUrl() {
     return baseUrl + "/api/";
 }
 
+
 function getOrderUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/order";
+	return baseUrl + "/api/operator/order";
 }
 
 function getOrderItemUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/orderItem";
+	return baseUrl + "/api/operator/orderItem";
 }
 
 function getPdfUrl(){
@@ -23,51 +24,94 @@ function addToggle(event){
 	$('#add-order-modal').modal('toggle');
 }
 
-var order= [];
+
+var order = [];
+
+const orderPriceMap = new Map();
+const orderQuantityMap = new Map();
+
+
 
 
 function getOrderItem(event){
 
 	event.preventDefault();
 
-	var $form = $("#add-order-form");
-  	var json = toJson($form);
-  	var orderItem = JSON.parse(json);
-
-  	console.log(orderItem);
-
-  	order.push(orderItem);
 	
-	displayOrderItemList(order);
+	var quantityInInventory = 0;
 
-	// var url = getOrderUrl();
+	var url = getProductUrl()+"operator/inventory";
+	  $.ajax({
+		 url: url,
+		 type: 'GET',
+		 success: function(data) {
+			var $form = $("#add-order-form");
+			var json = toJson($form);
+			var orderItem = JSON.parse(json);
 
-	// $.ajax({
-	// 	url: url,
-	// 	type: 'POST',
-	// 	success: function(data) {
-	// 			displayOrder(data);   
-	// 	},
-	// 	error: handleAjaxError
-	//  });
-
+		  for(var i in data){  	
+			var e = data[i];
+			console.log("hello :",e.quantity);
+			console.log("1  :",e.barcode);
+			console.log("2 :",orderItem.barcode);
+			  if(e.barcode == orderItem.barcode){
+				if(e.mrp < orderItem.sellingPrice){
+					msgErrorstring("Selling price cannot be greater than MRP");
+				}
+			 else{
+				quantityInInventory = e.quantity;
+				if(orderPriceMap.has(orderItem.barcode) && orderPriceMap.get(orderItem.barcode) != orderItem.sellingPrice){
+					msgError("Selling Price can only be " + String.toString(orderPriceMap.get(orderItem.barcode)));
+				}
+				else{
+					
+				if(orderQuantityMap.has(orderItem.barcode)){
+			
+					let x = parseInt(orderQuantityMap.get(orderItem.barcode));
+					if(x + parseInt(orderItem.quantity) <= quantityInInventory){
+					orderQuantityMap.set(orderItem.barcode, x + parseInt(orderItem.quantity) + "");
+					
+					order = [];
+			
+					for (let [key, value] of orderPriceMap) {
+						var orderItem = {"barcode":key,"sellingPrice":value,"quantity":orderQuantityMap.get(key)};
+						console.log(orderItem);
+						order.push(orderItem);
+					}
+				}
+				else{
+					msgErrorstring("Product quantity is not available in inventory");
+				}
+			
+				}
+				else{
+			
+					if(orderItem.quantity <= quantityInInventory){
+			
+					orderPriceMap.set(orderItem.barcode,orderItem.sellingPrice);
+					orderQuantityMap.set(orderItem.barcode,orderItem.quantity);
+			
+					order.push(orderItem);
+					}
+					else{
+						msgErrorstring("Product quantity is not available in inventory");
+					}
+					
+				}
+				displayOrderItemList(order);
+				}
+			}
+			  }
+		  }
+		 },
+		 error: handleAjaxError
+	  });
+	
+	console.log("quantity :: ", quantityInInventory);
+	console.log("ended"); 
+	
 }
-// BUTTON ACTION
-function addOrderHelp(form,col){
-	var serialisedArray = form.serializeArray();
-	var len = serialisedArray.length;
-	var orderItemFormList = [];
-	for(i=0;i<len;i+=3){
-		var orderItem = {};
-		for(var propIdx = 0; propIdx < col; propIdx++){
-			orderItem[serialisedArray[i + propIdx].name] = serialisedArray[i + propIdx].value;
-		}
-		orderItemFormList.push(orderItem);
-	}
 
-	var orderItemsObj = {orderItemFormList: orderItemFormList}
-	return orderItemsObj;
-}
 function addOrder(event){
 
 	console.log(JSON.stringify(order));
@@ -82,21 +126,13 @@ function addOrder(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
-
-		Toastify({
-			text: "Order added Successfully",
-			style: {
-				background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
-			  },
-			duration: 2500
-			}).showToast();
+		    $("#add-order-modal").modal("toggle");
+			msgSuccess("Order added Successfully");
 	   		getOrderList();  
-			$("#add-order-modal").modal("toggle");
-			//reset
 	   },
 	   error: handleAjaxError
 	});
-
+	cancelOrder();
 	return false;
 }
 function resetAddOrderDialog(){
@@ -107,9 +143,7 @@ function resetAddOrderDialog(){
 
 function getOrderList(){
 	var url = getOrderUrl();
-	
-	console.log(" into the get inventory function ");
-	console.log(" the url int the get inv is :", url);
+
 	$.ajax({
 	   url: url,
 	   type: 'GET',
@@ -127,14 +161,8 @@ function deleteOrder(id){
 	   url: url,
 	   type: 'DELETE',
 	   success: function(data) {
-		Toastify({
-			text: "Order deleted Successfully",
-			style: {
-				background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
-			  },
-			duration: 2500
-			}).showToast();
-	   		getOrderList();  
+		msgSuccess("Order deleted Successfully");
+	   	getOrderList();  
 	   },
 	   error: handleAjaxError
 	});
@@ -149,19 +177,22 @@ function displayOrderList(data){
 	for(var i in data){
 		var e = data[i];
 		var status;
+		var buttonHtml;
 		if(e.invoiceGenerated){
 			status = "Invoiced";
+			buttonHtml = ' <button class="fa fa-file-text" id="invoice" data-toggle="tooltip" data-html="true" title="download invoice" style="border-radius :5px;border-color:grey"  onclick="downloadInvoice(' + e.id + ')"></button>'	
+			// buttonHtml += ' <button class="fa fa-eye" id="edit"  data-toggle="tooltip" data-html="true" title="view order" style="border-radius :5px;border-color:grey"  onclick="displayEditOrder(' + e.id + ')"></button>'
 		}
 		else{
 			status = "Ordered";
+			buttonHtml = ' <button class="fa fa-file-text" id="invoice" data-toggle="tooltip" data-html="true" title="download invoice" style="border-radius :5px;border-color:grey"  onclick="downloadInvoice(' + e.id + ')"></button>'	
+			buttonHtml += ' <button class="fa fa-pencil" id="edit"  data-toggle="tooltip" data-html="true" title="view/edit order" style="border-radius :5px;border-color:grey"  onclick="displayEditOrder(' + e.id + ')"></button>'
 		}
-		var buttonHtml = '<button class="fa fa-trash" id="delete"  data-toggle="tooltip" data-html="true" title="delete order" style="border-radius :5px;border-color:grey" onclick="deleteOrder(' + e.id + ')"></button>'
-		 buttonHtml += ' <button class="fa fa-pencil" id="edit"  data-toggle="tooltip" data-html="true" title="edit order" style="border-radius :5px;border-color:grey"  onclick="displayEditOrder(' + e.id + ')"></button>'
-		 buttonHtml += ' <button class="fa fa-file-text" id="invoice" data-toggle="tooltip" data-html="true" title="download invoice" style="border-radius :5px;border-color:grey"  onclick="downloadInvoice(' + e.id + ')"></button>'
-		var row = '<tr>'
+		// var buttonHtml = '<button class="fa fa-trash" id="delete"  data-toggle="tooltip" data-html="true" title="delete order" style="border-radius :5px;border-color:grey" onclick="deleteOrder(' + e.id + ')"></button>'
+			var row = '<tr>'
 		+ '<td>' + e.id + '</td>'
-		+ '<td>' + e.date + '</td>'
-		+ '<td>' + e.updatedDate + '</td>'
+		+ '<td>' + e.orderAddDate + '</td>'
+		+ '<td>' + e.orderUpdatedDate + '</td>'
 		+ '<td>' + status + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
@@ -189,8 +220,12 @@ function viewOrder(){
 function downloadInvoice(id){
 	var url = getOrderUrl() + "/invoice/" + id;
 	window.location.href = url;
+	refresh();
 }
 
+function refresh(){
+	getOrderList();
+}
 function addRow(){
 	console.log("the add row function called");
 	$("#add-order-row").clone().insertAfter("tr.add-order-row:last");
@@ -211,10 +246,8 @@ function deleteRow(){
 		});
 	}
 	else{
-		alert("Order cannot be empty");
-		throw new Error("cannot be empty");	
+		msgError("Order cannot be empty");
 	}
-	 console.log("exiting the delete row");
 }
 
 
@@ -263,11 +296,11 @@ function displayOrderItemList(data){
 	$tbody.empty();
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button class="fa fa-trash" style="border:3px;border-color:black" aria-hidden="true"  onclick="deleteOrderItem(' + e.id + ')"></button>'
-		var buttonHtml = ' <button class="fa fa-pencil" style="border:8px;border-color:black" aria-hidden="true" onclick="displayEditOrderItem(' + e.id + ')"></button>'
-		var row = '<tr>'
+		var buttonHtml = '<button class="fa fa-trash" style="border:3px;border-color:black"  data-toggle="tooltip" data-html="true" title="remove Item from Cart" aria-hidden="true"  onclick="deleteOrderItem(`' +  e.barcode  + '`)"></button>'
+		//  var buttonHtml = ' <button class="fa fa-pencil" style="border:8px;border-color:black" aria-hidden="true" onclick="displayEditOrderItem(' + e.barcode + ')"></button>'
+		var row = '<tr id="' + e.barcode + '">'
 		+ '<td>' + e.barcode + '</td>'
-		+ '<td>'  + e.mrp + '</td>'
+		+ '<td>'  + e.sellingPrice + '</td>'
 		+ '<td>'  + e.quantity + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
@@ -275,21 +308,47 @@ function displayOrderItemList(data){
 	}
 }
 
+// function displayEditOrderItem(barcode){
+
+// }
+
+function deleteOrderItem(barcode){
+	console.log(barcode);
+	// $("#order-item-table").closest('tr').remove();
+	$("#"+barcode).remove();
+	const index = order.indexOf(barcode);
+	order.splice(index,1); 
+	orderPriceMap.delete(barcode);
+	orderQuantityMap.delete(barcode);
+	 displayOrderItemList(order);
+
+}
 
 function displayOrder(data){
 	$("#edit-barcode-dropdown-menu").val(data.barcode);
 	$("#order-edit-form input[name=id]").val(data.id);	
-	$("#order-edit-form input[name=date]").val(data.date);
-	$("#order-edit-form input[name=updatedDate]").val(data.updatedDate);
+	$("#order-edit-form input[name=orderAddDate]").val(data.orderAddDate);
+	$("#order-edit-form input[name=orderUpdatedDate]").val(data.orderUpdatedDate);
 	$("#order-edit-form input[name=invoiceGenerated]").val(data.invoiceGenerated);
 	$('#edit-order-modal').modal('toggle');
 }
 
+function cancelOrder(){
+	//$('#add-order-modal').modal('hide');
+	document.getElementById("add-order-form").reset();
+	order = [];
+	$('#order-item-table').find('tbody').empty();
+	orderPriceMap.clear();
+	orderQuantityMap.clear();
+	console.log( "order array size is :: " +  order.length);
+}
 
 //INITIALIZATION CODE
 function init(){
 	$('#add-order').click(addOrder);
 	$('#add-order-button').click(addToggle);
+	$('#cancel-order-button').click(cancelOrder);
+	$('#cancel-order').click(cancelOrder);
     $('#add-new-row').click(addRow);
 	$('#refresh-data').click(getOrderList);
 	$('#add-order-form').submit(getOrderItem);

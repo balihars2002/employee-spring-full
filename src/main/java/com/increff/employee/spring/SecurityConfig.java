@@ -15,18 +15,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-
+		String supervisor = "supervisor";
+		String operator = "operator";
 		http//
 			// Match only these URLs
 				.requestMatchers()//
 				.antMatchers("/api/**")//
 				.antMatchers("/ui/**")//
 				.and().authorizeRequests()//
-				.antMatchers("/api/operator/**").hasAnyAuthority("supervisor","operator")//
-//				.antMatchers("/api/user").hasAnyAuthority("supervisor","operator")//
-				.antMatchers("/api/site/**").hasAnyAuthority("supervisor","operator")//
-				.antMatchers("/api/**").hasAuthority("supervisor")//
-				.antMatchers("/ui/**").hasAnyAuthority("supervisor","operator")//
+				.antMatchers("/api/operator/**").hasAnyAuthority(supervisor, operator)//
+				.antMatchers("/api/site/**").hasAnyAuthority(supervisor, operator)//
+				.antMatchers("/api/**").hasAuthority(supervisor)//
+				.antMatchers("/ui/**").hasAnyAuthority(supervisor, operator)//
 				// Ignore CSRF and CORS
 				.and().csrf().disable().cors().disable();
 		logger.info("Configuration complete");

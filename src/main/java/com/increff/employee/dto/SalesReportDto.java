@@ -8,7 +8,7 @@ import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
 import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.pojo.ProductPojo;
-import com.increff.employee.service.*;
+import com.increff.employee.api.*;
 import com.increff.employee.spring.SecurityConfig;
 import com.increff.employee.util.CsvFileGenerator;
 import com.increff.employee.util.StringUtil;
@@ -44,29 +44,23 @@ public class SalesReportDto {
 
     private final static Logger logger = Logger.getLogger(SecurityConfig.class);
 
-
+    List<SalesReportData> salesReportDataList = new ArrayList<>();
 
     public List<SalesReportData> get(SalesReportForm form) throws ApiException {
+        salesReportDataList.clear();
         logger.info("Entered DTO");
-//       if (form.getBrand() == null && form.getCategory() == null){
-
-        // Handle Null Dates
         if(form.getStartingDate() == null || StringUtil.isEmpty(form.getStartingDate())) {
             form.setStartingDate("1750-01-01");
         }
-
         if(form.getEndingDate() == null || StringUtil.isEmpty(form.getEndingDate())) {
             form.setEndingDate(LocalDate.now().toString());
         }
-
-        // Parse String to LocalDate
         LocalDate startDateTime = LocalDate.parse(form.getStartingDate());
         LocalDate endDateTime = LocalDate.parse(form.getEndingDate());
-
-        return getReport(startDateTime, endDateTime, form.getBrand(), form.getCategory());
-//
+        getReport(startDateTime, endDateTime, form.getBrand(), form.getCategory());
+        return salesReportDataList;
     }
-    public List<SalesReportData> getReport(LocalDate startDate, LocalDate endDate, String brand, String category) throws ApiException{
+    private void getReport(LocalDate startDate, LocalDate endDate, String brand, String category) throws ApiException{
         List<OrderPojo> orderPojoList = orderApi.selectInDate(startDate, endDate);
         System.out.println("the size of the list of orders : " + orderPojoList.size());
         HashMap<List<String>,Integer> mapQuantity = new HashMap<List<String>,Integer>();
@@ -166,7 +160,7 @@ public class SalesReportDto {
                 }
             }
         }
-        List<SalesReportData> salesReportDataList = new ArrayList<>();
+      //  List<SalesReportData> salesReportDataList = new ArrayList<>();
         for(Map.Entry m : mapQuantity.entrySet()){
             SalesReportData salesReportData1 = new SalesReportData();
             List<String> tempList = (List<String>) m.getKey();
@@ -178,18 +172,18 @@ public class SalesReportDto {
             salesReportDataList.add(salesReportData1);
             //  System.out.println(m.getKey()+" "+m.getValue());
         }
-        return salesReportDataList;
+       // return salesReportDataList;
     }
 
-//    public void generateCsv(HttpServletResponse response) throws IOException {
-//        response.setContentType("text/csv");
-//        response.addHeader("Content-Disposition", "attachment; filename=\"salesReport.csv\"");
-//        List<SalesReportData> salesReportDataList =
-//        csvFileGenerator.writeSalesToCsv(salesList, response.getWriter());
-//        salesList.clear();
-//    }
+    public void generateCsv(HttpServletResponse response) throws IOException,ApiException {
+        response.setContentType("text/csv");
+        response.addHeader("Content-Disposition", "attachment; filename=\"salesReport.csv\"");
 
-    public List<OrderItemData> convertPojoListToDataList(List<OrderItemPojo> orderItemPojoList) throws ApiException {
+        csvFileGenerator.writeSalesToCsv(salesReportDataList, response.getWriter());
+        salesReportDataList.clear();
+    }
+
+    private List<OrderItemData> convertPojoListToDataList(List<OrderItemPojo> orderItemPojoList) throws ApiException {
         List<OrderItemData> list = new ArrayList<OrderItemData>();
         for(OrderItemPojo pojo:orderItemPojoList){
             OrderItemData orderItemData = convertOrderItemPojoToData(pojo);

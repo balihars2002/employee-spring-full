@@ -10,17 +10,29 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.increff.employee.model.form.BrandForm;
-import com.increff.employee.service.ApiException;
+import com.increff.employee.api.ApiException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import java.util.List;
+
 @Api
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/")
 
 public class BrandController {
     @Autowired
     private BrandDto brandDto;
+
+    @ApiOperation(value = "Add a Brand")
+    @RequestMapping(path = "/brandTsv", method = RequestMethod.POST)
+    public void addList(@RequestBody List<BrandForm> formList) throws ApiException{
+        for(BrandForm brandForm : formList) {
+            brandDto.add(brandForm);
+        }
+    }
+
     @ApiOperation(value = "Add a Brand")
     @RequestMapping(path = "/brand", method = RequestMethod.POST)
     public void add(@RequestBody BrandForm form) throws ApiException{

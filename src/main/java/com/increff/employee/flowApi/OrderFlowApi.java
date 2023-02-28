@@ -4,7 +4,7 @@ import com.increff.employee.model.form.OrderItemForm;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.OrderPojo;
 import com.increff.employee.pojo.ProductPojo;
-import com.increff.employee.service.*;
+import com.increff.employee.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,10 +31,14 @@ public class OrderFlowApi {
         orderApi.add(orderPojo);
         Integer id = orderPojo.getId();
         for(OrderItemForm orderItemForm:orderItemForms){
+
             OrderItemPojo orderItemPojo = convertOrderItemFormToPojo(orderItemForm,id);
             ProductPojo productPojo = productApi.getPojoFromBarcode(orderItemForm.getBarcode());
+            if( orderItemForm.getSellingPrice() > productPojo.getMrp()){
+                throw new ApiException("Selling Price cannot be greater than MRP");
+            }
             orderItemPojo.setProductId(productPojo.getId());
-            orderItemPojo.setSellingPrice(productPojo.getMrp());
+            orderItemPojo.setSellingPrice(orderItemForm.getSellingPrice());
             orderItemApi.add(orderItemPojo);
         }
 

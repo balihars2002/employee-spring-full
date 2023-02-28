@@ -2,15 +2,14 @@ package com.increff.employee.controller.operator;
 
 import com.increff.employee.dto.BrandDto;
 import com.increff.employee.model.data.BrandData;
-import com.increff.employee.service.ApiException;
-import io.swagger.annotations.Api;
+import com.increff.employee.api.ApiException;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api
+
 @RestController
 @RequestMapping("/api/operator/brand")
 public class OperatorBrandController {
@@ -21,7 +20,6 @@ public class OperatorBrandController {
 
     @ApiOperation(value = "Get a Brand by ID")
     @RequestMapping(path = "/{id}",method = RequestMethod.GET)
-
     public BrandData get(@PathVariable Integer id) throws ApiException {
         return brandDto.get(id);
     }

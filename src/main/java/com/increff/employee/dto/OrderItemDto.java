@@ -4,7 +4,7 @@ import com.increff.employee.model.data.OrderItemData;
 import com.increff.employee.model.form.OrderItemForm;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.ProductPojo;
-import com.increff.employee.service.*;
+import com.increff.employee.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +21,24 @@ public class OrderItemDto{
     private OrderItemApi orderItemApi;
     @Autowired
     private ProductApi productApi;
-
     @Autowired
     private InventoryApi inventoryApi;
     @Autowired
     private OrderApi orderApi;
 
 
-
-    public void add(OrderItemForm orderItemForm,Integer orderId) throws ApiException{
+    public void add(OrderItemForm orderItemForm, Integer orderId ) throws ApiException {
+        System.out.println("selling price is :" + orderItemForm.getSellingPrice());
         OrderItemPojo orderItemPojo = convertOrderItemFormToPojo(orderItemForm,orderId);
-        orderItemApi.add(orderItemPojo);
+        ProductPojo productPojo = productApi.getPojoFromBarcode(orderItemForm.getBarcode());
+        if( orderItemForm.getSellingPrice() > productPojo.getMrp() ){
+            throw new ApiException("Selling Price cannot be greater than MRP");
+        }
+        else {
+            orderItemPojo.setProductId( productPojo.getId());
+            orderItemPojo.setSellingPrice(orderItemForm.getSellingPrice());
+            orderItemApi.add(orderItemPojo);
+        }
     }
 
     public void deleteByProductId(Integer product_id) {
@@ -41,13 +48,7 @@ public class OrderItemDto{
     public void deleteByOrderId(Integer order_id) {
         orderItemApi.deleteByProductId(order_id);
     }
-//    @Transactional(rollbackOn  = ApiException.class)
-//    public void updateList(OrderItemForm form) throws ApiException {
-//        OrderItemPojo orderItemPojo = getPojoFromOrderIdAndProductId(form);
-//
-//        orderItemApi.update(orderItemPojo);
-//    }
-    public List<OrderItemData> viewAlLOrder() throws ApiException {
+    public List<OrderItemData> viewAlLOrderItems() throws ApiException {
         List<OrderItemData> list = new ArrayList<OrderItemData>();
         List<OrderItemPojo> list1 = orderItemApi.selectAll();
         for(OrderItemPojo pojo:list1){
@@ -73,6 +74,7 @@ public class OrderItemDto{
         OrderItemData orderItemData = convertOrderItemPojoToData(orderItemPojo);
         ProductPojo productPojo = productApi.getPojoFromId(orderItemPojo.getProductId());
         orderItemData.setBarcode(productPojo.getBarcode());
+        orderItemData.setProductName(productPojo.getName());
         return orderItemData;
     }
 

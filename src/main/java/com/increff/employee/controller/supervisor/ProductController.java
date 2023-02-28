@@ -6,20 +6,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.increff.employee.model.form.ProductForm;
-import com.increff.employee.service.ApiException;
+import com.increff.employee.api.ApiException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import java.util.List;
+
 @Api
 @RestController
 @RequestMapping("/api/product")
 public class ProductController {
     @Autowired
     private ProductDto productDto;
+
+    @ApiOperation(value = "Add a Product")
+    @RequestMapping(path = "/tsv", method = RequestMethod.POST)
+    public void add(@RequestBody List<ProductForm> formList) throws ApiException{
+        for(ProductForm form : formList) {
+            productDto.add(form);
+        }
+    }
     @ApiOperation(value = "Add a Product")
     @RequestMapping(path = "", method = RequestMethod.POST)
     public void add(@RequestBody ProductForm form) throws ApiException{
-        productDto.addDto(form);
+        productDto.add(form);
     }
 
     @ApiOperation(value = "Deletes a Product by ID")
@@ -31,7 +42,7 @@ public class ProductController {
     @ApiOperation(value = "Updates a Product")
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
     public void update(@PathVariable Integer id, @RequestBody ProductForm productForm) throws ApiException {
-        productDto.updateProduct(id,productForm);
+        productDto.update(id,productForm);
     }
 
 

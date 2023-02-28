@@ -10,8 +10,9 @@
 <nav th:replace="snippets.html :: name_app_navbar"></nav>
 
 <div class="container">
-<br>
-<h4>Pos Daily Sales Report</h4>
+	<hr>
+
+<h3 style="font-weight: bold;font-family: 'Times New Roman', Times, serif;padding-top: 25px;">DAILY SALES</h3><hr>
 
 <div class="row">
 	&nbsp;
@@ -21,7 +22,7 @@
  <div class="col-12">
 	<table class="table table-striped" id="daily-sales-table">
 	  <thead>
-	    <tr>
+	    <tr style="background-color: rgb(36, 36, 36);color: white;">
 	      <th scope="col">Date</th>
 	      <th scope="col">invoiced_orders_count</th>
 	      <th scope="col">invoiced_items_count</th>

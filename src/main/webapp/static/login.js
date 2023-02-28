@@ -1,11 +1,5 @@
 
 
-// function getRole(){
-// 	var role = $("meta[name=userRole]").attr("content")
-// 	console.log(" role :: ",role);
-// 	return role;
-// }
-
 // function showLogin(){
 //     Toastify({
 //         text: "Successfully Logged in as ",
@@ -22,7 +16,5 @@
 // }
 
 // $(document).ready(getRole);
-// $(document).ready(disableButtons);
 // $(document).ready(init);
-// $(document).ready(getBrandList);
 

@@ -2,7 +2,7 @@ package com.increff.employee.controller.operator;
 
 import com.increff.employee.dto.ProductDto;
 import com.increff.employee.model.data.ProductData;
-import com.increff.employee.service.ApiException;
+import com.increff.employee.api.ApiException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class OperatorProductController {
     @ApiOperation(value = "Gets list of all Products")
     @RequestMapping(path = "",method = RequestMethod.GET)
     public List<ProductData> getAll() throws ApiException {
-        return productDto.getAllDto();
+        return productDto.getAll();
     }
 
 }

@@ -5,10 +5,13 @@ import com.increff.employee.model.form.InventoryForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.increff.employee.service.ApiException;
+import com.increff.employee.api.ApiException;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
+import java.util.List;
+
 @Api
 @RestController
 @RequestMapping("/api/inventory")
@@ -17,9 +20,16 @@ public class InventoryController {
     @Autowired
     private InventoryDto inventoryDto;
 
+    @ApiOperation(value = "upload a product list in Inventory")
+    @RequestMapping(path = "/tsv",method = RequestMethod.POST)
+    public void upload(@RequestBody List<InventoryForm> inventoryFormList) throws ApiException{
+        for(InventoryForm form : inventoryFormList) {
+            inventoryDto.addDto(form);
+        }
+    }
     @ApiOperation(value = "Add a Product in Inventory")
     @RequestMapping(path = "",method = RequestMethod.POST)
-    public void addInInv(@RequestBody InventoryForm inventoryForm) throws ApiException{
+    public void add(@RequestBody InventoryForm inventoryForm) throws ApiException{
         inventoryDto.addDto(inventoryForm);
     }
 

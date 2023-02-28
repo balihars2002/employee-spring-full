@@ -1,6 +1,6 @@
 package com.increff.employee.dao;
 
-import com.increff.employee.service.ApiException;
+import com.increff.employee.api.ApiException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;

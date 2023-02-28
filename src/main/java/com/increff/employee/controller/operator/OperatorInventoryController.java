@@ -2,7 +2,7 @@ package com.increff.employee.controller.operator;
 
 import com.increff.employee.dto.InventoryDto;
 import com.increff.employee.model.data.InventoryData;
-import com.increff.employee.service.ApiException;
+import com.increff.employee.api.ApiException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

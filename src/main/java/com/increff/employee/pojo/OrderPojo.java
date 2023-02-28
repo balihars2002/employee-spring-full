@@ -6,23 +6,21 @@ import java.time.LocalDate;
 import java.time.ZonedDateTime;
 
 @Entity
-public class OrderPojo {
+public class OrderPojo extends AbstractPojo{
 
     @Id
     @TableGenerator(name = "order_id", pkColumnValue = "order_id", table = "table_sequence")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "order_id")
     private Integer id;
-    private ZonedDateTime orderAddDateTime;
-    private ZonedDateTime orderUpdateDateTime;
-    private Boolean isInvoiceGenerated=false;
-    private LocalDate addDate;
+    private Boolean isInvoiceGenerated = false;
+    private LocalDate orderLocalTime;
 
-    public LocalDate getAddDate() {
-        return addDate;
+    public LocalDate getOrderLocalTime() {
+        return orderLocalTime;
     }
 
-    public void setAddDate(LocalDate addDate) {
-        this.addDate = addDate;
+    public void setOrderLocalTime(LocalDate orderLocalTime) {
+        this.orderLocalTime = orderLocalTime;
     }
 
     public Boolean getInvoiceGenerated() {
@@ -41,19 +39,19 @@ public class OrderPojo {
         this.id = id;
     }
 
-    public ZonedDateTime getOrderAddDateTime() {
-        return orderAddDateTime;
-    }
-
-    public void setOrderAddDateTime(ZonedDateTime orderAddDateTime) {
-        this.orderAddDateTime = orderAddDateTime;
-    }
-
-    public ZonedDateTime getOrderUpdateDateTime() {
-        return orderUpdateDateTime;
-    }
-
-    public void setOrderUpdateDateTime(ZonedDateTime orderUpdateDateTime) {
-        this.orderUpdateDateTime = orderUpdateDateTime;
-    }
+//    public ZonedDateTime getOrderTime() {
+//        return orderTime;
+//    }
+//
+//    public void setOrderTime(ZonedDateTime orderTime) {
+//        this.orderTime = orderTime;
+//    }
+//
+//    public ZonedDateTime getOrderUpdateDateTime() {
+//        return orderUpdateDateTime;
+//    }
+//
+//    public void setOrderUpdateDateTime(ZonedDateTime orderUpdateDateTime) {
+//        this.orderUpdateDateTime = orderUpdateDateTime;
+//    }
 }

@@ -1,0 +1,57 @@
+<!doctype html>
+
+<html lang="en">
+
+<head th:replace="snippets.html :: name_head">
+</head>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" th:href="@{/static/login.css}">
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+<!-- https://wallpaperaccess.com/full/1668871.jpg -->
+<body>
+    
+    <nav th:replace="snippets.html :: name_site_navbar"></nav>
+    <div style="background-image: url('https://img.freepik.com/premium-photo/white-leather-texture-premium-luxury-surface_33725-60.jpg?w=2000');width:100vw; height: 100vh; ">
+    <div class="wrapper login" >
+        <div class="container">
+            <div class="col-left">
+                <div class="login-text">
+                    <p>Create new account</p> <a th:href="@{/site/init}" class="btn">Sign Up</a>
+                </div>
+            </div>
+            <div class="col-right">
+                <div class="login-form">
+                    <h2>Login</h2>
+                    <form class="form" id="login-form" method="POST" th:action="@{/session/login}">
+                        <p> 
+                            <label for="email" class="col-sm-10 col-form-label">Username/Email address<span>*</span></label> 
+                            <input type="text" class="form-control" name="email" id="email" placeholder="Username or Email" required>
+                         </p>
+                        <p>
+                             <label for="password" class="col-sm-10 col-form-label">Password<span>*</span></label> 
+                            <input type="password" class="form-control" name="password" id="password" placeholder="Password" required> 
+                        </p>
+                        <p>
+                             <input type="submit" id="login" value="Sign In">
+                         </p>
+                        <!-- <p> 
+                            <a href="">Forgot password?</a> 
+                        </p> -->
+                    </form>
+                    <br>
+                    <div class="text-danger" style="font-size: 14px;">
+                        [[${info.getMessage()}]]
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <footer th:replace="snippets.html :: name_footer"></footer>
+    <script th:src="@{/static/login.js}"> </script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</body>
+
+</html>

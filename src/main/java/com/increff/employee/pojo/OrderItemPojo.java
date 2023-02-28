@@ -3,10 +3,8 @@ package com.increff.employee.pojo;
 import javax.persistence.*;
 
 @Entity
-public class OrderItemPojo {
+public class OrderItemPojo extends AbstractPojo{
     @Id
-   // @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     @TableGenerator(name = "orderItem_id", pkColumnValue = "orderItem_id", table = "table_sequence")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "orderItem_id")
     private Integer id;

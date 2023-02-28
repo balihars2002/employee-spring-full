@@ -7,41 +7,61 @@
 
 <body>
 
-<nav th:replace="snippets.html :: name_app_navbar"></nav>
+	<nav th:replace="snippets.html :: name_app_navbar"></nav>
 
-<div class="container">
-<br>
-<h2 style="text-align: center;text-shadow:3px;font-weight: bold;font-family: 'Times New Roman', Times, serif;padding-top: 20px;text-decoration:underline;text-decoration-color: darkslategray;">Brand Report</h2>
-<div class="col-md-12 bg-white text-right">
-	<button type="button" class="btn btn-warning ml-2" id="download-csv">Download Csv</button>
-</div>
-<br>
+	<div class="container">
+		<br>
+		<h3 style="font-weight: bold;font-family: 'Times New Roman', Times, serif;padding-top: 15px;">Brand Report</h3>
 
-<div class="row">
-	&nbsp;
-</div>
-<div class="row">
+		<form id="brand-report-form">
+			<div class="form-row">
+				<!-- <div id="date-picker-example" class="md-form md-outline input-with-post-icon datepicker" inline="true">
+					<input placeholder="Select date" type="text" id="example" class="form-control">
+					<label for="example"></label>
+					<i class="fas fa-calendar input-prefix"></i>
+				  </div> -->
+				<div class="col-md-4 mb-3 inline">
+					<label class="col-sm-2 col-form-label" for="validationDefault01">Brand</label>
+					<input type="text" class="form-control" id="validationDefault01" placeholder="Brand">
+				</div>
+				<div class="col-md-4 mb-3 inline">
+					<label class="col-sm-2 col-form-label" for="validationDefault02">Category</label>
+					<input type="text" class="form-control" id="validationDefault02" placeholder="Category">
+				</div>
+			</div>
+			<button class="btn btn-success" type="button" id="get-brand-report">Search</button>
+			<button type="button" class="btn btn-success ml-2" id="download-csv">Download Report</button>
+		</form>
 
- <div class="col-12" style="text-align-last: center;">
-	<table class="table table-striped" id="brandReport-table">
-	  <thead>
-	    <tr>
-	      <th scope="col">ID</th>
-	      <th scope="col">Brand</th>
-	      <th scope="col">Category</th>
-	    </tr>
-	  </thead>
-	  <tbody>
-	    
-	  </tbody>
-	</table>
+		
+		<br>
 
-</div>
-</div>
-<footer th:replace="snippets.html :: name_footer"></footer>
+		<div class="row">
+			&nbsp;
+		</div>
+		<div class="row">
 
-<script th:src="@{/static/brandReport.js}"></script>
+			<div class="col-12" style="text-align-last: center;">
+				<table class="table table-striped" id="brandReport-table">
+					<thead>
+						<tr style="background-color: rgb(36, 36, 36);color: white;">
+							<th scope="col">ID</th>
+							<th scope="col">Brand</th>
+							<th scope="col">Category</th>
+						</tr>
+					</thead>
+					<tbody>
 
-</body>	
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+	<footer th:replace="snippets.html :: name_footer"></footer>
+
+	<script th:src="@{/static/brandReport.js}"></script>
+
+</body>
 
 </html>

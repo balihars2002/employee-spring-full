@@ -1,44 +1,11 @@
-// function incrementValue(e) {
-//     e.preventDefault();
-//     var fieldName = $(e.target).data('field');
-//     var parent = $(e.target).closest('div');
-//     var currentVal = parseInt(parent.find('input[name=' + fieldName + ']').val(), 10);
 
-//     if (!isNaN(currentVal)) {
-//         parent.find('input[name=' + fieldName + ']').val(currentVal + 1);
-//     } else {
-//         parent.find('input[name=' + fieldName + ']').val(0);
-//     }
-// }
-
-// function decrementValue(e) {
-//     e.preventDefault();
-//     var fieldName = $(e.target).data('field');
-//     var parent = $(e.target).closest('div');
-//     var currentVal = parseInt(parent.find('input[name=' + fieldName + ']').val(), 10);
-
-//     if (!isNaN(currentVal) && currentVal > 0) {
-//         parent.find('input[name=' + fieldName + ']').val(currentVal - 1);
-//     } else {
-//         parent.find('input[name=' + fieldName + ']').val(0);
-//     }
-// }
-
-// $('.input-group').on('click', '.button-plus', function(e) {
-//     incrementValue(e);
-// });
-
-// $('.input-group').on('click', '.button-minus', function(e) {
-//     decrementValue(e);
-// });
-
-// https://codepen.io/anitaparmar26/details/BaLYMeN
-
-
-
-function getBrandUrl(){
+function getSalesReportUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
 	return baseUrl + "/api/salesReport";
+}
+function getBrandUrl(){
+	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	return baseUrl + "/api/";
 }
 	
 //BUTTON ACTION
@@ -46,7 +13,7 @@ function addBrand(event){
 	//Set the values to update
 	var $form = $("#sales-report-form");
 	var json = toJson($form);
-	var url = getBrandUrl();
+	var url = getSalesReportUrl();
     console.log("JSON :::",json);
     console.log("url is  ",url);
 	$.ajax({
@@ -67,9 +34,74 @@ function addBrand(event){
 	return false;
 }
 
+var brandsAndCategory = {};
+var brands = new Set();
+
+function getBrandList() {
+    var url = getBrandUrl() + "operator/brand";
+    console.log(url);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (data) {
+            console.log(data);
+            brandOption(data);
+            // editbrandOption(data);
+        },
+        error: handleAjaxError
+    });
+}
+// function sortBrand(a, b) {
+//     if (a.brand > b.brand) {
+//         return 1;
+//     }
+//     else if (a.brand < b.brand) {
+//         return -1;
+//     }
+//     return 0;
+// }
+function brandOption(data) {
+    console.log("brand options function");
+    // data.sort(sortBrand);
+    let selectTag = $('#inputProductBrandName');
+    console.log(selectTag)
+    selectTag.empty();
+    for (let i in data) {
+        let e = data[i];
+        brands.add(e.brand);
+        if (brandsAndCategory[e.brand])
+            brandsAndCategory[e.brand].add(e.category);
+        else{
+            brandsAndCategory[e.brand] = new Set([e.category]);
+        }
+    }
+    let brandOption = '<option selected disabled value="">' + "Select Brand" + '</option>'
+    selectTag.append(brandOption);
+    for (brandName of brands.values()) {
+        //console.log(brandName);
+        let option = $('<option></option>').attr("value", brandName).text(brandName);
+        selectTag.append(option);
+    }
+    categoryOption();
+}
+function categoryOption() {
+    console.log("world");
+    let brd = $('#inputProductBrandName')[0].value;
+    let selectTag = $("#inputProductBrandCategoryName");
+    selectTag.empty();
+    let categoryOption = '<option selected disabled value> Select Category</option>';
+    selectTag.append(categoryOption);
+    if (brd.length != 0) {
+        for (categoryName of brandsAndCategory[brd].values()) {
+            console.log(categoryName);
+            let option1 = $('<option></option>').attr("value", categoryName).text(categoryName);
+            selectTag.append(option1);
+        }
+    }
+}
 
 function getOrderList(){
-	var url = getBrandUrl();
+	var url = getSalesReportUrl();
 	$.ajax({
 	   url: url,
 	   type: 'POST',
@@ -80,73 +112,57 @@ function getOrderList(){
 	});
 }
 
-function deleteBrand(id){
-	var url = getBrandUrl() + "/" + id;
+// function deleteBrand(id){
+// 	var url = getSalesReportUrl() + "/" + id;
 
-	$.ajax({
-	   url: url,
-	   type: 'DELETE',
-	   success: function(data) {
-	   		getOrderList();  
-	   },
-	   error: handleAjaxError
-	});
-}
+// 	$.ajax({
+// 	   url: url,
+// 	   type: 'DELETE',
+// 	   success: function(data) {
+// 	   		getOrderList();  
+// 	   },
+// 	   error: handleAjaxError
+// 	});
+// }
 
-// FILE UPLOAD METHODS
-var fileData = [];
-var errorData = [];
-var processCount = 0;
-
-
-function processData(){
-	var file = $('#brandFile')[0].files[0];
-	readFileData(file, readFileDataCallback);
-}
-
-function readFileDataCallback(results){
-	fileData = results.data;
-	uploadRows();
-}
-
-function uploadRows(){
-	//Update progress
-	updateUploadDialog();
-	//If everything processed then return
-	if(processCount==fileData.length){
-		return;
-	}
+// function uploadRows(){
+// 	//Update progress
+// 	updateUploadDialog();
+// 	//If everything processed then return
+// 	if(processCount==fileData.length){
+// 		return;
+// 	}
 	
-	//Process next row
-	var row = fileData[processCount];
-	processCount++;
+// 	//Process next row
+// 	var row = fileData[processCount];
+// 	processCount++;
 	
-	var json = JSON.stringify(row);
-	var url = getBrandUrl();
+// 	var json = JSON.stringify(row);
+// 	var url = getBrandUrl();
 
-	//Make ajax call
-	$.ajax({
-	   url: url,
-	   type: 'POST',
-	   data: json,
-	   headers: {
-       	'Content-Type': 'application/json'
-       },	   
-	   success: function(response) {
-	   		uploadRows();  
-	   },
-	   error: function(response){
-	   		row.error=response.responseText
-	   		errorData.push(row);
-	   		uploadRows();
-	   }
-	});
+// 	//Make ajax call
+// 	$.ajax({
+// 	   url: url,
+// 	   type: 'POST',
+// 	   data: json,
+// 	   headers: {
+//        	'Content-Type': 'application/json'
+//        },	   
+// 	   success: function(response) {
+// 	   		uploadRows();  
+// 	   },
+// 	   error: function(response){
+// 	   		row.error=response.responseText
+// 	   		errorData.push(row);
+// 	   		uploadRows();
+// 	   }
+// 	});
 
-}
+// }
 
-function downloadErrors(){
-	writeFileData(errorData);
-}
+// function downloadErrors(){
+// 	writeFileData(errorData);
+// }
 
 //UI DISPLAY METHODS
 
@@ -165,17 +181,17 @@ function displaySalesReportList(data){
 	}
 }
 
-function displayEditBrand(id){
-	var url = getBrandUrl() + "/" + id;
-	$.ajax({
-	   url: url,
-	   type: 'GET',
-	   success: function(data) {
-	   		displayBrand(data);   
-	   },
-	   error: handleAjaxError
-	});	
-}
+// function displayEditBrand(id){
+// 	var url = getBrandUrl() + "/" + id;
+// 	$.ajax({
+// 	   url: url,
+// 	   type: 'GET',
+// 	   success: function(data) {
+// 	   		displayBrand(data);   
+// 	   },
+// 	   error: handleAjaxError
+// 	});	
+// }
 
 function resetUploadDialog(){
 	//Reset file name
@@ -190,22 +206,22 @@ function resetUploadDialog(){
 	updateUploadDialog();
 }
 
-function updateUploadDialog(){
-	$('#rowCount').html("" + fileData.length);
-	$('#processCount').html("" + processCount);
-	$('#errorCount').html("" + errorData.length);
-}
+// function updateUploadDialog(){
+// 	$('#rowCount').html("" + fileData.length);
+// 	$('#processCount').html("" + processCount);
+// 	$('#errorCount').html("" + errorData.length);
+// }
 
-function updateFileName(){
-	var $file = $('#brandFile');
-	var fileName = $file.val();
-	$('#brandFileName').html(fileName);
-}
+// function updateFileName(){
+// 	var $file = $('#brandFile');
+// 	var fileName = $file.val();
+// 	$('#brandFileName').html(fileName);
+// }
 
-function displayUploadData(){
- 	resetUploadDialog(); 	
-	$('#upload-brand-modal').modal('toggle');
-}
+// function displayUploadData(){
+//  	resetUploadDialog(); 	
+// 	$('#upload-brand-modal').modal('toggle');
+// }
 
 function displayBrand(data){
 	$("#brand-edit-form input[name=brand]").val(data.brand);	
@@ -215,20 +231,17 @@ function displayBrand(data){
 	$('#edit-brand-modal').modal('toggle');
 }
 function downloadCsvFile(data){
-	var url = getBrandUrl() + "/exportCsv";
+	var url = getSalesReportUrl() + "/exportCsv";
 	window.location.href = url;
 }
 
 //INITIALIZATION CODE
 function init(){
+	getBrandList();
+	$('#inputProductBrandName').change(categoryOption);
 	$('#get-sales-report').click(addBrand);
 	$('#download-csv').click(downloadCsvFile);
-	// $('#update-brand').click(updateOrder);
 	$('#refresh-data').click(getOrderList);
-	$('#upload-data').click(displayUploadData);
-	$('#process-data').click(processData);
-	$('#download-errors').click(downloadErrors);
-    $('#brandFile').on('change', updateFileName)
 }
 
 $(document).ready(init);

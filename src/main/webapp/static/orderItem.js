@@ -1,12 +1,12 @@
 
 function getOrderItemUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/orderItem";
+	return baseUrl + "/api/operator/orderItem";
 }
 
 function getOrderUrl(){
 	var baseUrl = $("meta[name=baseUrl]").attr("content")
-	return baseUrl + "/api/order";
+	return baseUrl + "/api/operator/order";
 }
 
 //BUTTON ACTION
@@ -161,18 +161,20 @@ function displayOrderItemList(data){
 	var $tbody = $('#order-item-table').find('tbody');
 	console.log("into the display function");
 	$tbody.empty();
+	var sno = 1;
 	for(var i in data){
 		var e = data[i];
 		var buttonHtml = '<button class="fa fa-trash" style="border:3px;border-color:black" aria-hidden="true"  onclick="deleteOrderItem(' + e.id + ')"></button>'
 		var buttonHtml = ' <button class="fa fa-pencil" style="border:8px;border-color:black" aria-hidden="true" onclick="displayEditOrderItem(' + e.id + ')"></button>'
 		var row = '<tr>'
-		+ '<td>' + e.id + '</td>'
+		+ '<td>' + sno + '</td>'
 		+ '<td>' + e.barcode + '</td>'
 		+ '<td>'  + e.quantity + '</td>'
 		+ '<td>'  + e.sellingPrice + '</td>'
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);
+		sno += 1;
 	}
 }
 // function viewOrder(){

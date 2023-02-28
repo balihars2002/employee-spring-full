@@ -4,7 +4,7 @@ package com.increff.employee.pojo;
 import javax.persistence.*;
 
 @Entity
-public class InventoryPojo {
+public class InventoryPojo extends AbstractPojo {
     @Id
     @TableGenerator(name = "inventory_id", pkColumnValue = "inventory_id", table = "table_sequence")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "inventory_id")

@@ -3,12 +3,12 @@ package com.increff.employee.controller.supervisor;
 import com.increff.employee.dto.BrandDto;
 import com.increff.employee.dto.BrandReportDto;
 import com.increff.employee.model.data.BrandData;
+import com.increff.employee.model.form.BrandForm;
+import com.increff.employee.api.ApiException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -25,11 +25,12 @@ public class BrandReportController {
     private BrandReportDto brandReportDto;
 
 
-    @ApiOperation(value = "Gets list of all Brands")
-    @RequestMapping(path = "/brandReport",method = RequestMethod.GET)
-    public List<BrandData> getAll() {
-        return brandReportDto.getAllList();
+    @ApiOperation(value = "Gets Brand Report List")
+    @RequestMapping(path = "/brandReport",method = RequestMethod.POST)
+    public List<BrandData> get(@RequestBody BrandForm form) throws ApiException {
+        return brandReportDto.get(form);
     }
+
 
     @ApiOperation(value = "Export Product Report to CSV")
     @RequestMapping(path = "/brandReport/exportCsv", method = RequestMethod.GET)

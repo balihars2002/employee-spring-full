@@ -1,14 +1,13 @@
 package com.increff.employee.model.data;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 
 public class OrderData{
     private Integer id;
-    private ZonedDateTime orderAddDateTime;
-    private ZonedDateTime orderUpdateDateTime;
-    private String updatedDate;
-    private String date;
+//    private ZonedDateTime orderAddDateTime;
+//    private ZonedDateTime orderUpdateDateTime;
+    private String orderUpdatedDate;
+    private String orderAddDate;
     private List<OrderItemData> orderItemDataList;
     private Boolean isInvoiceGenerated=false;
 
@@ -20,28 +19,12 @@ public class OrderData{
         isInvoiceGenerated = invoiceGenerated;
     }
 
-    public String getUpdatedDate() {
-        return updatedDate;
+    public String getOrderUpdatedDate() {
+        return orderUpdatedDate;
     }
 
-    public void setUpdatedDate(String updatedDate) {
-        this.updatedDate = updatedDate;
-    }
-
-    public ZonedDateTime getOrderAddDateTime() {
-        return orderAddDateTime;
-    }
-
-    public void setOrderAddDateTime(ZonedDateTime orderAddDateTime) {
-        this.orderAddDateTime = orderAddDateTime;
-    }
-
-    public ZonedDateTime getOrderUpdateDateTime() {
-        return orderUpdateDateTime;
-    }
-
-    public void setOrderUpdateDateTime(ZonedDateTime orderUpdateDateTime) {
-        this.orderUpdateDateTime = orderUpdateDateTime;
+    public void setOrderUpdatedDate(String orderUpdatedDate) {
+        this.orderUpdatedDate = orderUpdatedDate;
     }
 
     public Integer getId() {
@@ -52,14 +35,6 @@ public class OrderData{
         this.id = id;
     }
 
-//    public LocalDateTime getOrderAddDateTime() {
-//        return orderAddDateTime;
-//    }
-//
-//    public void setOrderAddDateTime(LocalDateTime orderAddDateTime) {
-//        this.orderAddDateTime = orderAddDateTime;
-//    }
-
     public List<OrderItemData> getOrderItemDataList() {
         return orderItemDataList;
     }
@@ -68,12 +43,12 @@ public class OrderData{
         this.orderItemDataList = orderItemDataList;
     }
 
-    public String getDate() {
-        return date;
+    public String getOrderAddDate() {
+        return orderAddDate;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setOrderAddDate(String orderAddDate) {
+        this.orderAddDate = orderAddDate;
     }
 
 }

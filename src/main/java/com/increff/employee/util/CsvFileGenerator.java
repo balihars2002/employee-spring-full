@@ -1,5 +1,6 @@
 package com.increff.employee.util;
 
+import com.increff.employee.model.data.BrandData;
 import com.increff.employee.model.data.InventoryData;
 import com.increff.employee.model.data.SalesReportData;
 import com.increff.employee.pojo.BrandPojo;
@@ -15,13 +16,13 @@ import java.util.List;
 @Component
 public class CsvFileGenerator {
 
-    public void writeBrandsToCsv(List<BrandPojo> brandPojoList, Writer writer) {
+    public void writeBrandsToCsv(List<BrandData> brandDataList, Writer writer) {
 //        System.out.println("here");
         try {
             CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
             printer.printRecord("ID","Brand","Category");
-            for (BrandPojo brandPojo : brandPojoList) {
-                printer.printRecord(brandPojo.getId(), brandPojo.getBrand(), brandPojo.getCategory());
+            for (BrandData brandData : brandDataList) {
+                printer.printRecord(brandData.getId(), brandData.getBrand(), brandData.getCategory());
             }
         } catch (IOException e) {
             e.printStackTrace();

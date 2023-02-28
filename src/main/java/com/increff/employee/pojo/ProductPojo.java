@@ -4,8 +4,8 @@ package com.increff.employee.pojo;
 import javax.persistence.*;
 
 @Entity
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"barcode","brand_category"})})
-public class ProductPojo {
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"barcode", "brand_category"})})
+public class ProductPojo extends AbstractPojo{
     @Id
     @TableGenerator(name = "product_id", pkColumnValue = "product_id", table = "table_sequence")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "product_id")
@@ -14,13 +14,16 @@ public class ProductPojo {
     private Integer brand_category;
     private String name;
     private Double mrp;
+
     //default constructor
-     public ProductPojo(){ }
-    public ProductPojo(String BARCODE, Integer BRAND_CATEGORY, String NAME, Double MRP){
-        barcode=BARCODE;
-        brand_category=BRAND_CATEGORY;
-        name=NAME;
-        mrp= MRP;
+    public ProductPojo() {
+    }
+
+    public ProductPojo(String barcode, Integer brand_category, String name, Double mrp) {
+        brand_category = brand_category;
+        barcode = barcode;
+        name = name;
+        mrp = mrp;
     }
 
 
@@ -63,7 +66,6 @@ public class ProductPojo {
     public void setMrp(Double mrp) {
         this.mrp = mrp;
     }
-
 
 
 }

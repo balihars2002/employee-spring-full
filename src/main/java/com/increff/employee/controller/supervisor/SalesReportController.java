@@ -5,7 +5,7 @@ import com.increff.employee.dto.OrderItemDto;
 import com.increff.employee.dto.SalesReportDto;
 import com.increff.employee.model.data.SalesReportData;
 import com.increff.employee.model.form.SalesReportForm;
-import com.increff.employee.service.ApiException;
+import com.increff.employee.api.ApiException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.Logger;
@@ -38,9 +38,9 @@ public class SalesReportController {
         return salesReportDto.get(form);
     }
 
-//    @ApiOperation(value = "Export Product Report to CSV")
-//    @RequestMapping(path = "/salesReport/exportCsv", method = RequestMethod.GET)
-//    public void exportToCSV(HttpServletResponse response) throws IOException {
-//        salesReportDto.generateCsv(response);
-//    }
+    @ApiOperation(value = "Export Product Report to CSV")
+    @RequestMapping(path = "/salesReport/exportCsv", method = RequestMethod.GET)
+    public void exportToCSV(HttpServletResponse response) throws IOException,ApiException {
+        salesReportDto.generateCsv(response);
+    }
 }

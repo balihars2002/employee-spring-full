@@ -3,10 +3,9 @@ package com.increff.employee.pojo;
 import javax.persistence.*;
 
 @Entity
-public class UserPojo {
+public class UserPojo extends AbstractPojo{
 
 	@Id
-	// @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@TableGenerator(name = "user_id", pkColumnValue = "user_id", table = "table_sequence")
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "user_id")
 	private int id;
@@ -14,14 +13,16 @@ public class UserPojo {
 	private String email;
 	private String password;
 	private String role;
+	private Boolean isDisabled=false;
 
-//	public String getName() {
-//		return name;
-//	}
-//
-//	public void setName(String name) {
-//		this.name = name;
-//	}
+
+	public Boolean getDisabled() {
+		return isDisabled;
+	}
+
+	public void setDisabled(Boolean disabled) {
+		isDisabled = disabled;
+	}
 	public int getId() {
 		return id;
 	}

@@ -5,6 +5,7 @@ function getRole(){
 	console.log(" role :: ",role);
 	return role;
 }
+
 //HELPER METHOD
 function toJson($form){
     var serialized = $form.serializeArray();
@@ -18,6 +19,10 @@ function toJson($form){
     return json;
 }
 
+$(document).ready(function() {
+    $('.nav-item active').removeClass('active').removeAttr('aria-current');
+    $('a[href="' + location.pathname + '"]').closest('li').addClass('active').attr('aria-current', 'page');
+});
 
 function handleAjaxError(response){
 	var response = JSON.parse(response.responseText);
@@ -60,12 +65,45 @@ function writeFileData(arr){
 }
 function disableButtons(){
     if(getRole()=="operator"){
+        $("#user-link").addClass('d-none');
+        document.getElementById("dropdownMenuButton").hidden = true;
         document.getElementById("brand-report").hidden = true;
         document.getElementById("sales-report").hidden = true;
         document.getElementById("inventory-report").hidden = true;
         document.getElementById("daily-sales").hidden = true;
-        document.getElementById("admin").hidden = true;
+        // document.getElementById("user").hidden = true;
+        
     }
+}
+
+function msgSuccess(data){
+    Toastify({
+        text: data,
+        style: {
+            background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
+          },
+        duration: 2500
+        }).showToast();
+}
+
+function msgError(data){
+    Toastify({
+        text: JSON.parse(data).message,
+        style: {
+            background: "linear-gradient(to right,  #e74c3c, #e74c3c)",
+          },
+        duration: 2500
+        }).showToast();
+}
+
+function msgErrorstring(data){
+    Toastify({
+        text: data,
+        style: {
+            background: "linear-gradient(to right,  #e74c3c, #e74c3c)",
+          },
+        duration: 2500
+        }).showToast();
 }
 
 $(document).ready(disableButtons);

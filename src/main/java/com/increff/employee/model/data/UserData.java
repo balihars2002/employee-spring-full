@@ -5,6 +5,15 @@ public class UserData {
 	private int id;
 	private String email;
 	private String role;
+	private Boolean isDisabled;
+
+	public Boolean getDisabled() {
+		return isDisabled;
+	}
+
+	public void setDisabled(Boolean disabled) {
+		isDisabled = disabled;
+	}
 
 	public int getId() {
 		return id;

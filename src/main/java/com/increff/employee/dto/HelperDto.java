@@ -11,8 +11,8 @@ import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.OrderItemPojo;
 import com.increff.employee.pojo.ProductPojo;
-import com.increff.employee.service.ApiException;
-import com.increff.employee.service.InventoryApi;
+import com.increff.employee.api.ApiException;
+import com.increff.employee.api.InventoryApi;
 import com.increff.employee.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -67,7 +67,7 @@ public class HelperDto {
         productPojo.setName(StringUtil.toLowerCase(productPojo.getName()));
     }
     public static void normalizeProductForm(ProductForm form) {
-        form.setBarcode(StringUtil.toLowerCase(form.getBarcode()));
+//        form.setBarcode(StringUtil.toLowerCase(form.getBarcode()));
         form.setName(StringUtil.toLowerCase(form.getName()));
         form.setBrand(StringUtil.toLowerCase(form.getBrand()));
         form.setCategory(StringUtil.toLowerCase(form.getCategory()));

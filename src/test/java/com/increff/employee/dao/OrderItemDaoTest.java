@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.util.List;
 import static org.junit.Assert.assertEquals;
 
@@ -22,8 +21,8 @@ public class OrderItemDaoTest extends AbstractUnitTest {
     private ProductDao productDao;
     @Autowired
     private OrderItemDao orderItemDao;
-    private final ZonedDateTime addZoneTime = ZonedDateTime.now().minusDays(1);
-    private final ZonedDateTime updateZoneTime = ZonedDateTime.now();
+//    private final ZonedDateTime addZoneTime = ZonedDateTime.now().minusDays(1);
+//    private final ZonedDateTime updateZoneTime = ZonedDateTime.now();
     private final LocalDate addDate = LocalDate.now().minusDays(1);
 
 
@@ -165,9 +164,9 @@ public class OrderItemDaoTest extends AbstractUnitTest {
 
     public Integer addOrder(){
         OrderPojo orderPojo = new OrderPojo();
-        orderPojo.setOrderAddDateTime(addZoneTime);
-        orderPojo.setAddDate(addDate);
-        orderPojo.setOrderUpdateDateTime(updateZoneTime);
+//        orderPojo.setOrderTime(addZoneTime);
+        orderPojo.setOrderLocalTime(addDate);
+//        orderPojo.setOrderUpdateDateTime(updateZoneTime);
         orderDao.insert(orderPojo);
         List<OrderPojo> orderPojoList = orderDao.selectAll();
         return orderPojoList.get(0).getId();

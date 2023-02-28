@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"brand","category"})})
-public class BrandPojo {
+public class BrandPojo extends AbstractPojo{
 
     @Id
     @TableGenerator(name = "brand_id", pkColumnValue = "brand_id", table = "table_sequence")
@@ -18,7 +18,7 @@ public class BrandPojo {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

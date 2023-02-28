@@ -2,9 +2,9 @@ package com.increff.employee.flowApi;
 
 import com.increff.employee.pojo.InventoryPojo;
 import com.increff.employee.pojo.ProductPojo;
-import com.increff.employee.service.ApiException;
-import com.increff.employee.service.InventoryApi;
-import com.increff.employee.service.ProductApi;
+import com.increff.employee.api.ApiException;
+import com.increff.employee.api.InventoryApi;
+import com.increff.employee.api.ProductApi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +20,10 @@ public class ProductFlowAPi {
 
     @Transactional(rollbackFor = ApiException.class)
     public void insert(ProductPojo productPojo) throws ApiException{
-        productApi.insertService(productPojo);
+        productApi.insert(productPojo);
         InventoryPojo inventoryPojo= new InventoryPojo();
         inventoryPojo.setQuantity(0);
         inventoryPojo.setProductId(productPojo.getId());
-        inventoryApi.addService(inventoryPojo);
+        inventoryApi.add(inventoryPojo);
     }
 }

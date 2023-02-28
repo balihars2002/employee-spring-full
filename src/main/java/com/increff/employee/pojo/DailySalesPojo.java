@@ -9,7 +9,9 @@ public class DailySalesPojo {
     @TableGenerator(name = "scheduler_id", pkColumnValue = "scheduler_id", table = "table_sequence")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "scheduler_id")
     private Integer id;
+    //Todo : add unique constraint for localdate
     private LocalDate localDate;
+    // Todo: remove this
     private String date;
     private Integer invoiced_orders_count;
     private Integer invoiced_items_count;

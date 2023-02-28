@@ -18,7 +18,7 @@ function getRole(){
 //BUTTON ACTION
 function addInventory(event){
 	//Set the values to update
-	var $form = $("#inventory-form");
+	var $form = $("#add-inventory-form");
 	var json = toJson($form);
 	var url = getInventoryUrl()+"inventory";
 	console.log("JSON : ",json);
@@ -30,16 +30,14 @@ function addInventory(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
-		Toastify({
-			text: "Product added to Inventory Successfully",
-			style: {
-				background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
-			  },
-			duration: 2500
-			}).showToast();
+		$('#add-inventory-modal').modal('toggle');
+			msgSuccess("Product added to Inventory Successfully");
 	   		getInventoryList();  
 	   },
-	   error: handleAjaxError
+	   error: function(response){
+		msgError(response.responseText);
+		handleAjaxError
+	   }
 	});
 
 	return false;
@@ -47,7 +45,7 @@ function addInventory(event){
 
 function updateInventory(event){
 	event.preventDefault();
-	$('#edit-inventory-modal').modal('toggle');
+	
 	//Get the ID
 	var id = $("#inventory-edit-form input[name=id]").val();	
 	var url = getInventoryUrl() + "inventory/" + id;
@@ -64,16 +62,14 @@ function updateInventory(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
-		Toastify({
-			text: "Product quantity in Inventory updated Successfully",
-			style: {
-				background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
-			  },
-			duration: 2500
-			}).showToast();
-	   		getInventoryList();   
+		   $('#edit-inventory-modal').modal('toggle');
+		   msgSuccess("Product quantity in Inventory updated Successfully");
+	   	   getInventoryList();   
 	   },
-	   error: handleAjaxError
+	   error: function(response){
+	        msgError(response.responseText);
+			handleAjaxError
+	   }
 	});
 
 	return false;
@@ -102,16 +98,13 @@ function deleteInventory(id){
 	   url: url,
 	   type: 'DELETE',
 	   success: function(data) {
-		Toastify({
-			text: "Product removed from Inventory Successfully",
-			style: {
-				background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
-			  },
-			duration: 2500
-			}).showToast();
-	   		getInventoryList();  
+		msgSuccess("Product removed from Inventory Successfully");
+	   	getInventoryList();  
 	   },
-	   error: handleAjaxError
+	   error: function(response){
+		msgError(response.responseText);
+		handleAjaxError
+	   }
 	});
 }
 
@@ -176,12 +169,13 @@ function displayInventoryList(data){
 	console.log("into the display inventory ");
 	var $tbody = $('#inventory-table').find('tbody');
 	$tbody.empty();
+	var sno = 1;
 	for(var i in data){
 		var e = data[i];
-		var buttonHtml = '<button class="fa fa-trash"  data-toggle="tooltip" data-html="true" title="delete inventory" style="border-radius :5px;border-color:grey" onclick="deleteInventory(' + e.id + ')"></button>'
-		buttonHtml += ' <button class="fa fa-pencil"  data-toggle="tooltip" data-html="true" title="edit inventory" style="border-radius :5px;border-color:grey" onclick="displayEditInventory(' + e.id + ')"></button>'
+		// var buttonHtml = '<button class="fa fa-trash"  data-toggle="tooltip" data-html="true" title="delete inventory" style="border-radius :5px;border-color:grey" onclick="deleteInventory(' + e.id + ')"></button>'
+		var buttonHtml = ' <button class="fa fa-pencil"  data-toggle="tooltip" data-html="true" title="edit inventory" style="border-radius :5px;border-color:grey" onclick="displayEditInventory(' + e.id + ')"></button>'
 		var row = '<tr>'
-		+ '<td>' + e.productId + '</td>'
+		+ '<td>' + sno + '</td>'
 		+ '<td>' + e.brand + '</td>'
 		+ '<td>' + e.category + '</td>'
 		+ '<td>' + e.barcode + '</td>'
@@ -191,6 +185,7 @@ function displayInventoryList(data){
 		+ '<td>' + buttonHtml + '</td>'
 		+ '</tr>';
         $tbody.append(row);
+		sno += 1;
 	}
 	if(getRole()=="operator"){
 		deleteEditButton();
@@ -301,6 +296,15 @@ function displayUploadData(){
 	$('#upload-inventory-modal').modal('toggle');
 }
 
+function addToggle(event){
+	$('#add-inventory-modal').modal('toggle');
+}
+
+function cancelButton(){
+	console.log("cancel function");
+	$("#add-inventory-form").trigger("reset");
+}
+
 function displayInventory(data){
 	$("#edit-barcode-dropdown-menu").val(data.barcode);
 	$("#inventory-edit-form input[name=id]").val(data.id);
@@ -316,8 +320,11 @@ function displayInventory(data){
 
 //INITIALIZATION CODE
 function init(){
+	$('#cancel-top').click(cancelButton);
+	$('#cancel-inventory').click(cancelButton);
+	$('#add-inventory-button').click(addToggle);
 	$('#add-inventory').click(addInventory);
-	$('#inventory-edit-form').submit(updateInventory);
+	$('#update-inventory').click(updateInventory);
 	$('#refresh-data').click(getInventoryList);
 	$('#upload-data').click(displayUploadData);
 	$('#process-data').click(processData);
