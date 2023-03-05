@@ -38,19 +38,6 @@ public class BrandApiTest extends AbstractUnitTest {
         assertEquals((Boolean)false,brandPojoList.get(0).getDisabled());
     }
 
-    @Test
-    public void deleteTest() throws ApiException {
-        BrandPojo brandPojo = new BrandPojo();
-        brandPojo.setBrand("Brand");
-        brandPojo.setCategory("Category");
-        brandPojo.setDisabled(false);
-        brandApi.add(brandPojo);
-        List<BrandPojo> brandPojoList = brandApi.getAll();
-        Integer id = brandPojoList.get(0).getId();
-        brandApi.delete(id);
-        brandPojoList = brandApi.getAll();
-        assertEquals(0,brandPojoList.size());
-    }
 
     @Test
     public void getCheckTest() throws ApiException {

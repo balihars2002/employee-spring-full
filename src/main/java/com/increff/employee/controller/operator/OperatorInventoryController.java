@@ -20,13 +20,13 @@ public class OperatorInventoryController {
     @ApiOperation(value = "Gets list of all Products in inventory")
     @RequestMapping(path = "",method = RequestMethod.GET)
     public List<InventoryData> getAll() throws ApiException {
-        return inventoryDto.getAllDto();
+        return inventoryDto.getAll();
     }
 
     @ApiOperation(value = "Get a Product Quantity in Inventory by Id")
     @RequestMapping(path = "/{id}",method = RequestMethod.GET)
 
     public InventoryData get(@PathVariable Integer id) throws ApiException {
-        return inventoryDto.getDataFromId(id);
+        return inventoryDto.getDataById(id);
     }
 }

@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -45,7 +44,7 @@ public class OrderItemApiTest extends AbstractUnitTest {
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
         addOrderItem(orderId,productId,1,8.0);
-        List<OrderItemPojo> orderItemPojoList = orderItemApi.selectAll();
+        List<OrderItemPojo> orderItemPojoList = orderItemApi.getAll();
         assertEquals(orderId,orderItemPojoList.get(0).getOrderId());
         assertEquals(productId,orderItemPojoList.get(0).getProductId());
         assertEquals((Integer) 1,orderItemPojoList.get(0).getQuantity());
@@ -68,7 +67,7 @@ public class OrderItemApiTest extends AbstractUnitTest {
         addInventory(productId,3);
         addOrderItem(orderId,productId,2,8.0);
         orderItemApi.deleteByProductId(productId);
-        List<OrderItemPojo> orderItemPojoList = orderItemApi.selectAll();
+        List<OrderItemPojo> orderItemPojoList = orderItemApi.getAll();
         assertEquals(0,orderItemPojoList.size());
     }
 
@@ -79,7 +78,7 @@ public class OrderItemApiTest extends AbstractUnitTest {
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,3);
         addOrderItem(orderId,productId,2,8.0);
-        List<OrderItemPojo> orderItemPojoList = orderItemApi.selectAll();
+        List<OrderItemPojo> orderItemPojoList = orderItemApi.getAll();
         assertEquals(1,orderItemPojoList.size());
     }
 
@@ -90,11 +89,11 @@ public class OrderItemApiTest extends AbstractUnitTest {
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,3);
         addOrderItem(orderId,productId,2,8.0);
-        List<OrderItemPojo> orderItemPojoList = orderItemApi.selectAll();
+        List<OrderItemPojo> orderItemPojoList = orderItemApi.getAll();
 
         OrderItemPojo orderItemPojo = orderItemPojoList.get(0);
-        orderItemApi.update(orderItemPojo.getId(),0,"barcode");
-        orderItemPojoList = orderItemApi.selectAll();
+        orderItemApi.update(orderItemPojo.getId(),0,"barcode",1.5);
+        orderItemPojoList = orderItemApi.getAll();
         assertEquals(1,orderItemPojoList.size());
     }
     @Test
@@ -104,7 +103,7 @@ public class OrderItemApiTest extends AbstractUnitTest {
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,3);
         addOrderItem(orderId,productId,2,8.0);
-        List<OrderItemPojo> orderItemPojoList = orderItemApi.selectSome(orderId);
+        List<OrderItemPojo> orderItemPojoList = orderItemApi.getByOrderId(orderId);
         assertEquals(1,orderItemPojoList.size());
     }
 
@@ -115,7 +114,7 @@ public class OrderItemApiTest extends AbstractUnitTest {
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,3);
         addOrderItem(orderId,productId,2,8.0);
-        List<OrderItemPojo> orderItemPojoList = orderItemApi.selectSome(orderId+1);
+        List<OrderItemPojo> orderItemPojoList = orderItemApi.getByOrderId(orderId+1);
         assertEquals(0,orderItemPojoList.size());
     }
 
@@ -126,7 +125,7 @@ public class OrderItemApiTest extends AbstractUnitTest {
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,3);
         addOrderItem(orderId,productId,2,8.0);
-        OrderItemPojo orderItemPojo = orderItemApi.getPojoFromId(orderId);
+        OrderItemPojo orderItemPojo = orderItemApi.getById(orderId);
     }
 
     public void addOrderItem(Integer orderId,Integer productId,Integer quantity,Double sellingPrice) throws ApiException {
@@ -144,7 +143,7 @@ public class OrderItemApiTest extends AbstractUnitTest {
         orderPojo.setOrderLocalTime(addDate);
 //        orderPojo.setOrderUpdateDateTime(updateZoneTime);
         orderDao.insert(orderPojo);
-        List<OrderPojo> orderPojoList = orderDao.selectAll();
+        List<OrderPojo> orderPojoList = orderDao.getAll();
         return orderPojoList.get(0).getId();
     }
     public void addInventory(Integer id, Integer quantity){
@@ -160,7 +159,7 @@ public class OrderItemApiTest extends AbstractUnitTest {
         productPojo.setMrp(mrp);
         productPojo.setBrand_category(id);
         productDao.insert(productPojo);
-        List<ProductPojo> productPojoList = productDao.selectAll();
+        List<ProductPojo> productPojoList = productDao.getAll();
         return productPojoList.get(0).getId();
     }
     public Integer addBrand(String brand,String category,Boolean isDisabled){
@@ -169,7 +168,7 @@ public class OrderItemApiTest extends AbstractUnitTest {
         brandPojo.setCategory(category);
         brandPojo.setDisabled(isDisabled);
         brandDao.insert(brandPojo);
-        List<BrandPojo> brandPojoList = brandDao.selectAll();
+        List<BrandPojo> brandPojoList = brandDao.getAll();
         return brandPojoList.get(0).getId();
     }
 }

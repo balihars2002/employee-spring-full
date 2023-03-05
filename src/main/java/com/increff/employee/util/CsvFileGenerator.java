@@ -17,7 +17,6 @@ import java.util.List;
 public class CsvFileGenerator {
 
     public void writeBrandsToCsv(List<BrandData> brandDataList, Writer writer) {
-//        System.out.println("here");
         try {
             CSVPrinter printer = new CSVPrinter(writer, CSVFormat.DEFAULT);
             printer.printRecord("ID","Brand","Category");

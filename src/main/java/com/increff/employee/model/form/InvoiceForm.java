@@ -7,13 +7,10 @@ import java.util.List;
 
 public class InvoiceForm {
 
-
+// Todo remove this id if not getting used
     private Integer id;
     private Integer orderId;
     private String addDate;
-
-    //    private LocalDate addDate;
-//    private LocalDate lastUpdateDate;
     private Integer totalItems;
     private Double totalCost;
     private List<OrderItemData> orderItemDataList;
@@ -63,19 +60,4 @@ public class InvoiceForm {
     public void setAddDate(String addDate) {
         this.addDate = addDate;
     }
-//    public LocalDate getAddDate() {
-//        return addDate;
-//    }
-//
-//    public void setAddDate(LocalDate addDate) {
-//        this.addDate = addDate;
-//    }
-//
-//    public LocalDate getLastUpdateDate() {
-//        return lastUpdateDate;
-//    }
-//
-//    public void setLastUpdateDate(LocalDate lastUpdateDate) {
-//        this.lastUpdateDate = lastUpdateDate;
-//    }
 }

@@ -60,22 +60,19 @@ public class SalesReportDto {
         getReport(startDateTime, endDateTime, form.getBrand(), form.getCategory());
         return salesReportDataList;
     }
+
     private void getReport(LocalDate startDate, LocalDate endDate, String brand, String category) throws ApiException{
-        List<OrderPojo> orderPojoList = orderApi.selectInDate(startDate, endDate);
-        System.out.println("the size of the list of orders : " + orderPojoList.size());
+        List<OrderPojo> orderPojoList = orderApi.getInDate(startDate, endDate);
         HashMap<List<String>,Integer> mapQuantity = new HashMap<List<String>,Integer>();
         HashMap<List<String>,Double> mapRevenue = new HashMap<List<String>,Double>();
 
-        logger.info(brand + " " + category);
-
         for(OrderPojo pojo:orderPojoList){
 
-            List<OrderItemPojo> orderItemPojoList = orderItemApi.selectSome(pojo.getId());
+            List<OrderItemPojo> orderItemPojoList = orderItemApi.getByOrderId(pojo.getId());
             List<OrderItemData> orderItemDataList = convertPojoListToDataList(orderItemPojoList);
             for(OrderItemData data: orderItemDataList) {
                 if (data.getProductId() != null) {
-//                    logger.info("into atleast 1 order item");
-                    ProductPojo productPojo = productApi.givePojoById(data.getProductId());
+                    ProductPojo productPojo = productApi.getById(data.getProductId());
                     ProductData productData = convertProductPojoToData(productPojo);
                     BrandPojo brandPojo= brandApi.getCheck(productPojo.getBrand_category());
                     if(brandPojo == null){
@@ -88,7 +85,6 @@ public class SalesReportDto {
                     logger.info(productPojo.getName() + " " + productPojo.getBarcode());
                     if (!StringUtil.isEmpty(category) && !StringUtil.isEmpty(brand)) {
                         if (brand.equals(productData.getBrand()) && category.equals(productData.getCategory())) {
-//                        logger.info("Entered 1");
                             List<String> tempList = new ArrayList<>();
                             tempList.add(productData.getBrand());
                             tempList.add(productData.getCategory());
@@ -106,7 +102,6 @@ public class SalesReportDto {
                         }
                     } else if (!StringUtil.isEmpty(category)) {
                         if (category.equals(productData.getCategory())) {
-//                            logger.info("Entered 2");
                             List<String> tempList = new ArrayList<>();
                             tempList.add(productData.getBrand());
                             tempList.add(productData.getCategory());
@@ -124,7 +119,6 @@ public class SalesReportDto {
                         }
                     } else if (!StringUtil.isEmpty(brand)) {
                         if (brand.equals(productData.getBrand())) {
-//                            logger.info("Entered 3");
                             List<String> tempList = new ArrayList<>();
                             tempList.add(productData.getBrand());
                             tempList.add(productData.getCategory());
@@ -141,7 +135,6 @@ public class SalesReportDto {
                             }
                         }
                     } else {
-//                        logger.info("Entered 4");
                         List<String> tempList = new ArrayList<>();
                         tempList.add(productData.getBrand());
                         tempList.add(productData.getCategory());
@@ -160,7 +153,6 @@ public class SalesReportDto {
                 }
             }
         }
-      //  List<SalesReportData> salesReportDataList = new ArrayList<>();
         for(Map.Entry m : mapQuantity.entrySet()){
             SalesReportData salesReportData1 = new SalesReportData();
             List<String> tempList = (List<String>) m.getKey();
@@ -170,9 +162,7 @@ public class SalesReportDto {
             Double d = mapRevenue.get(tempList);
             salesReportData1.setRevenue(d);
             salesReportDataList.add(salesReportData1);
-            //  System.out.println(m.getKey()+" "+m.getValue());
         }
-       // return salesReportDataList;
     }
 
     public void generateCsv(HttpServletResponse response) throws IOException,ApiException {

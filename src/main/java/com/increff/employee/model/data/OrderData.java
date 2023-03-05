@@ -2,14 +2,12 @@ package com.increff.employee.model.data;
 
 import java.util.List;
 
-public class OrderData{
+public class OrderData {
     private Integer id;
-//    private ZonedDateTime orderAddDateTime;
-//    private ZonedDateTime orderUpdateDateTime;
     private String orderUpdatedDate;
     private String orderAddDate;
     private List<OrderItemData> orderItemDataList;
-    private Boolean isInvoiceGenerated=false;
+    private Boolean isInvoiceGenerated = false;
 
     public Boolean getInvoiceGenerated() {
         return isInvoiceGenerated;

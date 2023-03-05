@@ -109,37 +109,35 @@ function deleteInventory(id){
 }
 
 // FILE UPLOAD METHODS
+
 var fileData = [];
 var errorData = [];
 var processCount = 0;
-
+var uploadlength ,error=0 ;
 
 function processData(){
 	var file = $('#inventoryFile')[0].files[0];
 	readFileData(file, readFileDataCallback);
+	
 }
 
 function readFileDataCallback(results){
 	fileData = results.data;
-	uploadRows();
-}
-
-function uploadRows(){
-	//Update progress
-	updateUploadDialog();
-	//If everything processed then return
-	if(processCount==fileData.length){
+	if(fileData.length > 5000) {
+		msgErrorstring("Max Upload Limit: 5000");
 		return;
 	}
+	console.log("errordata.length ::",errorData.length);
 	
-	//Process next row
-	var row = fileData[processCount];
-	processCount++;
-	
-	var json = JSON.stringify(row);
-	var url = getInventoryUrl()+"inventory";
+	uploadRows(); 
+}
 
-	//Make ajax call
+function uploadFileHelper(data){
+	// console.log("second");
+	console.log("data.length :: " ,data.length);
+	uploadlength = data.length;
+	json = JSON.stringify(data); 
+	var url = getProductUrl() + "product/brandTsv";
 	$.ajax({
 	   url: url,
 	   type: 'POST',
@@ -148,19 +146,58 @@ function uploadRows(){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
-	   		uploadRows();  
+		 error =  response.length;
+			uploadlength -= response.length;
+			 errorData = JSON.stringify(response);
+			 msgSuccess('Products Uploaded:  ' + uploadlength.toString());	
+			msgErrorstring('Errors : ' + error.toString());		
+			 if(response.length == 0){
+				$('#upload-product-modal').modal('toggle');
+			 }
+			 else{
+				document.getElementById("download-errors").disabled = false;
+			 }
+			 updateUploadDialog();
+			 getBrandList();  
 	   },
 	   error: function(response){
-	   		row.error=response.responseText
-	   		errorData.push(row);
-	   		uploadRows();
-	   }
+			msgErrorstring("Error");
+	   },
+	      
 	});
-
 }
 
-function downloadErrors(){
-	writeFileData(errorData);
+
+var array = [];
+function uploadRows(){
+
+	console.log("first");
+	if(fileData.length == 0){
+		msgErrorstring("No Data to upload");
+		return;
+	}
+	
+	while(1){
+	if(processCount==fileData.length){
+		break;
+	}
+	
+	var row = fileData[processCount];
+	processCount++;
+	errorData.push(row);
+	var json = JSON.stringify(row);
+	console.log("json :: ",json);
+	array.push(row);
+	
+	}
+	console.log("consoling array::");
+	console.log(array);
+
+	uploadFileHelper(array);
+}
+
+function downloadErrors() {
+    writeFileData(errorData);
 }
 
 //UI DISPLAY METHODS
@@ -170,7 +207,7 @@ function displayInventoryList(data){
 	var $tbody = $('#inventory-table').find('tbody');
 	$tbody.empty();
 	var sno = 1;
-	for(var i in data){
+	for(i = data.length-1 ; i>=0 ; i--){
 		var e = data[i];
 		// var buttonHtml = '<button class="fa fa-trash"  data-toggle="tooltip" data-html="true" title="delete inventory" style="border-radius :5px;border-color:grey" onclick="deleteInventory(' + e.id + ')"></button>'
 		var buttonHtml = ' <button class="fa fa-pencil"  data-toggle="tooltip" data-html="true" title="edit inventory" style="border-radius :5px;border-color:grey" onclick="displayEditInventory(' + e.id + ')"></button>'
@@ -260,7 +297,8 @@ function fillDropDown(data) {
 function disableButtons(){
 	var role = getRole();
 	if(role == "operator"){
-	document.getElementById("inventory-form").hidden = true;
+	document.getElementById("top-row").hidden = true;
+	document.getElementById("break").hidden = true;
 	// document.getElementById("upload-data").disabled = true;
 	}
 }
@@ -282,7 +320,7 @@ function resetUploadDialog(){
 function updateUploadDialog(){
 	$('#rowCount').html("" + fileData.length);
 	$('#processCount').html("" + processCount);
-	$('#errorCount').html("" + errorData.length);
+	$('#errorCount').html("" + error);
 }
 
 function updateFileName(){

@@ -3,13 +3,13 @@ package com.increff.employee.pojo;
 import javax.persistence.*;
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"email"})})
 public class UserPojo extends AbstractPojo{
 
 	@Id
 	@TableGenerator(name = "user_id", pkColumnValue = "user_id", table = "table_sequence")
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "user_id")
 	private int id;
-	//private String name;
 	private String email;
 	private String password;
 	private String role;

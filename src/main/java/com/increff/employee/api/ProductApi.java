@@ -22,33 +22,23 @@ public class ProductApi {
     }
 
     @Transactional
-    public void deleteById(Integer id) {
-        productDao.delete(id);
-    }
-
-    @Transactional
     public List<ProductPojo> getAll() {
-        return productDao.selectAll();
+        return productDao.getAll();
     }
 
     @Transactional
-    public ProductPojo getPojoFromBarcode(String barcode) throws ApiException{
-        ProductPojo productPojo = productDao.selectPojoByBarcode(barcode);
+    public ProductPojo getByBarcode(String barcode) throws ApiException{
+        ProductPojo productPojo = productDao.getByBarcode(barcode);
         if(productPojo == null){
             throw new ApiException("Product with given barcode does not exist.");
         }
         return productPojo;
     }
-    @Transactional
-    public void getPojoByBarcode(String barcode) throws ApiException{
-        ProductPojo productPojo = productDao.selectPojoByBarcode(barcode);
-        if(productPojo != null) {
-            throw new ApiException("Product with given barcode already exist.");
-        }
-    }
+
+
     @Transactional
     public ProductPojo getPojoFromId(Integer id) throws ApiException{
-        ProductPojo productPojo1 = productDao.selectPojoById(id);
+        ProductPojo productPojo1 = productDao.getById(id);
         if(productPojo1 == null)
         {
             throw new ApiException("The product with given id does not exist.");
@@ -56,9 +46,16 @@ public class ProductApi {
         return productPojo1;
     }
 
+    @Transactional
+    public List<ProductPojo> getByBrandId(Integer brandId) throws ApiException{
+        return productDao.getByBrandId(brandId);
+    }
+
+
+
     @Transactional(rollbackFor  = ApiException.class)
     public void update(ProductPojo productPojo) throws ApiException {
-        ProductPojo productPojo1 = givePojoById(productPojo.getId());
+        ProductPojo productPojo1 = getById(productPojo.getId());
         productPojo1.setName(productPojo.getName());
         productPojo1.setBarcode(productPojo.getBarcode());
         productPojo1.setMrp(productPojo.getMrp());
@@ -66,8 +63,8 @@ public class ProductApi {
     }
 
     @Transactional
-    public ProductPojo givePojoById(Integer id) throws ApiException{
-        ProductPojo productPojo = productDao.selectPojoById(id);
+    public ProductPojo getById(Integer id) throws ApiException{
+        ProductPojo productPojo = productDao.getById(id);
         if(productPojo == null){
             throw new ApiException("Product with given ProductId does not exist.");
         }
@@ -83,5 +80,14 @@ public class ProductApi {
         }
     }
 //
+
+    @Transactional
+    public void getPojoByBarcode(String barcode) throws ApiException{
+        ProductPojo productPojo = productDao.getByBarcode(barcode);
+        if(productPojo != null) {
+            throw new ApiException("Product with given barcode already exist.");
+        }
+    }
+
 //
 }

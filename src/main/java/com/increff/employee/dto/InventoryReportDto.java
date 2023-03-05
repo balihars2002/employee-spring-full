@@ -10,7 +10,6 @@ import com.increff.employee.api.BrandApi;
 import com.increff.employee.api.InventoryApi;
 import com.increff.employee.api.ProductApi;
 import com.increff.employee.util.CsvFileGenerator;
-import com.increff.employee.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.increff.employee.dto.HelperDto.convertInventoryPojoToData;
@@ -39,31 +37,15 @@ public class InventoryReportDto {
 
     public List<InventoryData> get(BrandForm form) throws ApiException {
         inventoryDataList.clear();
-        List<InventoryPojo> inventoryPojoList = inventoryApi.getAll();
-
-        HashMap<List<String>,InventoryData> map = new HashMap<>();
-        for(InventoryPojo inventoryPojo : inventoryPojoList){
-            InventoryData data = convertPojoToData(inventoryPojo);
-            if(!StringUtil.isEmpty(form.getBrand()) && (!StringUtil.isEmpty(form.getCategory()))){
-                if(form.getBrand().equals(data.getBrand()) && form.getCategory().equals(data.getCategory())){
-                    inventoryDataList.add(data);
-                }
-            }
-            else if(!StringUtil.isEmpty(form.getBrand())){
-                if(form.getBrand().equals(data.getBrand())){
-                    inventoryDataList.add(data);
-                }
-            }
-            else if(!StringUtil.isEmpty(form.getCategory())){
-                if( form.getCategory().equals(data.getCategory())){
-                    inventoryDataList.add(data);
-                }
-            }
-            else{
-                inventoryDataList.add(data);
+        List<BrandPojo> brandPojoList = brandApi.getByBrandCategory(form.getBrand(),form.getCategory());
+        for(BrandPojo brandPojo:brandPojoList) {
+            for(ProductPojo productPojo:productApi.getByBrandId(brandPojo.getId())){
+                InventoryData inventoryData = convertPojoToData(inventoryApi.getByProductId(productPojo.getId()));
+                inventoryDataList.add(inventoryData);
             }
         }
-        return  inventoryDataList;
+        return inventoryDataList;
+
     }
     public void generateCsv(HttpServletResponse response) throws IOException, ApiException {
         response.setContentType("text/csv");
@@ -72,10 +54,10 @@ public class InventoryReportDto {
         csvFileGenerator.writeInventoryToCsv(inventoryDataList, response.getWriter());
         inventoryDataList.clear();
     }
-    
+
     public InventoryData convertPojoToData(InventoryPojo inventoryPojo) throws ApiException {
         InventoryData inventoryData = convertInventoryPojoToData(inventoryPojo);
-            ProductPojo productPojo= productApi.givePojoById(inventoryPojo.getProductId());
+            ProductPojo productPojo= productApi.getById(inventoryPojo.getProductId());
             BrandPojo brandPojo = brandApi.getCheck(productPojo.getBrand_category());
             inventoryData.setProductId(productPojo.getId());
             inventoryData.setMrp(productPojo.getMrp());

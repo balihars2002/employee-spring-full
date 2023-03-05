@@ -3,13 +3,10 @@ package com.increff.employee.dto;
 import com.increff.employee.AbstractUnitTest;
 import com.increff.employee.api.ProductApi;
 import com.increff.employee.dao.BrandDao;
-import com.increff.employee.model.data.BrandData;
 import com.increff.employee.model.data.InventoryData;
 import com.increff.employee.model.form.BrandForm;
 import com.increff.employee.model.form.InventoryForm;
-import com.increff.employee.model.form.ProductForm;
 import com.increff.employee.api.ApiException;
-import com.increff.employee.api.InventoryApi;
 import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.pojo.ProductPojo;
 import org.junit.Test;
@@ -54,7 +51,7 @@ public class InventoryReportDtoTest extends AbstractUnitTest {
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory("barcode",20);
-        List<InventoryData> inventoryDataList1 = inventoryDto.getAllDto();
+        List<InventoryData> inventoryDataList1 = inventoryDto.getAll();
         BrandForm brandForm = new BrandForm();
         brandForm.setBrand("brand");
         brandForm.setCategory("category");
@@ -67,7 +64,7 @@ public class InventoryReportDtoTest extends AbstractUnitTest {
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory("barcode",20);
-        List<InventoryData> inventoryDataList1 = inventoryDto.getAllDto();
+        List<InventoryData> inventoryDataList1 = inventoryDto.getAll();
         BrandForm brandForm = new BrandForm();
         brandForm.setBrand("");
         brandForm.setCategory("category");
@@ -79,7 +76,7 @@ public class InventoryReportDtoTest extends AbstractUnitTest {
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory("barcode",20);
-        List<InventoryData> inventoryDataList1 = inventoryDto.getAllDto();
+        List<InventoryData> inventoryDataList1 = inventoryDto.getAll();
         BrandForm brandForm = new BrandForm();
         brandForm.setBrand("brand");
         brandForm.setCategory("");
@@ -91,7 +88,7 @@ public class InventoryReportDtoTest extends AbstractUnitTest {
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory("barcode",20);
-        List<InventoryData> inventoryDataList1 = inventoryDto.getAllDto();
+        List<InventoryData> inventoryDataList1 = inventoryDto.getAll();
         BrandForm brandForm = new BrandForm();
         brandForm.setBrand("");
         brandForm.setCategory("");
@@ -104,7 +101,7 @@ public class InventoryReportDtoTest extends AbstractUnitTest {
         InventoryForm inventoryForm = new InventoryForm();
         inventoryForm.setBarcode(barcode);
         inventoryForm.setQuantity(quantity);
-        inventoryDto.addDto(inventoryForm);
+        inventoryDto.add(inventoryForm);
     }
     public Integer addProduct(String barcode,String name,Double mrp,Integer id) throws ApiException {
         ProductPojo productPojo = new ProductPojo();
@@ -122,7 +119,7 @@ public class InventoryReportDtoTest extends AbstractUnitTest {
         brandPojo.setCategory(category);
         brandPojo.setDisabled(isDisabled);
         brandDao.insert(brandPojo);
-        List<BrandPojo> brandPojoList = brandDao.selectAll();
+        List<BrandPojo> brandPojoList = brandDao.getAll();
         return brandPojoList.get(0).getId();
     }
 

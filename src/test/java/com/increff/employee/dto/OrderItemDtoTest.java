@@ -14,7 +14,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -50,7 +49,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,20);
-        List<InventoryPojo> inventoryPojoList = inventoryDao.selectAlls();
+        List<InventoryPojo> inventoryPojoList = inventoryDao.getAll();
         Integer orderId = addOrder();
         OrderItemForm orderItemForm = createOrderItemForm("barcode",1,10.0);
         orderItemDto.add(orderItemForm,orderId);
@@ -83,6 +82,22 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         orderItemDataList = orderItemDto.viewAlLOrderItems();
         assertEquals(0,orderItemDataList.size());
     }
+
+
+    @Test(expected = ApiException.class)
+    public void deleteByIdTest() throws ApiException {
+        Integer brandId = addBrand("brand","category",false);
+        Integer productId = addProduct("barcode","name",10.0, brandId);
+        addInventory(productId,2);
+        Integer orderId = addOrder();
+        OrderItemForm orderItemForm = createOrderItemForm("barcode",1,10.0);
+        orderItemDto.add(orderItemForm,orderId);
+
+        List<OrderItemData> orderItemDataList = orderItemDto.viewAlLOrderItems();
+        orderItemDto.deleteById(orderItemDataList.get(0).getId());
+
+    }
+
 
 //    @Test
 //    public void viewAllOrderItems() throws ApiException{
@@ -124,7 +139,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         orderItemDto.add(orderItemForm,orderId);
         List<OrderItemData> orderItemDataList = orderItemDto.viewAlLOrderItems();
         OrderItemForm orderItemForm1 = createOrderItemForm("barcode",2,10.0);
-        orderItemDto.updateOrderItem(orderItemDataList.get(0).getId(),orderItemForm1);
+        orderItemDto.update(orderItemDataList.get(0).getId(),orderItemForm1);
         orderItemDataList = orderItemDto.viewAlLOrderItems();
         assertEquals((Integer)2, orderItemDataList.get(0).getQuantity());
     }
@@ -163,7 +178,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         orderPojo.setOrderLocalTime(addDate);
 //        orderPojo.setOrderUpdateDateTime(updateZoneTime);
         orderDao.insert(orderPojo);
-        List<OrderPojo> orderPojoList = orderDao.selectAll();
+        List<OrderPojo> orderPojoList = orderDao.getAll();
         return orderPojoList.get(0).getId();
     }
     public void addInventory(Integer id, Integer quantity){
@@ -179,7 +194,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         productPojo.setMrp(mrp);
         productPojo.setBrand_category(id);
         productDao.insert(productPojo);
-        List<ProductPojo> productPojoList = productDao.selectAll();
+        List<ProductPojo> productPojoList = productDao.getAll();
         return productPojoList.get(0).getId();
     }
     public Integer addBrand(String brand,String category,Boolean isDisabled){
@@ -188,7 +203,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         brandPojo.setCategory(category);
         brandPojo.setDisabled(isDisabled);
         brandDao.insert(brandPojo);
-        List<BrandPojo> brandPojoList = brandDao.selectAll();
+        List<BrandPojo> brandPojoList = brandDao.getAll();
         return brandPojoList.get(0).getId();
     }
 

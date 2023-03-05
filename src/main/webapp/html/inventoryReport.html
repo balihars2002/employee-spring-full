@@ -10,32 +10,19 @@
 <nav th:replace="snippets.html :: name_app_navbar"></nav>
 
 <div class="container">
-	<h3 style="font-weight: bold;font-family: 'Times New Roman', Times, serif;padding-top: 25px;">Inventory Report</h3>
+	<h3 style="font-weight: bold;padding-top: 25px;">Inventory Report</h3><br>
 	<form id="inventory-report-form">
 		<div class="form-row">
-			<!-- <div id="date-picker-example" class="md-form md-outline input-with-post-icon datepicker" inline="true">
-				<input placeholder="Select date" type="text" id="example" class="form-control">
-				<label for="example"></label>
-				<i class="fas fa-calendar input-prefix"></i>
-			  </div> -->
-			<!-- <div class="col-md-4 mb-3 inline">
-				<label class="col-sm-2 col-form-label" for="validationDefault01">Brand</label>
-				<input type="text" class="form-control" id="validationDefault01" placeholder="Brand">
-			</div>
 			<div class="col-md-4 mb-3 inline">
-				<label class="col-sm-2 col-form-label" for="validationDefault02">Category</label>
-				<input type="text" class="form-control" id="validationDefault02" placeholder="Category">
-			</div> -->
-			<div class="col-md-4 mb-3 inline">
-				<label class="form-label" for="brand">Brand</label>
+				<label class="form-label h6" for="brand">Brand</label>
 				<select name="brand" class="form-control" id="inputProductBrandName"></select>
-				<option value=""></option>
+				
 			</div>
 
 			<div class="col-md-4 mb-3 inline">
-				<label class="form-label" for="category">Category</label>
+				<label class="form-label h6" for="category">Category</label>
 				<select name="category" class="form-control" id="inputProductBrandCategoryName"></select>
-			  <option value=""></option>
+			  
 			</div>
 
 		</div>

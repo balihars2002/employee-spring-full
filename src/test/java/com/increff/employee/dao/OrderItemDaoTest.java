@@ -38,7 +38,7 @@ public class OrderItemDaoTest extends AbstractUnitTest {
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
         addOrderItem(orderId,productId,1,8.0);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectAll();
+        List<OrderItemPojo> orderItemPojoList = orderItemDao.getAll();
         assertEquals(orderId,orderItemPojoList.get(0).getOrderId());
         assertEquals(productId,orderItemPojoList.get(0).getProductId());
         assertEquals((Integer) 1,orderItemPojoList.get(0).getQuantity());
@@ -53,7 +53,7 @@ public class OrderItemDaoTest extends AbstractUnitTest {
         addInventory(productId,2);
         addOrderItem(orderId,productId,1,8.0);
         orderItemDao.deleteByProductId(productId);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectAll();
+        List<OrderItemPojo> orderItemPojoList = orderItemDao.getAll();
         assertEquals(0,orderItemPojoList.size());
     }
 
@@ -65,7 +65,7 @@ public class OrderItemDaoTest extends AbstractUnitTest {
         addInventory(productId,2);
         addOrderItem(orderId,productId,1,8.0);
         orderItemDao.deleteByProductId(productId+1);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectAll();
+        List<OrderItemPojo> orderItemPojoList = orderItemDao.getAll();
         assertEquals(1,orderItemPojoList.size());
     }
 
@@ -77,7 +77,7 @@ public class OrderItemDaoTest extends AbstractUnitTest {
         addInventory(productId,2);
         addOrderItem(orderId,productId,1,8.0);
         orderItemDao.deleteByOrderId(orderId);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectAll();
+        List<OrderItemPojo> orderItemPojoList = orderItemDao.getAll();
         assertEquals(0,orderItemPojoList.size());
     }
 
@@ -89,7 +89,7 @@ public class OrderItemDaoTest extends AbstractUnitTest {
         addInventory(productId,2);
         addOrderItem(orderId,productId,1,8.0);
         orderItemDao.deleteByOrderId(orderId+1);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectAll();
+        List<OrderItemPojo> orderItemPojoList = orderItemDao.getAll();
         assertEquals(1,orderItemPojoList.size());
     }
 
@@ -101,7 +101,7 @@ public class OrderItemDaoTest extends AbstractUnitTest {
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
         addOrderItem(orderId,productId,1,8.0);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectAll();
+        List<OrderItemPojo> orderItemPojoList = orderItemDao.getAll();
         assertEquals(1,orderItemPojoList.size());
     }
 
@@ -112,7 +112,7 @@ public class OrderItemDaoTest extends AbstractUnitTest {
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
         addOrderItem(orderId,productId,1,8.0);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectSome(orderId);
+        List<OrderItemPojo> orderItemPojoList = orderItemDao.getByOrderId(orderId);
         assertEquals(1,orderItemPojoList.size());
     }
 
@@ -123,7 +123,7 @@ public class OrderItemDaoTest extends AbstractUnitTest {
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
         addOrderItem(orderId,productId,1,8.0);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectSome(orderId+1);
+        List<OrderItemPojo> orderItemPojoList = orderItemDao.getByOrderId(orderId+1);
         assertEquals(0,orderItemPojoList.size());
     }
 
@@ -134,8 +134,8 @@ public class OrderItemDaoTest extends AbstractUnitTest {
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
         addOrderItem(orderId,productId,1,8.0);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectAll();
-        OrderItemPojo orderItemPojo = orderItemDao.getPojoFromId(orderItemPojoList.get(0).getId());
+        List<OrderItemPojo> orderItemPojoList = orderItemDao.getAll();
+        OrderItemPojo orderItemPojo = orderItemDao.getById(orderItemPojoList.get(0).getId());
         assertEquals(orderId,orderItemPojoList.get(0).getOrderId());
         assertEquals(productId,orderItemPojoList.get(0).getProductId());
         assertEquals((Integer) 1,orderItemPojoList.get(0).getQuantity());
@@ -149,7 +149,7 @@ public class OrderItemDaoTest extends AbstractUnitTest {
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
         addOrderItem(orderId,productId,1,8.0);
-        List<OrderItemPojo> orderItemPojoList = orderItemDao.selectAll();
+        List<OrderItemPojo> orderItemPojoList = orderItemDao.getAll();
         orderItemDao.update(orderItemPojoList.get(0));
     }
 
@@ -168,7 +168,7 @@ public class OrderItemDaoTest extends AbstractUnitTest {
         orderPojo.setOrderLocalTime(addDate);
 //        orderPojo.setOrderUpdateDateTime(updateZoneTime);
         orderDao.insert(orderPojo);
-        List<OrderPojo> orderPojoList = orderDao.selectAll();
+        List<OrderPojo> orderPojoList = orderDao.getAll();
         return orderPojoList.get(0).getId();
     }
     public void addInventory(Integer id, Integer quantity){
@@ -184,7 +184,7 @@ public class OrderItemDaoTest extends AbstractUnitTest {
         productPojo.setMrp(mrp);
         productPojo.setBrand_category(id);
         productDao.insert(productPojo);
-        List<ProductPojo> productPojoList = productDao.selectAll();
+        List<ProductPojo> productPojoList = productDao.getAll();
         return productPojoList.get(0).getId();
     }
     public Integer addBrand(String brand,String category,Boolean isDisabled){
@@ -193,7 +193,7 @@ public class OrderItemDaoTest extends AbstractUnitTest {
         brandPojo.setCategory(category);
         brandPojo.setDisabled(isDisabled);
         brandDao.insert(brandPojo);
-        List<BrandPojo> brandPojoList = brandDao.selectAll();
+        List<BrandPojo> brandPojoList = brandDao.getAll();
         return brandPojoList.get(0).getId();
     }
 }

@@ -33,7 +33,7 @@ public class OrderFlowApi {
         for(OrderItemForm orderItemForm:orderItemForms){
 
             OrderItemPojo orderItemPojo = convertOrderItemFormToPojo(orderItemForm,id);
-            ProductPojo productPojo = productApi.getPojoFromBarcode(orderItemForm.getBarcode());
+            ProductPojo productPojo = productApi.getByBarcode(orderItemForm.getBarcode());
             if( orderItemForm.getSellingPrice() > productPojo.getMrp()){
                 throw new ApiException("Selling Price cannot be greater than MRP");
             }

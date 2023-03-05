@@ -22,29 +22,20 @@ public class InventoryController {
 
     @ApiOperation(value = "upload a product list in Inventory")
     @RequestMapping(path = "/tsv",method = RequestMethod.POST)
-    public void upload(@RequestBody List<InventoryForm> inventoryFormList) throws ApiException{
-        for(InventoryForm form : inventoryFormList) {
-            inventoryDto.addDto(form);
-        }
+    public List<List<String>> upload(@RequestBody List<InventoryForm> inventoryFormList) throws ApiException{
+        return inventoryDto.addList(inventoryFormList);
     }
     @ApiOperation(value = "Add a Product in Inventory")
     @RequestMapping(path = "",method = RequestMethod.POST)
     public void add(@RequestBody InventoryForm inventoryForm) throws ApiException{
-        inventoryDto.addDto(inventoryForm);
+        inventoryDto.add(inventoryForm);
     }
-
-    @ApiOperation(value = "Deletes a Product by Id")
-    @RequestMapping(path = "/{id}",method = RequestMethod.DELETE)
-    public void delete(@PathVariable Integer id) throws ApiException{
-        inventoryDto.deleteInventoryById(id);
-    }
-
 
     @ApiOperation(value = "Updates a Product quantity in inventory")
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
     public void update(@PathVariable Integer id,@RequestBody InventoryForm inventoryForm) throws ApiException {
        // ProductPojo p = convert(f);
-        inventoryDto.updateInv(id,inventoryForm);
+        inventoryDto.update(id,inventoryForm);
     }
 
 //

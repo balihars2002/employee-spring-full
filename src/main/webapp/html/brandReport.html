@@ -11,30 +11,19 @@
 
 	<div class="container">
 		<br>
-		<h3 style="font-weight: bold;font-family: 'Times New Roman', Times, serif;padding-top: 15px;">Brand Report</h3>
+		<h3 style="font-weight: bold;padding-bottom: 20px;">Brand Report</h3>
 
-		<form id="brand-report-form">
-			<div class="form-row">
-				<!-- <div id="date-picker-example" class="md-form md-outline input-with-post-icon datepicker" inline="true">
-					<input placeholder="Select date" type="text" id="example" class="form-control">
-					<label for="example"></label>
-					<i class="fas fa-calendar input-prefix"></i>
-				  </div> -->
-				<div class="col-md-4 mb-3 inline">
-					<label class="col-sm-2 col-form-label" for="validationDefault01">Brand</label>
-					<input type="text" class="form-control" id="validationDefault01" placeholder="Brand">
-				</div>
-				<div class="col-md-4 mb-3 inline">
-					<label class="col-sm-2 col-form-label" for="validationDefault02">Category</label>
-					<input type="text" class="form-control" id="validationDefault02" placeholder="Category">
-				</div>
+		<form class="form-inline" id="brand-report-form">
+			<div class="form-row ">
+					<label style="margin:10px" class="form-label" for="brand">Brand</label>
+					<select style="margin-left:20px;margin-top:3px" name="brand" class="form-control" id="brand-dropdown-menu"><option value="none" selected="" disabled="">Select Brand</option><option value="nike">nike</option><option value="adidas">adidas</option><option value="gucci">gucci</option><option value="asics">asics</option><option value="milton">milton</option><option value="apple">apple</option><option value="underarmour">underarmour</option><option value="hello">hello</option></select>
 			</div>
-			<button class="btn btn-success" type="button" id="get-brand-report">Search</button>
-			<button type="button" class="btn btn-success ml-2" id="download-csv">Download Report</button>
+			<button style="margin-left:15px" class="btn btn-success" type="button" id="get-brand-report">Search</button>
+			<button style="margin:2px" type="button" class="btn btn-success ml-2" id="download-csv">Download Report</button>
 		</form>
 
 		
-		<br>
+		
 
 		<div class="row">
 			&nbsp;
@@ -50,9 +39,7 @@
 							<th scope="col">Category</th>
 						</tr>
 					</thead>
-					<tbody>
-
-					</tbody>
+					<tbody><tr><td>1</td><td>apple</td><td>watch</td></tr><tr><td>2</td><td>hello</td><td>world</td></tr><tr><td>3</td><td>asics</td><td>shoes</td></tr><tr><td>4</td><td>underarmour</td><td>tshirt</td></tr><tr><td>5</td><td>apple</td><td>mobile</td></tr><tr><td>6</td><td>gucci</td><td>bag</td></tr><tr><td>7</td><td>milton</td><td>bottle</td></tr><tr><td>8</td><td>adidas</td><td>cap</td></tr><tr><td>9</td><td>asics</td><td>cap</td></tr><tr><td>10</td><td>nike</td><td>socks</td></tr><tr><td>11</td><td>nike</td><td>tshirt</td></tr><tr><td>12</td><td>gucci</td><td>shoes</td></tr><tr><td>13</td><td>adidas</td><td>shoes</td></tr><tr><td>14</td><td>nike</td><td>shoes</td></tr></tbody>
 				</table>
 
 			</div>

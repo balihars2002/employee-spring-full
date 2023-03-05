@@ -1,6 +1,7 @@
 package com.increff.employee.spring;
 
 import java.util.Properties;
+import java.util.TimeZone;
 
 import javax.sql.DataSource;
 
@@ -35,11 +36,11 @@ public class DbConfig {
 	private String hibernateShowSql;
 	@Value("${hibernate.hbm2ddl.auto}")
 	private String hibernateHbm2ddl;
-	
+	@Value("${hibernate.jdbc.time_zone}")
+	private String hibernateTimeZone;
 
 	@Bean(name = "dataSource")
 	public DataSource getDataSource() {
-//		logger.info("jdbcDriver: " + jdbcDriver + ", jdbcUrl: " + jdbcUrl + ", jdbcUsername: " + jdbcUsername);
 		BasicDataSource bean = new BasicDataSource();
 		bean.setDriverClassName(jdbcDriver);
 		bean.setUrl(jdbcUrl);
@@ -47,7 +48,6 @@ public class DbConfig {
 		bean.setPassword(jdbcPassword);
 		bean.setInitialSize(2);
 		bean.setDefaultAutoCommit(false);
-		//bean.setMaxTotal(10);
 		bean.setMinIdle(2);
 		bean.setValidationQuery("Select 1");
 		bean.setTestWhileIdle(true);
@@ -58,7 +58,6 @@ public class DbConfig {
 	@Bean(name = "entityManagerFactory")
 	@Autowired
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
-		//logger.info("hibernateDialect: " + jdbcDriver + ", hibernateHbm2ddl: " + hibernateHbm2ddl);
 		LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
 		bean.setDataSource(dataSource);
 		bean.setPackagesToScan(PACKAGE_POJO);
@@ -68,7 +67,7 @@ public class DbConfig {
 		jpaProperties.put("hibernate.dialect", hibernateDialect);
 		jpaProperties.put("hibernate.show_sql", hibernateShowSql);
 		jpaProperties.put("hibernate.hbm2ddl.auto", hibernateHbm2ddl);
-		jpaProperties.put("hibernate.hbm2ddl.auto", hibernateHbm2ddl);
+		jpaProperties.put("hibernate.jdbc.time_zone", TimeZone.getTimeZone(hibernateTimeZone));
 		bean.setJpaProperties(jpaProperties);
 		return bean;
 	}

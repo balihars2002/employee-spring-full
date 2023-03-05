@@ -33,14 +33,7 @@ public class ProductApiTest extends AbstractUnitTest {
         assertEquals((Integer) id,productPojoList.get(0).getBrand_category());
     }
 
-    @Test
-    public void deleteTest() throws ApiException{
-        Integer id = addBrand("brand","category",false);
-        addProduct("barcode","name",(Double)10.0,(Integer) id);
-        List<ProductPojo> productPojoList = productApi.getAll();
-        productApi.deleteById(productPojoList.get(0).getId());
-        assertEquals(0,productApi.getAll().size());
-    }
+
 
     @Test
     public void selectAllTest() throws ApiException {
@@ -55,7 +48,7 @@ public class ProductApiTest extends AbstractUnitTest {
     public void getPojoFromBarcodeTest() throws ApiException{
         Integer id = addBrand("brand","category",false);
         addProduct("barcode","name",(Double) 10.0,(Integer) id);
-        ProductPojo productPojo = productApi.getPojoFromBarcode("barcode");
+        ProductPojo productPojo = productApi.getByBarcode("barcode");
         assertEquals("barcode",productPojo.getBarcode());
         assertEquals("name",productPojo.getName());
         assertEquals((Double) 10.0,productPojo.getMrp());
@@ -76,7 +69,7 @@ public class ProductApiTest extends AbstractUnitTest {
     public void getPojoFromBarcodeTest1() throws ApiException{
         Integer id = addBrand("brand","category",false);
         addProduct("barcode","name",(Double) 10.0,(Integer) id);
-        ProductPojo productPojo = productApi.getPojoFromBarcode("barcode1");
+        ProductPojo productPojo = productApi.getByBarcode("barcode1");
     }
     @Test
     public void getPojoFromIdTest() throws ApiException{
@@ -104,7 +97,7 @@ public class ProductApiTest extends AbstractUnitTest {
         Integer id = addBrand("brand","category",false);
         addProduct("barcode","name",(Double) 10.0,(Integer) id);
         List<ProductPojo> productPojoList = productApi.getAll();
-        ProductPojo productPojo = productApi.givePojoById(productPojoList.get(0).getId());
+        ProductPojo productPojo = productApi.getById(productPojoList.get(0).getId());
         assertEquals("barcode",productPojo.getBarcode());
         assertEquals("name",productPojo.getName());
         assertEquals((Double) 10.0,productPojo.getMrp());
@@ -116,7 +109,7 @@ public class ProductApiTest extends AbstractUnitTest {
         Integer id = addBrand("brand","category",false);
         addProduct("barcode","name",(Double) 10.0,(Integer) id);
         List<ProductPojo> productPojoList = productApi.getAll();
-        ProductPojo productPojo = productApi.givePojoById(productPojoList.get(0).getId()+1);
+        ProductPojo productPojo = productApi.getById(productPojoList.get(0).getId()+1);
     }
 
     @Test(expected = ApiException.class)
@@ -163,7 +156,7 @@ public class ProductApiTest extends AbstractUnitTest {
         brandPojo.setCategory(category);
         brandPojo.setDisabled(isDisabled);
         brandApi.add(brandPojo);
-        List<BrandPojo> brandPojoList = brandDao.selectAll();
+        List<BrandPojo> brandPojoList = brandDao.getAll();
         return brandPojoList.get(0).getId();
     }
 }

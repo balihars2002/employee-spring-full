@@ -6,10 +6,10 @@ import com.increff.employee.model.data.BrandData;
 import com.increff.employee.model.form.BrandForm;
 import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.api.ApiException;
-import io.swagger.models.auth.In;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -20,6 +20,49 @@ public class BrandDtoTest extends AbstractUnitTest {
     BrandDto brandDto;
     @Autowired
     BrandApi brandApi;
+
+
+    @Test
+    public void addListTest() throws ApiException{
+        List<BrandForm> brandFormList = new ArrayList<>();
+        BrandForm brandForm = new BrandForm();
+        brandForm.setBrand("brand");
+        brandForm.setCategory("category");
+        brandForm.setDisabled(false);
+        brandFormList.add(brandForm);
+        brandDto.addList(brandFormList);
+        List<BrandData> brandDataList = brandDto.getAllList();
+        assertEquals(1,brandDataList.size());
+    }
+
+    @Test(expected = ApiException.class)
+    public void addListTest1() throws ApiException{
+        List<BrandForm> brandFormList = new ArrayList<>();
+        BrandForm brandForm = new BrandForm();
+        brandForm.setBrand("brand");
+        brandForm.setCategory("category");
+        brandForm.setDisabled(false);
+        for(int i=0;i<6000;i++) {
+            brandFormList.add(brandForm);
+        }
+        brandDto.addList(brandFormList);
+    }
+
+    @Test
+    public void addListTest2() throws ApiException{
+        List<BrandForm> brandFormList = new ArrayList<>();
+        BrandForm brandForm = new BrandForm();
+        brandForm.setBrand("brand");
+        brandForm.setCategory("category");
+        brandForm.setDisabled(false);
+        for(int i=0;i<100;i++) {
+            brandFormList.add(brandForm);
+        }
+        brandDto.addList(brandFormList);
+        List<BrandData> brandDataList = brandDto.getAllList();
+        assertEquals(1,brandDataList.size());
+    }
+
     @Test
     public void addBrandTest() throws ApiException {
         BrandForm brandForm = new BrandForm();
@@ -44,7 +87,6 @@ public class BrandDtoTest extends AbstractUnitTest {
            brandDto.add(brandForm);
         } catch (Exception e) {
             temp = true;
-           // System.out.println("Something went wrong.");
         }
         assertEquals(true,temp);
     }
@@ -76,7 +118,6 @@ public class BrandDtoTest extends AbstractUnitTest {
             brandDto.add(brandForm);
         } catch (Exception e) {
             temp = true;
-            // System.out.println("Something went wrong.");
         }
         assertEquals(true,temp);
     }
@@ -113,9 +154,8 @@ public class BrandDtoTest extends AbstractUnitTest {
         brandDto.add(brandForm2);
 
         List<BrandData> brandDataList = brandDto.getAllList();
-        brandDto.delete(brandDataList.get(0).getId());
-        List<BrandData> brandDataList1 = brandDto.getAllList();
-        assertEquals(1,brandDataList1.size());
+
+        assertEquals(2,brandDataList.size());
     }
 
     @Test
@@ -130,19 +170,6 @@ public class BrandDtoTest extends AbstractUnitTest {
         BrandData brandData = brandDto.get(id);
         assertEquals("brand1",brandData.getBrand());
         assertEquals("category1",brandData.getCategory());
-    }
-    @Test
-    public void  deleteTest() throws ApiException {
-        BrandForm brandForm1 = new BrandForm();
-        brandForm1.setCategory("category1");
-        brandForm1.setBrand("brand1");
-        brandForm1.setDisabled(false);
-        brandDto.add(brandForm1);
-        List<BrandData> brandDataList = brandDto.getAllList();
-        Integer id = brandDataList.get(0).getId();
-        brandDto.delete(id);
-        brandDataList = brandDto.getAllList();
-        assertEquals(0,brandDataList.size());
     }
 
     @Test
@@ -196,7 +223,7 @@ public class BrandDtoTest extends AbstractUnitTest {
         brandDto.add(brandForm);
         List<BrandData> brandDataList = brandDto.getAllList();
         Integer id = brandDataList.get(0).getId();
-        BrandPojo pojo = brandDto.getCheckFromService(id);
+        BrandPojo pojo = brandDto.getCheckById(id);
         assertEquals("brand",pojo.getBrand());
         assertEquals("category",pojo.getCategory());
         assertEquals((Boolean) false,pojo.getDisabled());
@@ -211,7 +238,7 @@ public class BrandDtoTest extends AbstractUnitTest {
         brandDto.add(brandForm);
         List<BrandData> brandDataList = brandDto.getAllList();
         Integer id = brandDataList.get(0).getId()+1;
-        BrandPojo pojo = brandDto.getCheckFromService(id);
+        BrandPojo pojo = brandDto.getCheckById(id);
     }
     @Test(expected = ApiException.class)
     public void checkDuplicateTest() throws ApiException {

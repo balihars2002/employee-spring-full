@@ -41,14 +41,8 @@ public class OrderDto {
     private ProductApi productApi;
     @Autowired
     private OrderFlowApi orderFlowApi;
-    @Autowired
-    private InventoryApi inventoryApi;
-
     @Value("${invoice.url}")
     private String invoiceUrl;
-
-    private final static Logger logger = Logger.getLogger(SecurityConfig.class);
-
 
     public void add(List<OrderItemForm> orderItemFormList) throws ApiException{
         OrderForm orderForm = new OrderForm();
@@ -57,37 +51,19 @@ public class OrderDto {
         orderFlowApi.add(orderPojo,orderItemFormList);
     }
 
-    public void delete(Integer id) {
-        orderApi.delete(id);
-    }
-
     public void generateInvoice(Integer id) throws ApiException {
         orderApi.generateInvoice(id);
     }
-//    public void updateList(OrderForm form) throws ApiException {
-////        OrderPojo orderPojo = orderApi.selectById()
-////        BrandPojo brandPojo1 = brandService.getBrandCat(brandPojo.getBrand(),brandPojo.getCategory());
-////        if(brandPojo1 != null){
-////            throw new ApiException("Brand and Category already exist");
-////        }
-////        normalizeBrand(brandPojo);
-////        BrandPojo updated = getCheckFromService(id);
-////        updated.setCategory(brandPojo.getCategory());
-////        updated.setBrand(brandPojo.getBrand());
-////        brandService.update(updated);
-//        orderApi.update(orderPojo.);
-//    }
-
-    public List<OrderData> viewAlLOrder() throws ApiException {
+    public List<OrderData> getAll() throws ApiException {
         List<OrderData> list = new ArrayList<OrderData>();
-        List<OrderPojo> list1 = orderApi.selectAll();
+        List<OrderPojo> list1 = orderApi.getAll();
         for(OrderPojo pojo:list1){
             list.add(convertPojoToData(pojo));
         }
         return list;
     }
     public List<OrderItemData> viewOrderItemsInOrder(Integer id) throws ApiException {
-        List<OrderItemPojo> orderItemPojoList = orderItemApi.selectSome(id);
+        List<OrderItemPojo> orderItemPojoList = orderItemApi.getByOrderId(id);
         List<OrderItemData> orderItemDataList = new ArrayList<>();
         for(OrderItemPojo orderItemPojo:orderItemPojoList){
             OrderItemData orderItemData = convertOrderItemPojoToData(orderItemPojo);
@@ -138,7 +114,7 @@ public class OrderDto {
     public InvoiceForm generateInvoiceForOrder(Integer orderId) throws ApiException
     {
         InvoiceForm invoiceForm = new InvoiceForm();
-        OrderPojo orderPojo = orderApi.selectById(orderId);
+        OrderPojo orderPojo = orderApi.getById(orderId);
         invoiceForm.setOrderId(orderPojo.getId());
         invoiceForm.setId(orderId);
 
@@ -153,7 +129,6 @@ public class OrderDto {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String formattedDateTime = localDate.format(dateTimeFormatter);
         invoiceForm.setAddDate(formattedDateTime);
-        System.out.println(" formatted Date : : " + formattedDateTime);
         return invoiceForm;
     }
 

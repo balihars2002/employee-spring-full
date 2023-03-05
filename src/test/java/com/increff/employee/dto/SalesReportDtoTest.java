@@ -43,8 +43,6 @@ public class SalesReportDtoTest extends AbstractUnitTest {
     private InventoryDto inventoryDto;
     @Autowired
     private SalesReportDto salesReportDto;
-    private final ZonedDateTime addZoneTime = ZonedDateTime.now().minusDays(1);
-    private final ZonedDateTime updateZoneTime = ZonedDateTime.now();
     private final LocalDate addDate = LocalDate.now().minusDays(1);
 
 
@@ -80,7 +78,7 @@ public class SalesReportDtoTest extends AbstractUnitTest {
         OrderPojo orderPojo = new OrderPojo();
         orderPojo.setOrderLocalTime(addDate);
         orderDao.insert(orderPojo);
-        List<OrderPojo> orderPojoList = orderDao.selectAll();
+        List<OrderPojo> orderPojoList = orderDao.getAll();
         return orderPojoList.get(0).getId();
     }
     public void addInventory(Integer id, Integer quantity){
@@ -96,7 +94,7 @@ public class SalesReportDtoTest extends AbstractUnitTest {
         productPojo.setMrp(mrp);
         productPojo.setBrand_category(id);
         productDao.insert(productPojo);
-        List<ProductPojo> productPojoList = productDao.selectAll();
+        List<ProductPojo> productPojoList = productDao.getAll();
         return productPojoList.get(productPojoList.size()-1).getId();
     }
     public Integer addBrand(String brand,String category,Boolean isDisabled){
@@ -105,7 +103,7 @@ public class SalesReportDtoTest extends AbstractUnitTest {
         brandPojo.setCategory(category);
         brandPojo.setDisabled(isDisabled);
         brandDao.insert(brandPojo);
-        List<BrandPojo> brandPojoList = brandDao.selectAll();
+        List<BrandPojo> brandPojoList = brandDao.getAll();
         return brandPojoList.get(0).getId();
     }
 }

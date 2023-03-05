@@ -20,19 +20,32 @@ public class BrandDto extends HelperDto {
     private BrandApi brandApi;
 
     public void add(BrandForm form) throws ApiException {
-        //validate if form is not empty
         validateBrandForm(form);
-        //convert brandForm to brandPojo
+        normalizeBrandForm(form);
         BrandPojo brandPojo = convertBrandFormToPojo(form);
-        //normalize brand and category
         normalizeBrandPojo(brandPojo);
-        //check duplicate of brand name and category
          getCheckBrand(brandPojo.getBrand(),brandPojo.getCategory());
-         //add brand
          brandApi.add(brandPojo);
     }
-    public void delete(Integer id) {
-        brandApi.delete(id);
+
+    public List<List<String>> addList(List<BrandForm> formList) throws ApiException{
+        if(formList.size()>5000){
+            throw new ApiException("Max Upload Limit: 5000");
+        }
+        List<List<String>> errorList = new ArrayList<>();
+        for(BrandForm brandForm : formList) {
+            try {
+                add(brandForm);
+            } catch(ApiException e)
+            {
+                List<String> temp = new ArrayList<>();
+                temp.add(brandForm.getBrand());
+                temp.add(brandForm.getCategory());
+                temp.add(e.getMessage());
+                errorList.add(temp);
+            }
+        }
+        return errorList;
     }
 
     public BrandData get(Integer id) throws ApiException{
@@ -48,17 +61,13 @@ public class BrandDto extends HelperDto {
     }
     public void updateList(Integer id, BrandForm brandform) throws ApiException {
         validateBrandForm(brandform);
+        normalizeBrandForm(brandform);
         BrandPojo brandPojo = convertBrandFormToPojo(brandform);
         getCheckBrand(brandPojo.getBrand(),brandPojo.getCategory());
-//        BrandPojo brandPojo1 = brandApi.getBrandCat(brandPojo.getBrand(),brandPojo.getCategory());
         normalizeBrandPojo(brandPojo);
-//        BrandPojo updated = getCheckFromService(id);
-//        updated.setCategory(brandPojo.getCategory());
-//        updated.setBrand(brandPojo.getBrand());
         brandApi.update(id,brandPojo);
-
     }
-    public BrandPojo getCheckFromService(Integer id) throws ApiException {
+    public BrandPojo getCheckById(Integer id) throws ApiException {
         return brandApi.getCheck(id);
     }
     public BrandPojo getCheckBrand(String brandName, String categoryName) throws ApiException{

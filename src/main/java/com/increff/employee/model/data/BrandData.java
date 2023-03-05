@@ -3,7 +3,7 @@ package com.increff.employee.model.data;
 import com.increff.employee.model.form.BrandForm;
 
 public class BrandData extends BrandForm {
-    private int id;
+    private Integer id;
 
     public int getId() {
         return id;

@@ -16,26 +16,18 @@ public class UserDaoTest extends AbstractUnitTest {
     public void addTest(){
         UserPojo userPojo = createPojo();
         userDao.insert(userPojo);
-        List<UserPojo> userPojoList = userDao.selectAll();
+        List<UserPojo> userPojoList = userDao.getAll();
         assertEquals(1,userPojoList.size());
     }
 
-    @Test
-    public void deleteTest(){
-        UserPojo userPojo = createPojo();
-        userDao.insert(userPojo);
-        List<UserPojo> userPojoList = userDao.selectAll();
-        userDao.delete(userPojoList.get(0).getId());
-        userPojoList = userDao.selectAll();
-        assertEquals(0,userPojoList.size());
-    }
+
 
     @Test
     public void selectTest(){
         UserPojo userPojo = createPojo();
         userDao.insert(userPojo);
-        List<UserPojo> userPojoList = userDao.selectAll();
-        UserPojo userPojo1 = userDao.selectById(userPojoList.get(0).getId());
+        List<UserPojo> userPojoList = userDao.getAll();
+        UserPojo userPojo1 = userDao.getById(userPojoList.get(0).getId());
         assertEquals("operator",userPojo1.getRole());
         assertEquals("email",userPojo1.getEmail());
         assertEquals("password",userPojo1.getPassword());
@@ -51,8 +43,8 @@ public class UserDaoTest extends AbstractUnitTest {
     public void selectTest1(){
         UserPojo userPojo = createPojo();
         userDao.insert(userPojo);
-        List<UserPojo> userPojoList = userDao.selectAll();
-        UserPojo userPojo1 = userDao.select(userPojoList.get(0).getEmail());
+        List<UserPojo> userPojoList = userDao.getAll();
+        UserPojo userPojo1 = userDao.getByEmail(userPojoList.get(0).getEmail());
         assertEquals("operator",userPojo1.getRole());
         assertEquals("email",userPojo1.getEmail());
         assertEquals("password",userPojo1.getPassword());

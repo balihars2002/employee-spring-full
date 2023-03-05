@@ -4,6 +4,11 @@ function getBrandReportUrl(){
 	return baseUrl + "/api/brandReport";
 }
 
+function getBrandUrl(){
+	var baseUrl = $("meta[name=baseUrl]").attr("content")
+	return baseUrl + "/api/operator/brand";
+}
+
 function getBrandList(){
 	var url = getBrandReportUrl();
 	$.ajax({
@@ -43,11 +48,66 @@ function addBrand(event){
 }
 
 
+function processDropDown() {
+    var url = getBrandUrl();
+    var brandData = null;
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (data) {
+            fillDropDown(data);
+        },
+        error: handleAjaxError
+    });
+}
+
+function fillDropDown(data) {
+
+	    let brandArr = [], categoryArr = [];
+	    data.forEach((e) => {
+	        brandArr.push(e.brand);
+	        categoryArr.push(e.category);
+	    });
+	
+	    brandArr = [...new Set(brandArr)];
+	    categoryArr = [...new Set(categoryArr)];
+	
+	    // BRAND
+	    var $brandDropdown = $('#brand-dropdown-menu');
+	    $brandDropdown.empty();
+	    var $editBrandDropdown = $('#edit-brand-dropdown-menu');
+	    $editBrandDropdown.empty();
+	
+	    var firstRowBrand = '<option value="none" selected disabled>Select Brand</option>';
+	    $brandDropdown.append(firstRowBrand);
+	
+	    brandArr.forEach((brand) => {
+	        var row = '<option value="' + brand + '">' + brand + '</option>';
+	        $brandDropdown.append(row);
+	        $editBrandDropdown.append(row);
+	    })
+	
+	    // CATEGORY
+	    var $categoryDropdown = $('#category-dropdown-menu');
+	    $categoryDropdown.empty();
+	    var $editCategoryDropdown = $('#edit-category-dropdown-menu');
+	    $editCategoryDropdown.empty();
+	
+	    var firstRowCategory = '<option value="none" selected disabled hidden>Select Category</option>';
+	    $categoryDropdown.append(firstRowCategory);
+	
+	    categoryArr.forEach((category) => {
+	        var row = '<option value="' + category + '">' + category + '</option>';
+	        $categoryDropdown.append(row);
+	        $editCategoryDropdown.append(row);
+	    })
+		
+	}
 function displayBrandList(data){
 	var $tbody = $('#brandReport-table').find('tbody');
 	$tbody.empty();
 	var sno = 1;
-	for(var i in data){
+	for(i = data.length-1 ; i>=0 ; i--){
 		var e = data[i];
 		var row = '<tr>'
 		+ '<td>' + sno + '</td>'
@@ -77,4 +137,5 @@ function init(){
 
 $(document).ready(init);
 $(document).ready(addBrand);
+$(document).ready(processDropDown);
 

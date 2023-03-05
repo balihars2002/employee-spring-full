@@ -12,7 +12,7 @@
 <div class="container">
 
     
-<h3 style="font-weight: bold;font-family: 'Times New Roman', Times, serif;padding-top: 25px;">Sales Report</h3><hr>
+<h3 style="font-weight: bold;padding-top: 25px;">Sales Report</h3><br>
 <!-- <div class="col-md-12 bg-white text-right">
 	<button type="button" class="btn btn-warning ml-2" id="download-csv">Download Csv</button>
 </div> -->
@@ -20,71 +20,39 @@
  <div class="row">
 	 <div class="col-12">
 		<form class="form-inline" id="sales-report-form">
-			<!-- <div class="form-group">
-				<label for="inputStartDate" class="col-sm-2 col-form-label">Starting Date</label>
-				<div class="col-sm-10">
-				  <input type="date" class="form-control" name="startingDate" id="inputStartDate" placeholder="enter starting date">
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label for="inputEndDate" class="col-sm-2 col-form-label">Ending Date</label>
-				<div class="col-sm-10">
-				  <input type="date" class="form-control" name="endingDate" id="inputEndDate" placeholder="enter ending date">
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label for="inputBrand" class="col-sm-2 col-form-label">Brand</label>
-				<div class="col-sm-10">
-				  <input type="text" class="form-control" name="brand" id="inputBrand" placeholder="enter brand">
-				</div>
-			  </div>
-			  <div class="form-group">
-				<label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
-				<div class="col-sm-10">
-				  <input type="text" class="form-control" name="category" id="inputCategory" placeholder="enter category">
-				</div>
-			  </div>
-	 -->
+			
 			<table>
-				<tr>
+				<tbody><tr>
 					<td>
-						
 						<div class="form-group">
-							<label for="inputStartDate" class="col-sm-2 col-form-label">Starting Date</label>
-							<div class="col-sm-10">
+							<label for="inputStartDate" class=" col-form-label">Start Date</label>
+							<div style="padding-left:8px">
 							  <input type="date" class="form-control" name="startingDate" id="inputStartDate" placeholder="enter starting date">
 							</div>
 						  </div>
 					</td>
 					<td>
-						<div class="form-group">
-							<label for="inputEndDate" class="col-sm-2 col-form-label">Ending Date</label>
-							<div class="col-sm-10">
+						<div class="form-group" style="padding-left:50px">
+							<label for="inputEndDate" class="col-form-label">End Date</label>
+							<div style="padding-left:8px">
 							  <input type="date" class="form-control" name="endingDate" id="inputEndDate" placeholder="enter ending date">
 							</div>
 						  </div>
 					</td>
-				</tr>
-				<tr>
 					<td>
-						<div class="form-group">
+						<div class="form-group" style="margin-top:2px;padding-left:50px">
                                 <label class="form-label" for="brand">Brand</label>
-                                <select name="brand" class="form-control" id="inputProductBrandName"></select>
-                                <option value=""></option>
-                           
+								<div style="margin-top:2px;padding-left:8px">
+									<select name="brand" class="form-control" id="inputProductBrandName"><option selected="" disabled="" value="">Select Brand</option><option value="nike">nike</option><option value="adidas">adidas</option><option value="gucci">gucci</option><option value="asics">asics</option><option value="milton">milton</option><option value="apple">apple</option><option value="underarmour">underarmour</option><option value="hello">hello</option></select>								 
+								</div>
 						  </div>
 					</td>
 					<td>
-						<div class="form-group">
-							<!-- <label for="inputCategory" class="col-sm-2 col-form-label">Category</label>
-							<div class="col-sm-10">
-							  <input type="text" class="form-control" name="category" id="inputCategory" placeholder="enter category">
-							</div> -->
-						
+						<div class="form-group" style=" padding-left: 50px ; margin-top:2px ; ">
                                 <label class="form-label" for="category">Category</label>
-                                <select name="category" class="form-control" id="inputProductBrandCategoryName"></select>
-                              <option value=""></option>
-                           
+								<div style="margin-top:2px;padding-left:8px">
+									<select name="category" class="form-control" id="inputProductBrandCategoryName"><option selected="" disabled="" value=""> Select Category</option></select>
+								</div>
 						  </div>
 					</td>
 				</tr>
@@ -97,13 +65,12 @@
 						</div>
 					</td>
 				</tr>
-			</table>
+			</tbody></table>
 				<!-- <button type="button" class="btn btn-primary" id="get-sales-report">Search</button>
 				<button type="button" class="btn btn-warning ml-2" id="download-csv">Download Csv</button> -->
 		</form>
 	 </div>	
 </div> 
-<hr>
 
 <div class="row">
 	&nbsp;

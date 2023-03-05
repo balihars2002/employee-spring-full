@@ -11,14 +11,10 @@ function getRole(){
 	return role;
 }
 
-//BUTTON ACTIONS
 function addUser(event){
-	//Set the values to update
 	var $form = $("#user-form");
 	var json = toJson($form);
 	var url = getUserUrl();
-	console.log(" json :: ",json);
-	console.log(" url :: ",url);
 	$.ajax({
 	   url: url,
 	   type: 'POST',
@@ -27,19 +23,22 @@ function addUser(event){
        	'Content-Type': 'application/json'
        },	   
 	   success: function(response) {
+		console.log("entered");
 		$("#add-user-modal").modal('toggle');
 		$("#add-user-modal").modal('reset');
 		Toastify({
-			text: "User added Successfully",
+			text: "User added",
 			style: {
 				background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
 			  },
 			duration: 2500
 			}).showToast();
-		   // $('.alert').alert()
 	   		getUserList();    
 	   },
-	   error: handleAjaxError
+	   error: function(response){
+		msgError(response.responseText);
+		handleAjaxError
+	   }
 	});
 	
 	return false;
@@ -53,7 +52,10 @@ function getUserList(){
 	   success: function(data) {
 	   		displayUserList(data);   
 	   },
-	   error: handleAjaxError
+	   error: function(response){
+		msgError(response.responseText);
+		handleAjaxError
+	   }
 	});
 }
 
@@ -77,17 +79,16 @@ function deleteUser(id){
 	});
 }
 
-//UI DISPLAY METHODS
 
 function displayUserList(data){
 	console.log('Printing user data');
 	var $tbody = $('#user-table').find('tbody');
 	$tbody.empty();
 	var sno = 1;
-	for(var i in data){
+	for(i = data.length-1 ; i>=0 ; i--){
 		var e = data[i];
 		var status;
-		var buttonHtml = ' <button class="fa fa-ban" id="edit-button"  data-toggle="tooltip" data-html="true" title="Disable User" style="border-radius :5px;border-color:grey" aria-hidden="true" onclick="disableUser(' + e.id + ')"></button>'
+		var buttonHtml = ' <button class="fa fa-ban" id="edit-button"  data-toggle="tooltip" data-html="true" title="Disable User" style="color:red;border-radius :5px;border-color:grey" aria-hidden="true" onclick="disableUser(' + e.id + ')"></button>'
 		if(e.disabled){
 			buttonHtml = ''
 			status = "Disabled";
@@ -113,6 +114,16 @@ function displayUserList(data){
 	
 }
 
+
+
+function myFunction() {
+	var x = document.getElementById("password");
+	if (x.type === "password") {
+		x.type = "text";
+	} else {
+		x.type = "password";
+	}
+}
 
 function disableUser(id){
 	var url = getUserUrl() + "/" + id;
@@ -141,6 +152,7 @@ function addToggle(event){
 
 //INITIALIZATION CODE
 function init(){
+	$('#show-password').click(myFunction);
 	$('#add-user-button').click(addToggle);
 	$('#add-user').click(addUser);
 	$('#refresh-data').click(getUserList);

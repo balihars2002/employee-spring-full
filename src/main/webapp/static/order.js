@@ -174,14 +174,14 @@ function displayOrderList(data){
 	console.log("into the display order ");
 	var $tbody = $('#order-table').find('tbody');
 	$tbody.empty();
-	for(var i in data){
+	for(i = data.length-1 ; i>=0 ; i--){
 		var e = data[i];
 		var status;
 		var buttonHtml;
 		if(e.invoiceGenerated){
 			status = "Invoiced";
 			buttonHtml = ' <button class="fa fa-file-text" id="invoice" data-toggle="tooltip" data-html="true" title="download invoice" style="border-radius :5px;border-color:grey"  onclick="downloadInvoice(' + e.id + ')"></button>'	
-			// buttonHtml += ' <button class="fa fa-eye" id="edit"  data-toggle="tooltip" data-html="true" title="view order" style="border-radius :5px;border-color:grey"  onclick="displayEditOrder(' + e.id + ')"></button>'
+			buttonHtml += ' <button class="fa fa-eye" id="edit" id="view-order"  data-toggle="tooltip" data-html="true" title="view order" style="border-radius :5px;border-color:grey"  onclick="getOrderItemList(' + e.id + ')"></button>'
 		}
 		else{
 			status = "Ordered";
@@ -308,6 +308,49 @@ function displayOrderItemList(data){
 	}
 }
 
+
+
+function viewOrder(data){
+	var $tbody = $('#view-order-item-table').find('tbody');
+	console.log("into the display function");
+	$tbody.empty();
+	var sno = 1;
+	for(var i in data){
+		var e = data[i];
+		var row = '<tr>'
+		+ '<td>' + sno + '</td>'
+		+ '<td>' + e.barcode + '</td>'
+		+ '<td>'  + e.quantity + '</td>'
+		+ '<td>'  + e.sellingPrice + '</td>'
+		+ '</tr>';
+        $tbody.append(row);
+		sno += 1;
+	}
+}
+
+
+
+function getOrderItemList(id) {
+	console.log("into the function getORderList");
+	$('#view-order-modal').modal('toggle');
+    var url = document.location.href;
+    var params = url.split('/');
+    var order_id = params.at(-1);
+	console.log("getorderurl : ",getOrderUrl());
+	console.log("order_id : ",id);
+    var url = getOrderUrl() + "/" + id;
+	console.log("url is :: ",url);
+    $.ajax({
+        url: url,
+        type: 'GET',
+        success: function (data) {
+            console.log(data);
+            // getPdf(data);
+            viewOrder(data);
+        },
+        error: handleAjaxError
+    });
+}
 // function displayEditOrderItem(barcode){
 
 // }

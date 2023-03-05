@@ -15,6 +15,7 @@ import com.increff.employee.api.ApiException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Api
@@ -27,10 +28,8 @@ public class BrandController {
 
     @ApiOperation(value = "Add a Brand")
     @RequestMapping(path = "/brandTsv", method = RequestMethod.POST)
-    public void addList(@RequestBody List<BrandForm> formList) throws ApiException{
-        for(BrandForm brandForm : formList) {
-            brandDto.add(brandForm);
-        }
+    public List<List<String>> addList(@RequestBody List<BrandForm> formList) throws ApiException{
+       return brandDto.addList(formList);
     }
 
     @ApiOperation(value = "Add a Brand")
@@ -38,14 +37,6 @@ public class BrandController {
     public void add(@RequestBody BrandForm form) throws ApiException{
         brandDto.add(form);
     }
-
-    @ApiOperation(value = "Deletes a Brand")
-    @RequestMapping(path = "/brand/{id}",method = RequestMethod.DELETE)
-
-    public void delete(@PathVariable Integer id) {
-        brandDto.delete(id);
-    }
-
 
     @ApiOperation(value = "Updates a Brand")
     @RequestMapping(path = "/brand/{id}", method = RequestMethod.PUT)

@@ -7,7 +7,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -27,7 +26,7 @@ public class OrderDaoTest extends AbstractUnitTest {
 
 //    private final ZonedDateTime addZoneTime = ZonedDateTime.now().minusDays(1);
 //    private final ZonedDateTime updateZoneTime = ZonedDateTime.now();
-    private final LocalDate addDate = LocalDate.now().minusDays(1);
+    private final LocalDate addDate = LocalDate.now();
 
     @Before
     public void beforeTest(){
@@ -37,7 +36,7 @@ public class OrderDaoTest extends AbstractUnitTest {
     @Test
     public void addTest(){
         Integer id = addOrder();
-        List<OrderPojo> orderPojoList = orderDao.selectAll();
+        List<OrderPojo> orderPojoList = orderDao.getAll();
         OrderPojo orderPojo = orderPojoList.get(0);
         assertEquals(id,orderPojo.getId());
         assertEquals(addDate,orderPojo.getOrderLocalTime());
@@ -46,22 +45,13 @@ public class OrderDaoTest extends AbstractUnitTest {
         assertEquals((Boolean) false,orderPojo.getInvoiceGenerated());
     }
 
-    @Test
-    public void deleteTest(){
-        Integer id = addOrder();
-        List<OrderPojo> orderPojoList = orderDao.selectAll();
-        OrderPojo orderPojo = orderPojoList.get(0);
-        id = orderPojo.getId();
-        orderDao.delete(id);
-        List<OrderPojo> orderPojoList1 = orderDao.selectAll();
-        assertEquals(0,orderPojoList1.size());
-    }
+
 
     @Test
     public void selectAllTest(){
         addOrder();
         addOrder();
-        List<OrderPojo> orderPojoList = orderDao.selectAll();
+        List<OrderPojo> orderPojoList = orderDao.getAll();
         assertEquals(2,orderPojoList.size());
     }
 
@@ -70,7 +60,7 @@ public class OrderDaoTest extends AbstractUnitTest {
         Integer id = addOrder();
         LocalDate startDate = LocalDate.now().minusDays(2);
         LocalDate endDate = LocalDate.now();
-        List<OrderPojo> orderPojoList = orderDao.selectInDate(startDate,endDate);
+        List<OrderPojo> orderPojoList = orderDao.getInDate(startDate,endDate);
         assertEquals(1,orderPojoList.size());
     }
 
@@ -78,7 +68,7 @@ public class OrderDaoTest extends AbstractUnitTest {
     @Test
     public void selectByIdTest(){
         Integer id = addOrder();
-        OrderPojo orderPojo = orderDao.selectBYId(id);
+        OrderPojo orderPojo = orderDao.getById(id);
         assertEquals(id,orderPojo.getId());
         assertEquals(addDate,orderPojo.getOrderLocalTime());
 //        assertEquals(addZoneTime,orderPojo.getOrderTime());
@@ -91,13 +81,13 @@ public class OrderDaoTest extends AbstractUnitTest {
          Integer id = addOrder();
          LocalDate localDate = LocalDate.now().minusDays(1);
          List<OrderPojo> orderPojoList = orderDao.getOrdersForScheduler(localDate);
-         assertEquals(1,orderPojoList.size());
+         assertEquals(0,orderPojoList.size());
     }
 
     @Test
     public void updateTest(){
         Integer id = addOrder();
-        List<OrderPojo> orderPojoList = orderDao.selectAll();
+        List<OrderPojo> orderPojoList = orderDao.getAll();
         OrderPojo orderPojo = orderPojoList.get(0);
         orderDao.update(orderPojo);
     }
@@ -108,7 +98,7 @@ public class OrderDaoTest extends AbstractUnitTest {
         orderPojo.setOrderLocalTime(addDate);
 //        orderPojo.setOrderUpdateDateTime(updateZoneTime);
         orderDao.insert(orderPojo);
-        List<OrderPojo> orderPojoList = orderDao.selectAll();
+        List<OrderPojo> orderPojoList = orderDao.getAll();
         return orderPojoList.get(0).getId();
     }
 

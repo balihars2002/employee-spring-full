@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.increff.employee.flowApi.ProductFlowAPi;
+import com.increff.employee.model.form.BrandForm;
 import com.increff.employee.model.form.ProductForm;
 import com.increff.employee.pojo.BrandPojo;
 import com.increff.employee.pojo.ProductPojo;
@@ -28,8 +29,28 @@ public class ProductDto extends HelperDto {
     @Autowired
     private ProductFlowAPi productFlowAPi;
 
-    private final static Logger logger = Logger.getLogger(SecurityConfig.class);
 
+    public List<List<String>> addList(List<ProductForm> formList) throws ApiException{
+        if(formList.size()>5000){
+            throw new ApiException("Max Upload Limit: 5000");
+        }
+        List<List<String>> errorList = new ArrayList<>();
+        for(ProductForm form : formList) {
+            try {
+                add(form);
+            } catch(ApiException e)
+            {
+                List<String> temp = new ArrayList<>();
+                temp.add(form.getBrand());
+                temp.add(form.getCategory());
+                temp.add(form.getBarcode());
+                temp.add(form.getName());
+                temp.add(e.getMessage());
+                errorList.add(temp);
+            }
+        }
+        return errorList;
+    }
     public void add(ProductForm productForm) throws ApiException {
         validateProductForm(productForm);
         normalizeProductForm(productForm);
@@ -39,19 +60,11 @@ public class ProductDto extends HelperDto {
         productFlowAPi.insert(productPojo);
     }
 
-
-    public void delete(Integer id) throws ApiException {
-        ProductPojo productPojo = productApi.getPojoFromId(id);
-        inventoryApi.delete(productPojo.getId());
-        productApi.deleteById(id);
-    }
-
     public List<ProductData> getAll() throws ApiException {
         List<ProductPojo> list= productApi.getAll();
         List<ProductData> list1 = new ArrayList<ProductData>();
         for(ProductPojo productPojo:list){
             ProductData productData = convertProductPojoToData(productPojo);
-            System.out.println(productPojo.getBrand_category());
             BrandPojo brandPojo= brandApi.getCheck(productPojo.getBrand_category());
             String brandName= brandPojo.getBrand();
             String categoryName= brandPojo.getCategory();
@@ -64,14 +77,13 @@ public class ProductDto extends HelperDto {
     public void update(Integer id, ProductForm productForm) throws ApiException {
         validateProductEditForm(productForm);
         normalizeProductForm(productForm);
-        productApi.getPojoByBarcode(productForm.getBarcode());
+//        productApi.getPojoByBarcode(productForm.getBarcode());
         ProductPojo productPojo1 = productApi.getPojoFromId(id);
-        productPojo1.setBarcode(productForm.getBarcode());
-        productPojo1.setMrp(productForm.getMrp());
-        productPojo1.setName(productForm.getName());
+            productApi.getPojoByBarcode(productForm.getBarcode());
+            productPojo1.setBarcode(productForm.getBarcode());
+            productPojo1.setMrp(productForm.getMrp());
+            productPojo1.setName(productForm.getName());
         productApi.getCheck(productPojo1.getBrand_category(),productPojo1.getName());
-        normalizeProductPojo(productPojo1);
-
         productApi.update(productPojo1);
 
     }
@@ -80,7 +92,7 @@ public class ProductDto extends HelperDto {
        return inventoryApi.getById(id).getQuantity();
     }
     public ProductData getDataFromBarcode(String barcode) throws ApiException {
-          ProductPojo pojo = productApi.getPojoFromBarcode(barcode);
+          ProductPojo pojo = productApi.getByBarcode(barcode);
           return convertProductPojoToData(pojo);
     }
     public ProductData getDataFromId(Integer id) throws ApiException {
@@ -91,7 +103,6 @@ public class ProductDto extends HelperDto {
     private ProductPojo convertFormToPojo(ProductForm form) throws ApiException{
         BrandPojo brandPojo = brandApi.getBrandCat(form.getBrand(),form.getCategory());
         Integer brandCategory_Id = brandPojo.getId();
-        System.out.println(brandCategory_Id);
         ProductPojo productPojo = new ProductPojo();
         productPojo.setMrp(form.getMrp());
         productPojo.setBarcode(form.getBarcode());

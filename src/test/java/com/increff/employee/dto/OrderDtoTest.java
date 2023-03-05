@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +65,7 @@ public class OrderDtoTest extends AbstractUnitTest {
         orderItemFormList.add(orderItemForm1);
         orderItemFormList.add(orderItemForm2);
         orderDto.add(orderItemFormList);
-        List<OrderData> orderDataList = orderDto.viewAlLOrder();
+        List<OrderData> orderDataList = orderDto.getAll();
         assertEquals(1,orderDataList.size());
     }
 
@@ -86,21 +85,7 @@ public class OrderDtoTest extends AbstractUnitTest {
         orderDto.add(orderItemFormList);
     }
 
-    @Test
-    public void deleteTest() throws ApiException {
-        Integer brandId = addBrand("brand","category",false);
-        Integer productId1 = addProduct("barcode1","name1",10.0, brandId);
-        addInventory(productId1,12);
-        OrderItemForm orderItemForm1 = createOrderItemForm("barcode1",3,1.0);
-        List<OrderItemForm> orderItemFormList = new ArrayList<>();
-        orderItemFormList.add(orderItemForm1);
-        orderDto.add(orderItemFormList);
-        List<OrderData> orderDataList = orderDto.viewAlLOrder();
-        Integer id = orderDataList.get(0).getId();
-        orderDto.delete(id);
-        List<OrderData> orderDataList1 = orderDto.viewAlLOrder();
-        assertEquals(0,orderDataList1.size());
-    }
+
 
     @Test
     public void generateInvoiceTest() throws ApiException {
@@ -111,10 +96,10 @@ public class OrderDtoTest extends AbstractUnitTest {
         List<OrderItemForm> orderItemFormList = new ArrayList<>();
         orderItemFormList.add(orderItemForm1);
         orderDto.add(orderItemFormList);
-        List<OrderData> orderDataList = orderDto.viewAlLOrder();
+        List<OrderData> orderDataList = orderDto.getAll();
         Integer id = orderDataList.get(0).getId();
         orderDto.generateInvoice(id);
-        List<OrderData> orderDataList1 = orderDto.viewAlLOrder();
+        List<OrderData> orderDataList1 = orderDto.getAll();
         assertEquals(true,orderDataList1.get(0).getInvoiceGenerated());
     }
 
@@ -127,7 +112,7 @@ public class OrderDtoTest extends AbstractUnitTest {
         List<OrderItemForm> orderItemFormList = new ArrayList<>();
         orderItemFormList.add(orderItemForm1);
         orderDto.add(orderItemFormList);
-        List<OrderData> orderDataList = orderDto.viewAlLOrder();
+        List<OrderData> orderDataList = orderDto.getAll();
         List<OrderItemData> orderItemDataList = orderDto.viewOrderItemsInOrder(orderDataList.get(0).getId());
         assertEquals(1,orderItemDataList.size());
     }
@@ -141,7 +126,7 @@ public class OrderDtoTest extends AbstractUnitTest {
         List<OrderItemForm> orderItemFormList = new ArrayList<>();
         orderItemFormList.add(orderItemForm1);
         orderDto.add(orderItemFormList);
-        List<OrderData> orderDataList = orderDto.viewAlLOrder();
+        List<OrderData> orderDataList = orderDto.getAll();
         List<OrderItemData> orderItemDataList = orderDto.viewOrderItemsInOrder(orderDataList.get(0).getId()+1);
         assertEquals(0,orderItemDataList.size());
     }
@@ -155,7 +140,7 @@ public class OrderDtoTest extends AbstractUnitTest {
         List<OrderItemForm> orderItemFormList = new ArrayList<>();
         orderItemFormList.add(orderItemForm1);
         orderDto.add(orderItemFormList);
-        List<OrderData> orderDataList = orderDto.viewAlLOrder();
+        List<OrderData> orderDataList = orderDto.getAll();
         InvoiceForm invoiceForm = orderDto.generateInvoiceForOrder(orderDataList.get(0).getId());
         assertEquals(invoiceForm.getOrderId(),orderDataList.get(0).getId());
 
@@ -170,7 +155,7 @@ public class OrderDtoTest extends AbstractUnitTest {
         List<OrderItemForm> orderItemFormList = new ArrayList<>();
         orderItemFormList.add(orderItemForm1);
         orderDto.add(orderItemFormList);
-        List<OrderData> orderDataList = orderDto.viewAlLOrder();
+        List<OrderData> orderDataList = orderDto.getAll();
         ResponseEntity<byte[]> response = orderDto.getPDF(orderDataList.get(0).getId());
         assertNotEquals(null,response);
     }
@@ -188,7 +173,7 @@ public class OrderDtoTest extends AbstractUnitTest {
         orderPojo.setOrderLocalTime(addDate);
 //        orderPojo.setOrderUpdateDateTime(updateZoneTime);
         orderDao.insert(orderPojo);
-        List<OrderPojo> orderPojoList = orderDao.selectAll();
+        List<OrderPojo> orderPojoList = orderDao.getAll();
         return orderPojoList.get(0).getId();
     }
     public void addInventory(Integer id, Integer quantity){
@@ -204,7 +189,7 @@ public class OrderDtoTest extends AbstractUnitTest {
         productPojo.setMrp(mrp);
         productPojo.setBrand_category(id);
         productDao.insert(productPojo);
-        List<ProductPojo> productPojoList = productDao.selectAll();
+        List<ProductPojo> productPojoList = productDao.getAll();
         return productPojoList.get(productPojoList.size()-1).getId();
     }
     public Integer addBrand(String brand,String category,Boolean isDisabled){
@@ -213,7 +198,7 @@ public class OrderDtoTest extends AbstractUnitTest {
         brandPojo.setCategory(category);
         brandPojo.setDisabled(isDisabled);
         brandDao.insert(brandPojo);
-        List<BrandPojo> brandPojoList = brandDao.selectAll();
+        List<BrandPojo> brandPojoList = brandDao.getAll();
         return brandPojoList.get(0).getId();
     }
 

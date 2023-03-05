@@ -53,29 +53,20 @@ public class InventoryApiTest extends AbstractUnitTest {
         addInventory(productId,2);
         productId = addProduct("barcode1","name1",20.0, brandId);
         addInventory(productId,3);
-        assertEquals(2,inventoryDao.selectAlls().size());
+        assertEquals(2,inventoryDao.getAll().size());
     }
 
-    @Test
-    public void deleteTest()throws ApiException {
-        Integer brandId = addBrand("brand","category",false);
-        Integer productId = addProduct("barcode","name",10.0, brandId);
-        addInventory(productId,2);
-        List<InventoryPojo> inventoryPojoList = inventoryDao.selectAlls();
-        inventoryApi.delete(inventoryPojoList.get(0).getId());
-        List<InventoryPojo> inventoryPojoList1 = inventoryDao.selectAlls();
-        assertEquals(0,inventoryPojoList1.size());
-    }
+
 
     @Test
     public void updateTest() throws ApiException {
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
-        List<InventoryPojo> inventoryPojoList = inventoryDao.selectAlls();
+        List<InventoryPojo> inventoryPojoList = inventoryDao.getAll();
         InventoryPojo inventoryPojo = inventoryPojoList.get(0);
         inventoryApi.updateInv(inventoryPojo,5);
-        List<InventoryPojo> inventoryPojoList1 = inventoryDao.selectAlls();
+        List<InventoryPojo> inventoryPojoList1 = inventoryDao.getAll();
         assertEquals((Integer) 5,inventoryPojoList1.get(0).getQuantity());
     }
 
@@ -84,7 +75,7 @@ public class InventoryApiTest extends AbstractUnitTest {
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
-        List<InventoryPojo> inventoryPojoList = inventoryDao.selectAlls();
+        List<InventoryPojo> inventoryPojoList = inventoryDao.getAll();
         Integer id = inventoryPojoList.get(0).getId();
         InventoryPojo inventoryPojo = inventoryApi.getById(id);
         assertEquals((Integer) 2,inventoryPojo.getQuantity());
@@ -96,7 +87,7 @@ public class InventoryApiTest extends AbstractUnitTest {
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
-        List<InventoryPojo> inventoryPojoList = inventoryDao.selectAlls();
+        List<InventoryPojo> inventoryPojoList = inventoryDao.getAll();
         Integer id = inventoryPojoList.get(0).getId()+1;
         InventoryPojo inventoryPojo = inventoryApi.getById(id);
     }
@@ -106,10 +97,10 @@ public class InventoryApiTest extends AbstractUnitTest {
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
-        List<InventoryPojo> inventoryPojoList = inventoryDao.selectAlls();
+        List<InventoryPojo> inventoryPojoList = inventoryDao.getAll();
         Integer product_id = inventoryPojoList.get(0).getProductId();
         Integer id = inventoryPojoList.get(0).getId();
-        InventoryPojo inventoryPojo = inventoryApi.getPojoFromProductId(product_id);
+        InventoryPojo inventoryPojo = inventoryApi.getByProductId(product_id);
         assertEquals((Integer) 2,inventoryPojo.getQuantity());
         assertEquals( productId, inventoryPojo.getProductId());
         assertEquals( id,inventoryPojo.getId());
@@ -139,18 +130,7 @@ public class InventoryApiTest extends AbstractUnitTest {
         brandPojo.setCategory(category);
         brandPojo.setDisabled(isDisabled);
         brandDao.insert(brandPojo);
-        List<BrandPojo> brandPojoList = brandDao.selectAll();
+        List<BrandPojo> brandPojoList = brandDao.getAll();
         return brandPojoList.get(0).getId();
     }
-//    public Integer addBrand(String brand,String category,Boolean isDisabled) throws ApiException {
-//        System.out.println(brand + " " + category + " " + isDisabled);
-//        BrandPojo brandPojo = new BrandPojo();
-//        brandPojo.setBrand(brand);
-//        brandPojo.setCategory(category);
-//        brandPojo.setDisabled(isDisabled);
-//        brandApi.add(brandPojo);
-//        List<BrandPojo> brandPojoList = brandApi.getAll();
-//        System.out.println(brandPojoList.size());
-//        return brandPojoList.get(0).getId();
-//    }
 }

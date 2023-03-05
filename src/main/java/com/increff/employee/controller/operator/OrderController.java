@@ -26,17 +26,11 @@ public class OrderController {
         orderDto.add(orderItemFormList);
     }
 
-    @ApiOperation(value = "Deletes a Brand")
-    @RequestMapping(path = "/{id}",method = RequestMethod.DELETE)
-
-    public void delete(@PathVariable Integer id) {
-        orderDto.delete(id);
-    }
 
     @ApiOperation(value = "View All Orders")
     @RequestMapping(path = "", method = RequestMethod.GET)
     public List<OrderData> view() throws ApiException {
-       return  orderDto.viewAlLOrder();
+       return  orderDto.getAll();
     }
     @ApiOperation(value = "View Order with Given ID")
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
@@ -56,16 +50,5 @@ public class OrderController {
         return orderDto.getPDF(id);
 
     }
-//    @ApiOperation(value = "Updates a Product quantity in inventory")
-//    @RequestMapping(path = "/inventory/{id}", method = RequestMethod.PUT)
-//    public void update(@PathVariable Integer id,@RequestBody InventoryForm inventoryForm) throws ApiException {
-//        // ProductPojo p = convert(f);
-//        orderDto.update(id,inventoryForm);
-//    }
-//
-//    @ApiOperation(value = "Updates a Brand")
-//    @RequestMapping(path = "/order/{id}", method = RequestMethod.PUT)
-//    public void update(@RequestBody OrderForm form) throws ApiException {
-//        orderDto.updateList(form);
-//    }
+
 }

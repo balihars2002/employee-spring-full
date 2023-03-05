@@ -2,7 +2,6 @@ package com.increff.employee.dao;
 
 import com.increff.employee.AbstractUnitTest;
 import com.increff.employee.pojo.*;
-import io.swagger.models.auth.In;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,15 +18,10 @@ public class DailySalesDaoTest extends AbstractUnitTest {
     private final LocalDate date = LocalDate.now().minusDays(1);
 
 
-    @Before
-    public void beforeTest(){
-
-    }
-
     @Test
     public void insertTest(){
         addDailySales();
-        List<DailySalesPojo> dailySalesPojosList = dailySalesDao.selectAll();
+        List<DailySalesPojo> dailySalesPojosList = dailySalesDao.getAll();
         assertEquals(date,dailySalesPojosList.get(0).getLocalDate());
         assertEquals((Integer) 3,dailySalesPojosList.get(0).getInvoiced_orders_count());
         assertEquals((Integer) 10,dailySalesPojosList.get(0).getInvoiced_items_count());
@@ -37,7 +31,7 @@ public class DailySalesDaoTest extends AbstractUnitTest {
     @Test
     public void selectAllTest(){
         addDailySales();
-        List<DailySalesPojo> dailySalesPojosList = dailySalesDao.selectAll();
+        List<DailySalesPojo> dailySalesPojosList = dailySalesDao.getAll();
         assertEquals(1,dailySalesPojosList.size());
     }
 

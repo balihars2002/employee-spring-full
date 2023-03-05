@@ -13,7 +13,7 @@
 
 	<div class="container">
 
-		<h3 style="font-weight: bold;font-family: 'Times New Roman', Times, serif;padding-top: 15px;">Order</h3>
+		<h3 style="font-weight: bold;padding-top: 15px;">Order Dashboard</h3>
 		<br>
 		<div class="row">
 			<div class="col-12">
@@ -23,7 +23,7 @@
 			</div>
 		</div>
 
-		<br>
+	
 
 		<!-- Blank Row -->
 		<div class="row">
@@ -56,7 +56,7 @@
 			<div class="modal-dialog d-flex justify-content-center" style="min-width: 50%;">
 				<div class="modal-content" style="padding:2%;padding-left: 2%;">
 					<div class="modal-header">
-						<h3 style="padding-left:35%" class="modal-title" id="exampleModalLabel2">Place Order</h3>
+						<h3 style="padding-left:35%" class="modal-title" id="exampleModalLabel2">Create Order</h3>
 						<!-- <button type="button" id="cancel-order" aria-label="Close">&times;</button> -->
 					</div>
 					<br>
@@ -118,8 +118,49 @@
 					</div>
 
 					<div class="modal-footer">
-						<button type="button" class="btn btn-danger" data-dismiss="modal" id="cancel-order-button">Cancel</button>
-						<button type="button" class="btn btn-success" id="add-order">Place</button>
+						<button type="button" class="btn btn-secondary" data-dismiss="modal"
+							id="cancel-order-button">Cancel</button>
+						<button type="button" class="btn btn-success" id="add-order">Add</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<!-- view modal -->
+
+		<div class="modal" id="view-order-modal" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+			<div class="modal-dialog d-flex justify-content-center" style="min-width: 50%;">
+				<div class="modal-content" style="padding:2%;padding-left: 2%;">
+					<div class="modal-header">
+						<h3 style="padding-left:35%" class="modal-title" id="exampleModalLabel2">Order Items</h3>
+					</div>
+					<br>
+					<div class="modal-body">
+						<br>
+						<div class="row">
+							<div class="col-12">
+								<table class="table table-striped" id="view-order-item-table">
+									<thead>
+										<tr style="background-color: rgb(36, 36, 36);color: white;">
+											<th scope="col">Serial No.</th>
+											<th scope="col">Barcode</th>
+											<th scope="col">Selling Price</th>
+											<th scope="col">Quantity</th>
+										</tr>
+									</thead>
+									<tbody>
+									</tbody>
+								</table>
+
+							</div>
+						</div>
+						<br>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" data-dismiss="modal" class="btn btn-success">Close</button>
 					</div>
 				</div>
 			</div>

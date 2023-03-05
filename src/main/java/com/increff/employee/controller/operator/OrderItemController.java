@@ -24,19 +24,7 @@ public class OrderItemController {
     public void add(@RequestBody OrderItemForm orderItemForm) throws ApiException {
         orderItemDto.add(orderItemForm,0);
     }
-    @ApiOperation(value = "Deletes an order item by Product Id")
-    @RequestMapping(path = "/id/{id}",method = RequestMethod.DELETE)
 
-    public void deleteByProductId(@PathVariable Integer product_id) {
-        orderItemDto.deleteByProductId(product_id);
-    }
-
-    @ApiOperation(value = "Deletes an order item by Order Id")
-    @RequestMapping(path = "/{id}",method = RequestMethod.DELETE)
-
-    public void deleteByOrderId(@PathVariable Integer order_id) {
-        orderItemDto.deleteByOrderId(order_id);
-    }
 
     @ApiOperation(value = "View All Item Orders")
     @RequestMapping(path = "", method = RequestMethod.GET)
@@ -47,12 +35,18 @@ public class OrderItemController {
     @ApiOperation(value = "Update Item Order")
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
     public void update(@PathVariable Integer id,@RequestBody OrderItemForm form) throws ApiException {
-        orderItemDto.updateOrderItem(id,form);
+        orderItemDto.update(id,form);
     }
     @ApiOperation(value = "View Order Item by Id")
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public OrderItemData view(@PathVariable Integer id) throws ApiException {
         return  orderItemDto.getDataById(id);
+    }
+
+    @ApiOperation(value = "View Order Item by Id")
+    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable Integer id) throws ApiException {
+        orderItemDto.deleteById(id);
     }
 
 }

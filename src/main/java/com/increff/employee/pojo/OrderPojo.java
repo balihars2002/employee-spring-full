@@ -39,19 +39,4 @@ public class OrderPojo extends AbstractPojo{
         this.id = id;
     }
 
-//    public ZonedDateTime getOrderTime() {
-//        return orderTime;
-//    }
-//
-//    public void setOrderTime(ZonedDateTime orderTime) {
-//        this.orderTime = orderTime;
-//    }
-//
-//    public ZonedDateTime getOrderUpdateDateTime() {
-//        return orderUpdateDateTime;
-//    }
-//
-//    public void setOrderUpdateDateTime(ZonedDateTime orderUpdateDateTime) {
-//        this.orderUpdateDateTime = orderUpdateDateTime;
-//    }
 }

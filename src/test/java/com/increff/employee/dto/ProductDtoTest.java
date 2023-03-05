@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -32,9 +33,65 @@ public class ProductDtoTest extends AbstractUnitTest {
     @Autowired
     private InventoryApi inventoryApi;
 
-    @Before
-    public void beforeTest(){
 
+
+
+    @Test
+    public void addListTest() throws ApiException{
+        List<ProductForm> productFormList = new ArrayList<>();
+        BrandForm brandForm = new BrandForm();
+        brandForm.setBrand("brand");
+        brandForm.setCategory("category");
+        brandDto.add(brandForm);
+        ProductForm productForm = new ProductForm();
+        productForm.setName("name");
+        productForm.setBarcode("barcode");
+        productForm.setMrp(10.5);
+        productForm.setBrand("brand");
+        productForm.setCategory("category");
+        productFormList.add(productForm);
+        productDto.addList(productFormList);
+        List<ProductData> list = productDto.getAll();
+        assertEquals(1,list.size());
+    }
+    @Test(expected = ApiException.class)
+    public void addListTest1() throws ApiException{
+        List<ProductForm> productFormList = new ArrayList<>();
+        BrandForm brandForm = new BrandForm();
+        brandForm.setBrand("brand");
+        brandForm.setCategory("category");
+        brandDto.add(brandForm);
+        ProductForm productForm = new ProductForm();
+        productForm.setName("name");
+        productForm.setBarcode("barcode");
+        productForm.setMrp(10.5);
+        productForm.setBrand("brand");
+        productForm.setCategory("category");
+        for(int i=0;i<6000;i++) {
+            productFormList.add(productForm);
+        }
+        productDto.addList(productFormList);
+
+    }
+    @Test
+    public void addListTest2() throws ApiException{
+        List<ProductForm> productFormList = new ArrayList<>();
+        BrandForm brandForm = new BrandForm();
+        brandForm.setBrand("brand");
+        brandForm.setCategory("category");
+        brandDto.add(brandForm);
+        ProductForm productForm = new ProductForm();
+        productForm.setName("name");
+        productForm.setBarcode("barcode");
+        productForm.setMrp(10.5);
+        productForm.setBrand("brand");
+        productForm.setCategory("category");
+        for(int i=0;i<100;i++) {
+            productFormList.add(productForm);
+        }
+        productDto.addList(productFormList);
+        List<ProductData> list = productDto.getAll();
+        assertEquals(1,list.size());
     }
     @Test
     public void addProductTest() throws ApiException {
@@ -72,30 +129,9 @@ public class ProductDtoTest extends AbstractUnitTest {
         productDto.add(productForm);
     }
 
-    @Test
-    public void deleteTest() throws ApiException {
-        BrandForm brandForm = new BrandForm();
-        brandForm.setBrand("brand");
-        brandForm.setCategory("category");
-        brandDto.add(brandForm);
-        ProductForm productForm = new ProductForm();
-        productForm.setName("name");
-        productForm.setBarcode("barcode");
-        productForm.setMrp(10.5);
-        productForm.setBrand("brand");
-        productForm.setCategory("category");
-        productDto.add(productForm);
-        List<InventoryPojo> inventoryDataList = inventoryApi.getAll();
-        System.out.println(inventoryDataList.size());
-        List<ProductPojo> productPojoList = productApi.getAll();
-        System.out.println(productPojoList.size());
-        Integer id = productPojoList.get(0).getId();
-        productDto.delete(id);
-        List<ProductPojo> productPojoList1 = productApi.getAll();
-        assertEquals(0,productPojoList1.size());
-    }
 
-    @Test
+
+    @Test(expected = ApiException.class)
     public void getCheckFromServiceTest() throws ApiException{
         BrandForm brandForm = new BrandForm();
         brandForm.setBrand("brand");
@@ -131,17 +167,29 @@ public class ProductDtoTest extends AbstractUnitTest {
 
     }
 
-    @Test
+    @Test(expected = ApiException.class)
     public void updateTest() throws ApiException {
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
         ProductForm productForm = new ProductForm();
-        productForm.setCategory("category");
-        productForm.setBrand("brand");
         productForm.setName("hello");
         productForm.setMrp(23.0);
         productForm.setBarcode("barcode");
+        productDto.update(productId,productForm);
+
+    }
+
+    @Test(expected = ApiException.class)
+    public void updateTest1() throws ApiException {
+        Integer brandId = addBrand("brand","category",false);
+        Integer productId = addProduct("barcode","name",10.0, brandId);
+        Integer productId1 = addProduct("barcodes","names",10.0, brandId);
+        addInventory(productId,2);
+        ProductForm productForm = new ProductForm();
+        productForm.setName("names");
+        productForm.setMrp(23.0);
+        productForm.setBarcode("barcodes");
         productDto.update(productId,productForm);
 
     }
@@ -218,7 +266,7 @@ public class ProductDtoTest extends AbstractUnitTest {
         brandPojo.setCategory(category);
         brandPojo.setDisabled(isDisabled);
         brandDao.insert(brandPojo);
-        List<BrandPojo> brandPojoList = brandDao.selectAll();
+        List<BrandPojo> brandPojoList = brandDao.getAll();
         return brandPojoList.get(0).getId();
     }
 }

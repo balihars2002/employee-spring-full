@@ -21,7 +21,7 @@ import java.util.List;
 public class DailySalesDto {
 
     @Autowired
-    private DailySalesApi schedulerApi;
+    private DailySalesApi dailySalesApi;
     @Autowired
     private OrderApi orderApi;
     @Autowired
@@ -31,14 +31,8 @@ public class DailySalesDto {
 
     @Scheduled(cron = "0 0 0 * * *")
     public void scheduleTask() throws ApiException {
-
         DailySalesPojo schedulerPojo = new DailySalesPojo();
-//        System.out.println("hello ");
-        schedulerPojo.setTotal_revenue((Double) 2.0);
-        //get date to get the query to store in the scheduler pojo
         LocalDate date = LocalDate.now();
-
-        //
         List<OrderPojo> orderPojoList = new ArrayList<>();
         orderPojoList = orderApi.getOrdersForScheduler(date);
         schedulerPojo.setLocalDate(date);
@@ -47,22 +41,21 @@ public class DailySalesDto {
         Integer totalOrderItems = 0;
         for(OrderPojo pojo : orderPojoList){
             List<OrderItemPojo> orderItemPojos = new ArrayList<>();
-            orderItemPojos = orderItemApi.selectSome(pojo.getId());
+            orderItemPojos = orderItemApi.getByOrderId(pojo.getId());
             for(OrderItemPojo orderItemPojo : orderItemPojos){
                 totalOrderItems += orderItemPojo.getQuantity();
-                ProductPojo productPojo = productApi.givePojoById(orderItemPojo.getProductId());
-                revenue += ( orderItemPojo.getQuantity() * productPojo.getMrp() );
+                revenue += ( orderItemPojo.getQuantity() * orderItemPojo.getSellingPrice() );
 
             }
         }
         schedulerPojo.setTotal_revenue(revenue);
         schedulerPojo.setInvoiced_items_count(totalOrderItems);
-        schedulerApi.add(schedulerPojo);
+        dailySalesApi.add(schedulerPojo);
     }
 
     public List<DailySalesData> getAllData() throws ApiException {
         List<DailySalesData> list = new ArrayList<DailySalesData>();
-        List<DailySalesPojo> list1 = schedulerApi.selectAll();
+        List<DailySalesPojo> list1 = dailySalesApi.getAll();
         for(DailySalesPojo pojo:list1){
             list.add(convertPojoToData(pojo));
         }

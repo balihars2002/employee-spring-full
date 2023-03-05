@@ -3,6 +3,7 @@ package com.increff.employee.pojo;
 import javax.persistence.*;
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"orderId","productId"})})
 public class OrderItemPojo extends AbstractPojo{
     @Id
     @TableGenerator(name = "orderItem_id", pkColumnValue = "orderItem_id", table = "table_sequence")

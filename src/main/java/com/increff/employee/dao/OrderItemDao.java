@@ -20,6 +20,7 @@ public class OrderItemDao extends AbstractDao{
     private static final String DELETE_BY_PRODUCT_ID = "delete from OrderItemPojo p where productId=:productId";
 
     private static final String DELETE_BY_ORDER_ID = "delete from OrderItemPojo p where orderId=:orderId";
+    private static final String DELETE_BY_ID = "delete from OrderItemPojo p where id=:id";
 
     private static final String SELECT_SOME = "select p from OrderItemPojo p where orderId=:id";
 
@@ -49,20 +50,28 @@ public class OrderItemDao extends AbstractDao{
     }
 
     @Transactional
-    public List<OrderItemPojo> selectAll(){
+    public void deleteById(Integer id) {
+        Query query = em.createQuery(DELETE_BY_ID);
+        query.setParameter("id", id);
+        query.executeUpdate();
+    }
+
+
+    @Transactional
+    public List<OrderItemPojo> getAll(){
         TypedQuery<OrderItemPojo> query = getQuery(SELECT_ALL,OrderItemPojo.class);
         return query.getResultList();
     }
 
     @Transactional
-    public List<OrderItemPojo> selectSome(Integer id){
+    public List<OrderItemPojo> getByOrderId(Integer id){
         TypedQuery<OrderItemPojo> query = getQuery(SELECT_SOME,OrderItemPojo.class);
         query.setParameter("id",id);
         return query.getResultList();
     }
 
     @Transactional
-    public OrderItemPojo getPojoFromId(Integer id){
+    public OrderItemPojo getById(Integer id){
         TypedQuery<OrderItemPojo> query = getQuery(SELECT_BY_ID,OrderItemPojo.class);
         query.setParameter("id",id);
         return getSingle(query);

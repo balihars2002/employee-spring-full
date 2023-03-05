@@ -13,21 +13,21 @@
 
     <div class="container">
 
-        <h3 style="font-weight: bold;font-family: 'Times New Roman', Times, serif;padding-top: 15px;">Product</h3><br>
+        <h3 style="font-weight: bold;padding-top: 15px;">Product</h3><br>
         <!-- Top row with form-->
-        <div class="row">
+        <div class="row" id="top-row">
             <div class="col-12">
                 <button type="button" class="btn btn-success" id="add-product-button">Add</button>
                 &nbsp;
                 <button type="button" class="btn btn-success" id="upload-data">Upload</button>
             </div>
         </div>
-        <br>
+       
 
 
         <div class="modal" id="add-product-modal" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
             <div class="modal-dialog d-flex justify-content-center">
-                <div class="modal-content w-75">
+                <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel2">Add Product </h5>
                         <button type="button" class="close" data-dismiss="modal" id="cancel-top" aria-label="Close">
@@ -37,41 +37,43 @@
                     <div class="modal-body p-4">
                         <form id="product-add-form">
 
-                            <div class="form-outline mb-4">
+                            <div class="form-outline">
                                 <label class="form-label" for="brand">Brand</label>
                                 <select name="brand" class="form-control" id="inputProductBrandName"></select>
-                            
+
                                 <option value=""></option>
                             </div>
 
-                            <div class="form-outline mb-4">
+                            <div class="form-outline">
                                 <label class="form-label" for="category">Category</label>
-                                <select name="category" class="form-control" id="inputProductBrandCategoryName"></select>
-                              <option value=""></option>
+                                <select name="category" class="form-control"
+                                    id="inputProductBrandCategoryName"></select>
+                                <option value=""></option>
                             </div>
 
-                            <div class="form-outline mb-4">
+                            <div class="form-outline">
                                 <label class="form-label" for="barcode">Barcode</label>
-                                <input type="text" id="barcode"  minlength="1" maxlength="20" class="form-control" name="barcode"
-                                    placeholder="Enter Barcode" />
+                                <input type="text" id="barcode" minlength="1" maxlength="20" class="form-control"
+                                    name="barcode" placeholder="Enter Barcode" />
                             </div>
 
-                            <div class="form-outline mb-4">
+                            <div class="form-outline">
                                 <label class="form-label" for="mrp">Mrp</label>
-                                <input type="number" id="mrp" min="0" max="10000000" class="form-control" name="mrp" placeholder="Enter Mrp" />
+                                <input type="number" id="mrp" min="0" max="10000000" class="form-control" name="mrp"
+                                    placeholder="Enter Mrp" />
                             </div>
 
-                            <div class="form-outline mb-4">
+                            <div class="form-outline">
                                 <label class="form-label" for="name">Name</label>
-                                <input type="name" id="name"  minlength="1" maxlength="20" class="form-control" name="name"
-                                    placeholder="Enter Name" />
+                                <input type="name" id="name" minlength="1" maxlength="20" class="form-control"
+                                    name="name" placeholder="Enter Name" />
                             </div>
 
                             <input type="hidden" name="id">
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" id="cancel-product"
+                        <button type="button" class="btn btn-secondary" id="cancel-product"
                             data-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-success" id="add-product">Add</button>
                     </div>
@@ -123,7 +125,8 @@
 
                             <div class="form-outline mb-4">
                                 <label class="form-label" for="barcode">Barcode</label>
-                                <input type="text" id="barcode" readonly  minlength="1" maxlength="20" class="form-control" name="barcode" />
+                                <input type="text" id="barcode" readonly minlength="1" maxlength="20"
+                                    class="form-control" name="barcode" />
                             </div>
 
                             <div class="form-outline mb-4">
@@ -133,13 +136,14 @@
 
                             <div class="form-outline mb-4">
                                 <label class="form-label" for="name">Name</label>
-                                <input type="name" id="name"  minlength="1" maxlength="20" class="form-control" name="name" />
+                                <input type="name" id="name" minlength="1" maxlength="20" class="form-control"
+                                    name="name" />
                             </div>
                             <input type="hidden" name="id">
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                         <button type="button" class="btn btn-primary" id="update-the-product">Update</button>
                     </div>
                 </div>
@@ -147,36 +151,42 @@
         </div>
         <!-- Upload Modal -->
         <div class="modal" tabindex="-1" role="dialog" id="upload-product-modal">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
+			<div class="modal-dialog" role="document">
+				<div class="modal-content">
 
-                    <div class="modal-header">
-                        <h5 class="modal-title">Upload Product</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+					<div class="modal-header">
+						<h5 class="modal-title">Upload Products</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
 
-                    <div class="modal-body">
-                        <div class="product-file">
-                            <input type="file" class="custom-file-input" id="productFile">
-                            <label class="custom-file-label" for="productFile" id="productFileName">Choose file</label>
-                        </div>
-                        <a th:href="@{/sample/product.tsv}" target="_blank">Download Sample</a>
-                        <br>
-                        Rows: <span id="rowCount">0</span>,
-                        Processed: <span id="processCount">0</span>,
-                        Errors: <span id="errorCount">0</span>
-                    </div>
+					<div class="modal-body">
+						<div class="product-file">
+							<input type="file" class="custom-file-input" id="productFile" accept=".tsv">
+							<label class="custom-file-label" for="productFile" id="productFileName">Choose file</label>
+						</div>
+						<div class="d-inline">
+							<div>
+									Rows: <span id="rowCount">0</span>,
+									Processed: <span id="processCount">0</span>,
+									Errors: <span id="errorCount">0</span>
+							</div>
+							<div>
+									<a class="float-right" th:href="@{/sample/product.tsv}" target="_blank">Download Sample</a>
+							</div>
+						</div>
+						<br>
+					</div>
 
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-success" id="process-data">Upload</button>
-                        <button type="button" class="btn btn-success" id="download-errors">Download Errors</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+					<div class="modal-footer">
+                        <button type="button" style="margin-right:160px" class="btn btn-success float-left" id="download-errors">Download Errors</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+						<button type="button" class="btn btn-success" id="process-data">Upload</button>
+					</div>
+				</div>
+			</div>
+		</div>
 
     </div>
     <!-- Container end-->

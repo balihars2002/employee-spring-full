@@ -24,54 +24,71 @@ public class OrderItemApi {
 
     @Transactional(rollbackFor = ApiException.class)
     public void add(OrderItemPojo orderItemPojo) throws ApiException {
-        System.out.println(orderItemPojo.getProductId() + " initial ");
-        InventoryPojo inventoryPojo = inventoryApi.getPojoFromProductId(orderItemPojo.getProductId());
+        InventoryPojo inventoryPojo = inventoryApi.getByProductId(orderItemPojo.getProductId());
         if(inventoryPojo == null) throw new ApiException("Not sufficient quantity of product available in inventory");
         Integer availableQuantity = inventoryPojo.getQuantity();
-        System.out.println(availableQuantity + "available");
         if(availableQuantity < orderItemPojo.getQuantity()){
             throw new ApiException("Not sufficient quantity of product available in inventory");
         }
         inventoryApi.updateInv(inventoryPojo,(availableQuantity - orderItemPojo.getQuantity()));
         orderItemDao.insert(orderItemPojo);
     }
-
-//    @Transactional
-//    public void deleteByOrderId(Integer order_id) {
-//        orderItemDao.deleteByOrderId(order_id);
-//    }
+    @Transactional
+    public void deleteById(Integer id) {
+        orderItemDao.deleteById(id);
+    }
 
     @Transactional
     public void deleteByProductId(Integer product_id) {
         orderItemDao.deleteByProductId(product_id);
     }
 
+   // Todo refactor this and break into functions
     @Transactional(rollbackFor  = ApiException.class)
-    public void update(Integer id,Integer updQuantity,String barcode) throws ApiException {
-        Integer product_id = productApi.getPojoFromBarcode(barcode).getId();
-        InventoryPojo inventoryPojo = inventoryApi.getPojoFromProductId(product_id);
+    public void update(Integer id,Integer updQuantity,String barcode,Double sellingPrice) throws ApiException {
+        OrderItemPojo orderItemPojo = getById(id);
+        Integer initialQuantity = orderItemPojo.getQuantity();
+        Integer product_id = productApi.getByBarcode(barcode).getId();
+        InventoryPojo inventoryPojo = inventoryApi.getByProductId(product_id);
         Integer availableQuantity = inventoryPojo.getQuantity();
-        if(availableQuantity < updQuantity){
-            throw new ApiException("Not sufficient quantity of product available in inventory");
+        ProductPojo productPojo = productApi.getByBarcode(barcode);
+        if(sellingPrice > productPojo.getMrp()){
+            throw new ApiException("Selling Price cannot be greater than Mrp");
         }
-        inventoryApi.updateInv(inventoryPojo,(availableQuantity - updQuantity));
-        OrderItemPojo orderItemPojo = getPojoFromId(id);
-        ProductPojo productPojo = productApi.getPojoFromBarcode(barcode);
-        orderItemPojo.setQuantity(updQuantity);
+        if(updQuantity <= 0){
+            throw new ApiException("Quantity cannot be zero or negative");
+        }
+        Integer extraQuantity = updQuantity - initialQuantity;
+        if(initialQuantity < updQuantity){
+            if(availableQuantity < extraQuantity){
+                throw new ApiException("Unavailable Quantity");
+            }
+            else{
+                inventoryApi.updateInv(inventoryPojo,(availableQuantity - extraQuantity));
+            }
+        }
+        else{
+            inventoryApi.updateInv(inventoryPojo,(availableQuantity - extraQuantity));
+        }
+        createUpdatedPojo(orderItemPojo,updQuantity,sellingPrice);
         orderItemPojo.setProductId(productPojo.getId());
         orderItemDao.update(orderItemPojo);
     }
 
-    public List<OrderItemPojo> selectAll(){
-        return orderItemDao.selectAll();
+    public void createUpdatedPojo(OrderItemPojo orderItemPojo,Integer updQuantity,Double sellingPrice){
+        orderItemPojo.setSellingPrice(sellingPrice);
+        orderItemPojo.setQuantity(updQuantity);
+    }
+    public List<OrderItemPojo> getAll(){
+        return orderItemDao.getAll();
     }
 
-    public List<OrderItemPojo> selectSome(Integer orderId){
-        return orderItemDao.selectSome(orderId);
+    public List<OrderItemPojo> getByOrderId(Integer orderId){
+        return orderItemDao.getByOrderId(orderId);
     }
 
-    public OrderItemPojo getPojoFromId(Integer id){
-        return orderItemDao.getPojoFromId(id);
+    public OrderItemPojo getById(Integer id){
+        return orderItemDao.getById(id);
     }
 
 

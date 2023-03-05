@@ -23,7 +23,7 @@ public class DailySalesDao extends AbstractDao{
         em.persist(pojo);
     }
 
-    public List<DailySalesPojo> selectAll(){
+    public List<DailySalesPojo> getAll(){
         TypedQuery<DailySalesPojo> query = getQuery(SELECT_ALL, DailySalesPojo.class);
         return query.getResultList();
     }

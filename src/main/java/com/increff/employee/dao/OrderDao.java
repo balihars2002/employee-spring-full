@@ -14,9 +14,8 @@ import java.util.List;
 public class OrderDao extends AbstractDao {
 
     private static final String SELECT_ALL = "select p from OrderPojo p";
-    private static final String DELETE_BY_ID = "delete from OrderPojo p where id=:id";
-    private static final String REPORT_FULL = "select p from OrderPojo p where DATE(orderLocalTime)>=DATE(:startDate) and DATE(orderLocalTime)<=DATE(:endDate)";
-    private static final String PER_DAY_ORDERS = "select p from OrderPojo p where DATE(orderLocalTime)=DATE(:date)";
+    private static final String REPORT_FULL = "select p from OrderPojo p where orderLocalTime >= :startDate and orderLocalTime <= :endDate ";
+    private static final String PER_DAY_ORDERS = "select p from OrderPojo p where orderLocalTime = :date";
     private static final String SELECT_BY_ID = "select p from OrderPojo p where id=:id";
 
 
@@ -28,20 +27,20 @@ public class OrderDao extends AbstractDao {
         em.persist(orderPojo);
     }
 
-    @Transactional(rollbackFor = ApiException.class)
-    public Integer delete(Integer id) {
-        Query query = em.createQuery(DELETE_BY_ID);
-        query.setParameter("id", id);
-        return query.executeUpdate();
-    }
+//    @Transactional(rollbackFor = ApiException.class)
+//    public Integer delete(Integer id) {
+//        Query query = em.createQuery(DELETE_BY_ID);
+//        query.setParameter("id", id);
+//        return query.executeUpdate();
+//    }
     @Transactional
-    public List<OrderPojo> selectAll(){
+    public List<OrderPojo> getAll(){
         TypedQuery<OrderPojo> query = getQuery(SELECT_ALL,OrderPojo.class);
         return query.getResultList();
     }
 
     @Transactional
-    public List<OrderPojo> selectInDate(LocalDate startDate, LocalDate endDate){
+    public List<OrderPojo> getInDate(LocalDate startDate, LocalDate endDate){
         TypedQuery<OrderPojo> query = getQuery(REPORT_FULL,OrderPojo.class);
         query.setParameter("startDate", startDate);
         query.setParameter("endDate", endDate);
@@ -49,7 +48,7 @@ public class OrderDao extends AbstractDao {
     }
 
     @Transactional
-    public OrderPojo selectBYId(Integer id){
+    public OrderPojo getById(Integer id){
         TypedQuery<OrderPojo> query = getQuery(SELECT_BY_ID,OrderPojo.class);
         query.setParameter("id", id);
         return getSingle(query);

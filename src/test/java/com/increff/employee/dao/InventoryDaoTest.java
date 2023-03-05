@@ -32,7 +32,7 @@ public class InventoryDaoTest extends AbstractUnitTest {
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
-        List<InventoryPojo> inventoryPojoList = inventoryDao.selectAlls();
+        List<InventoryPojo> inventoryPojoList = inventoryDao.getAll();
         assertEquals(productId,inventoryPojoList.get(0).getProductId());
         assertEquals((Integer) 2,inventoryPojoList.get(0).getQuantity());
     }
@@ -51,19 +51,9 @@ public class InventoryDaoTest extends AbstractUnitTest {
         addInventory(productId,2);
         productId = addProduct("barcode1","name1",20.0, brandId);
         addInventory(productId,3);
-        assertEquals(2,inventoryDao.selectAlls().size());
+        assertEquals(2,inventoryDao.getAll().size());
     }
 
-    @Test
-    public void deleteTest(){
-        Integer brandId = addBrand("brand","category",false);
-        Integer productId = addProduct("barcode","name",10.0, brandId);
-        addInventory(productId,2);
-        List<InventoryPojo> inventoryPojoList = inventoryDao.selectAlls();
-        inventoryDao.delete(inventoryPojoList.get(0).getId());
-        List<InventoryPojo> inventoryPojoList1 = inventoryDao.selectAlls();
-        assertEquals(0,inventoryPojoList1.size());
-    }
 
 //    @Test(expected = Exception.class)
 //    public void deleteTest1(){
@@ -79,9 +69,9 @@ public class InventoryDaoTest extends AbstractUnitTest {
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
-        List<InventoryPojo> inventoryPojoList = inventoryDao.selectAlls();
+        List<InventoryPojo> inventoryPojoList = inventoryDao.getAll();
         String bar = "barcode";
-        InventoryPojo inventoryPojo = inventoryDao.selectPojoByBarcode(bar);
+        InventoryPojo inventoryPojo = inventoryDao.getByBarcode(bar);
 //        assertEquals(productId,inventoryPojo.getProductId());
 //        assertEquals((Integer) 2,inventoryPojo.getQuantity());
     }
@@ -91,8 +81,8 @@ public class InventoryDaoTest extends AbstractUnitTest {
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
-        List<InventoryPojo> inventoryPojoList = inventoryDao.selectAlls();
-        InventoryPojo inventoryPojo = inventoryDao.selectPojoById(inventoryPojoList.get(0).getId());
+        List<InventoryPojo> inventoryPojoList = inventoryDao.getAll();
+        InventoryPojo inventoryPojo = inventoryDao.getById(inventoryPojoList.get(0).getId());
         assertEquals(productId,inventoryPojo.getProductId());
         assertEquals((Integer) 2,inventoryPojo.getQuantity());
     }
@@ -102,8 +92,8 @@ public class InventoryDaoTest extends AbstractUnitTest {
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
-        List<InventoryPojo> inventoryPojoList = inventoryDao.selectAlls();
-        InventoryPojo inventoryPojo = inventoryDao.selectPojoByProductId(inventoryPojoList.get(0).getProductId());
+        List<InventoryPojo> inventoryPojoList = inventoryDao.getAll();
+        InventoryPojo inventoryPojo = inventoryDao.getByProductId(inventoryPojoList.get(0).getProductId());
         assertEquals(productId,inventoryPojo.getProductId());
         assertEquals((Integer) 2,inventoryPojo.getQuantity());
     }
@@ -113,7 +103,7 @@ public class InventoryDaoTest extends AbstractUnitTest {
         Integer brandId = addBrand("brand","category",false);
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
-        List<InventoryPojo> inventoryPojoList = inventoryDao.selectAlls();
+        List<InventoryPojo> inventoryPojoList = inventoryDao.getAll();
         InventoryPojo inventoryPojo = inventoryPojoList.get(0);
         inventoryDao.update(inventoryPojo);
     }
@@ -133,7 +123,7 @@ public class InventoryDaoTest extends AbstractUnitTest {
         productPojo.setMrp(mrp);
         productPojo.setBrand_category(id);
         productDao.insert(productPojo);
-        List<ProductPojo> productPojoList = productDao.selectAll();
+        List<ProductPojo> productPojoList = productDao.getAll();
         return productPojoList.get(0).getId();
     }
     public Integer addBrand(String brand,String category,Boolean isDisabled){
@@ -142,7 +132,7 @@ public class InventoryDaoTest extends AbstractUnitTest {
         brandPojo.setCategory(category);
         brandPojo.setDisabled(isDisabled);
         brandDao.insert(brandPojo);
-        List<BrandPojo> brandPojoList = brandDao.selectAll();
+        List<BrandPojo> brandPojoList = brandDao.getAll();
         return brandPojoList.get(0).getId();
     }
 }

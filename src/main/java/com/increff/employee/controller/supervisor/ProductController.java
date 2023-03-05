@@ -22,10 +22,8 @@ public class ProductController {
 
     @ApiOperation(value = "Add a Product")
     @RequestMapping(path = "/tsv", method = RequestMethod.POST)
-    public void add(@RequestBody List<ProductForm> formList) throws ApiException{
-        for(ProductForm form : formList) {
-            productDto.add(form);
-        }
+    public List<List<String>> add(@RequestBody List<ProductForm> formList) throws ApiException{
+        return productDto.addList(formList);
     }
     @ApiOperation(value = "Add a Product")
     @RequestMapping(path = "", method = RequestMethod.POST)
@@ -33,11 +31,6 @@ public class ProductController {
         productDto.add(form);
     }
 
-    @ApiOperation(value = "Deletes a Product by ID")
-    @RequestMapping(path = "/{id}",method = RequestMethod.DELETE)
-    public void delete(@PathVariable Integer id) throws ApiException {
-        productDto.delete(id);
-    }
 
     @ApiOperation(value = "Updates a Product")
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)

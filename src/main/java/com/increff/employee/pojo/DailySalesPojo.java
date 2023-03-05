@@ -4,15 +4,13 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"localDate"})})
 public class DailySalesPojo {
     @Id
     @TableGenerator(name = "scheduler_id", pkColumnValue = "scheduler_id", table = "table_sequence")
     @GeneratedValue(strategy = GenerationType.TABLE, generator = "scheduler_id")
     private Integer id;
-    //Todo : add unique constraint for localdate
     private LocalDate localDate;
-    // Todo: remove this
-    private String date;
     private Integer invoiced_orders_count;
     private Integer invoiced_items_count;
     private Double total_revenue;
@@ -31,14 +29,6 @@ public class DailySalesPojo {
 
     public void setLocalDate(LocalDate localDate) {
         this.localDate = localDate;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
     }
 
     public Integer getInvoiced_orders_count() {

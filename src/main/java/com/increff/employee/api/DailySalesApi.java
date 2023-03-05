@@ -19,7 +19,7 @@ public class DailySalesApi {
     }
 
     @Transactional
-    public List<DailySalesPojo> selectAll() {
-        return dailySalesDao.selectAll();
+    public List<DailySalesPojo> getAll() {
+        return dailySalesDao.getAll();
     }
 }
