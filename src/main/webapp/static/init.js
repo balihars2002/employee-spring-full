@@ -15,19 +15,16 @@ function signup(event) {
             'Content-Type': 'application/json'
         },
         success: function (response) {
-            // $(location).prop('href', '/employee/session/login');
-        },
-        error: function (response) {
-           if(JSON.parse(response.responseText).message == "User added successfully"){
+            var data = "User created";
             Toastify({
-                text:JSON.parse(response.responseText).message,
+                text:data ,
                 style: {
                     background: "linear-gradient(to right,  #5cb85c, #5cb85c)",
                 },
                 duration: 2500
             }).showToast();
-           }
-           else{
+        },
+        error: function (response) {
             Toastify({
                 text:JSON.parse(response.responseText).message,
                 style: {
@@ -35,8 +32,6 @@ function signup(event) {
                 },
                 duration: 2500
             }).showToast();
-           }
-            
             handleAjaxError
         }
     });

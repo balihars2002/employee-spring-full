@@ -139,7 +139,7 @@ function uploadFileHelper(data){
 	console.log("data.length :: " ,data.length);
 	uploadlength = data.length;
 	json = JSON.stringify(data); 
-	var url = getProductUrl() + "product/brandTsv";
+	var url = getProductUrl() + "product/tsv";
 	$.ajax({
 	   url: url,
 	   type: 'POST',
@@ -346,6 +346,7 @@ function updateFileName() {
 }
 
 function displayUploadData() {
+    document.getElementById("download-errors").disabled = true;
     resetUploadDialog();
     $('#upload-product-modal').modal('toggle');
 }

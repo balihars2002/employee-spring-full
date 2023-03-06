@@ -2,8 +2,10 @@ package com.increff.employee.dto;
 import com.increff.employee.api.ApiException;
 import com.increff.employee.api.UserApi;
 import com.increff.employee.model.data.UserData;
+import com.increff.employee.model.form.LoginForm;
 import com.increff.employee.model.form.UserForm;
 import com.increff.employee.pojo.UserPojo;
+import com.increff.employee.util.SecurityUtil;
 import com.increff.employee.util.StringUtil;
 import com.increff.employee.util.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +15,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserDto {
@@ -45,11 +51,31 @@ public class UserDto {
             }
 
             userApi.add(p);
-            throw new ApiException("User added successfully");
+            //throw new ApiException("User added successfully");
         }
 
     }
 
+    public void login(HttpServletRequest req,LoginForm f) throws ApiException{
+        UserPojo p = get(f.getEmail());
+        boolean authenticated = (p != null && Objects.equals(p.getPassword(), f.getPassword()));
+        if (!authenticated) {
+            throw new ApiException("Invalid username or password");
+        }
+        if (p.getDisabled()) {
+            throw new ApiException("User is Restricted! Contact Supervisor");
+        } else {
+            // Create authentication object
+            Authentication authentication = convertPojoToAuthentication(p);
+            // Create new session
+            HttpSession session = req.getSession(true);
+            // Attach Spring SecurityContext to this new session
+            SecurityUtil.createContext(session);
+            // Attach Authentication object to the Security Context
+            SecurityUtil.setAuthentication(authentication);
+//			return new ModelAndView("redirect:/ui/order");
+        }
+    }
 
     public List<UserData> getAll(){
         List<UserPojo> list = userApi.getAll();
@@ -83,10 +109,10 @@ public class UserDto {
         p.setPassword(f.getPassword());
         return p;
     }
-    private static void normalize(UserPojo p) {
-        p.setEmail(p.getEmail().toLowerCase().trim());
-        p.setRole(p.getRole().toLowerCase().trim());
-    }
+//    private static void normalize(UserPojo p) {
+//        p.setEmail(p.getEmail().toLowerCase().trim());
+//        p.setRole(p.getRole().toLowerCase().trim());
+//    }
 
     public Authentication convertPojoToAuthentication(UserPojo p) {
         // Create principal
@@ -104,4 +130,7 @@ public class UserDto {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(principal, null, authorities);
         return token;
     }
+
+
+
 }

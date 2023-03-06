@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 @Scope(value="session", proxyMode=ScopedProxyMode.TARGET_CLASS)
 public class InfoData implements Serializable {
 
-	// Todo remove this class if not getting used
 	private static final long serialVersionUID = 1L;
 
 	private String message;

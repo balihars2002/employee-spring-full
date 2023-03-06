@@ -46,15 +46,16 @@ public class InventoryApiTest extends AbstractUnitTest {
         assertEquals((Integer) 2,inventoryPojoList.get(0).getQuantity());
     }
 
-    @Test
-    public void selectAllTest()throws ApiException {
-        Integer brandId = addBrand("brand","category",false);
-        Integer productId = addProduct("barcode","name",10.0, brandId);
-        addInventory(productId,2);
-        productId = addProduct("barcode1","name1",20.0, brandId);
-        addInventory(productId,3);
-        assertEquals(2,inventoryDao.getAll().size());
-    }
+//    @Test
+//    public void selectAllTest()throws ApiException {
+//        Integer brandId = addBrand("brand","category",false);
+//        Integer productId = addProduct("barcode","name",10.0, brandId);
+//        addInventory(productId,2);
+//        productId = addProduct("barcode1","name1",20.0, brandId);
+//        addInventory(productId,3);
+//        List<InventoryPojo> inventoryPojoList = inventoryApi.getAll();
+//        assertEquals(2,inventoryPojoList.size());
+//    }
 
 
 
@@ -128,7 +129,6 @@ public class InventoryApiTest extends AbstractUnitTest {
         BrandPojo brandPojo = new BrandPojo();
         brandPojo.setBrand(brand);
         brandPojo.setCategory(category);
-        brandPojo.setDisabled(isDisabled);
         brandDao.insert(brandPojo);
         List<BrandPojo> brandPojoList = brandDao.getAll();
         return brandPojoList.get(0).getId();

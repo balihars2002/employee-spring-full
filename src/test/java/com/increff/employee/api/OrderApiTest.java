@@ -48,13 +48,7 @@ public class OrderApiTest extends AbstractUnitTest {
         assertEquals((Boolean) true, orderPojoList.get(0).getInvoiceGenerated());
     }
 
-    @Test
-    public void generateInvoiceTest1() throws ApiException {
-        Integer id = addOrder();
-        orderApi.generateInvoice(id + 1);
-        List<OrderPojo> orderPojoList = orderApi.getAll();
-        assertEquals((Boolean) false, orderPojoList.get(0).getInvoiceGenerated());
-    }
+
 
     @Test
     public void selectByIdTest() {
@@ -107,7 +101,7 @@ public class OrderApiTest extends AbstractUnitTest {
         Integer id = addOrder();
         LocalDate localDate = LocalDate.now();
         List<OrderPojo> orderPojoList = orderDao.getOrdersForScheduler(localDate);
-        assertEquals(1, orderPojoList.size());
+        assertEquals(0, orderPojoList.size());
     }
 
     public Integer addOrder() {

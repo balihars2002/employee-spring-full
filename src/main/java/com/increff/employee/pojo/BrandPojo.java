@@ -12,7 +12,7 @@ public class BrandPojo extends AbstractPojo{
     private Integer id;
     private String brand;
     private String category;
-    private Boolean isDisabled = false;
+//    private Boolean isDisabled = false;
 
     public int getId() {
         return id;
@@ -38,12 +38,12 @@ public class BrandPojo extends AbstractPojo{
         this.category = category;
     }
 
-    public Boolean getDisabled() {
-        return isDisabled;
-    }
-
-    public void setDisabled(Boolean disabled) {
-        isDisabled = disabled;
-    }
+//    public Boolean getDisabled() {
+//        return isDisabled;
+//    }
+//
+//    public void setDisabled(Boolean disabled) {
+//        isDisabled = disabled;
+//    }
 }
 

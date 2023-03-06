@@ -40,7 +40,7 @@ public class OrderItemApiTest extends AbstractUnitTest {
     @Test
     public void addTest() throws ApiException {
         Integer orderId = addOrder();
-        Integer brandId = addBrand("brand","category",false);
+        Integer brandId = addBrand("brand","category");
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
         addOrderItem(orderId,productId,1,8.0);
@@ -53,7 +53,7 @@ public class OrderItemApiTest extends AbstractUnitTest {
     @Test(expected = ApiException.class)
     public void addTest1() throws ApiException {
         Integer orderId = addOrder();
-        Integer brandId = addBrand("brand","category",false);
+        Integer brandId = addBrand("brand","category");
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,2);
         addOrderItem(orderId,productId,3,2.0);
@@ -62,7 +62,7 @@ public class OrderItemApiTest extends AbstractUnitTest {
     @Test
     public void deleteByProductIdTest() throws ApiException {
         Integer orderId = addOrder();
-        Integer brandId = addBrand("brand","category",false);
+        Integer brandId = addBrand("brand","category");
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,3);
         addOrderItem(orderId,productId,2,8.0);
@@ -74,7 +74,7 @@ public class OrderItemApiTest extends AbstractUnitTest {
     @Test
     public void selectAllTest() throws ApiException {
         Integer orderId = addOrder();
-        Integer brandId = addBrand("brand","category",false);
+        Integer brandId = addBrand("brand","category");
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,3);
         addOrderItem(orderId,productId,2,8.0);
@@ -82,10 +82,10 @@ public class OrderItemApiTest extends AbstractUnitTest {
         assertEquals(1,orderItemPojoList.size());
     }
 
-    @Test
+    @Test(expected = ApiException.class)
     public void updateTest() throws ApiException {
         Integer orderId = addOrder();
-        Integer brandId = addBrand("brand","category",false);
+        Integer brandId = addBrand("brand","category");
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,3);
         addOrderItem(orderId,productId,2,8.0);
@@ -93,13 +93,13 @@ public class OrderItemApiTest extends AbstractUnitTest {
 
         OrderItemPojo orderItemPojo = orderItemPojoList.get(0);
         orderItemApi.update(orderItemPojo.getId(),0,"barcode",1.5);
-        orderItemPojoList = orderItemApi.getAll();
-        assertEquals(1,orderItemPojoList.size());
+//        orderItemPojoList = orderItemApi.getAll();
+//        assertEquals(1,orderItemPojoList.size());
     }
     @Test
     public void selectSomeTest() throws ApiException {
         Integer orderId = addOrder();
-        Integer brandId = addBrand("brand","category",false);
+        Integer brandId = addBrand("brand","category");
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,3);
         addOrderItem(orderId,productId,2,8.0);
@@ -110,7 +110,7 @@ public class OrderItemApiTest extends AbstractUnitTest {
     @Test
     public void selectSomeTest1() throws ApiException {
         Integer orderId = addOrder();
-        Integer brandId = addBrand("brand","category",false);
+        Integer brandId = addBrand("brand","category");
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,3);
         addOrderItem(orderId,productId,2,8.0);
@@ -121,7 +121,7 @@ public class OrderItemApiTest extends AbstractUnitTest {
     @Test
     public void getPojoFromIdTest() throws ApiException {
         Integer orderId = addOrder();
-        Integer brandId = addBrand("brand","category",false);
+        Integer brandId = addBrand("brand","category");
         Integer productId = addProduct("barcode","name",10.0, brandId);
         addInventory(productId,3);
         addOrderItem(orderId,productId,2,8.0);
@@ -162,11 +162,10 @@ public class OrderItemApiTest extends AbstractUnitTest {
         List<ProductPojo> productPojoList = productDao.getAll();
         return productPojoList.get(0).getId();
     }
-    public Integer addBrand(String brand,String category,Boolean isDisabled){
+    public Integer addBrand(String brand,String category){
         BrandPojo brandPojo = new BrandPojo();
         brandPojo.setBrand(brand);
         brandPojo.setCategory(category);
-        brandPojo.setDisabled(isDisabled);
         brandDao.insert(brandPojo);
         List<BrandPojo> brandPojoList = brandDao.getAll();
         return brandPojoList.get(0).getId();

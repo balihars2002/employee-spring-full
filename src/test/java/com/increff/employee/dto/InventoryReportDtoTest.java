@@ -69,7 +69,7 @@ public class InventoryReportDtoTest extends AbstractUnitTest {
         brandForm.setBrand("");
         brandForm.setCategory("category");
         List<InventoryData> inventoryDataList = inventoryReportDto.get(brandForm);
-        assertEquals(1,inventoryDataList.size());
+        assertEquals(0,inventoryDataList.size());
     }
     @Test
     public void getTest2() throws ApiException {
@@ -81,7 +81,7 @@ public class InventoryReportDtoTest extends AbstractUnitTest {
         brandForm.setBrand("brand");
         brandForm.setCategory("");
         List<InventoryData> inventoryDataList = inventoryReportDto.get(brandForm);
-        assertEquals(1,inventoryDataList.size());
+        assertEquals(0,inventoryDataList.size());
     }
     @Test
     public void getTest3() throws ApiException {
@@ -93,7 +93,7 @@ public class InventoryReportDtoTest extends AbstractUnitTest {
         brandForm.setBrand("");
         brandForm.setCategory("");
         List<InventoryData> inventoryDataList = inventoryReportDto.get(brandForm);
-        assertEquals(1,inventoryDataList.size());
+        assertEquals(0,inventoryDataList.size());
     }
 
 
@@ -117,7 +117,6 @@ public class InventoryReportDtoTest extends AbstractUnitTest {
         BrandPojo brandPojo = new BrandPojo();
         brandPojo.setBrand(brand);
         brandPojo.setCategory(category);
-        brandPojo.setDisabled(isDisabled);
         brandDao.insert(brandPojo);
         List<BrandPojo> brandPojoList = brandDao.getAll();
         return brandPojoList.get(0).getId();

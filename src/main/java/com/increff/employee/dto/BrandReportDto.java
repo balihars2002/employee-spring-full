@@ -27,7 +27,6 @@ public class BrandReportDto {
 
     public List<BrandData> get(BrandForm form) {
         brandDataList.clear();
-        form.setDisabled(false);
         List<BrandPojo> brandPojoList = brandApi.getBrandReport(form.getBrand());
         for(BrandPojo brandPojo : brandPojoList){
             brandDataList.add(convertBrandPojoToData(brandPojo));

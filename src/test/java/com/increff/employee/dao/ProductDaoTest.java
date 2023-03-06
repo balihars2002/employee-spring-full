@@ -19,109 +19,100 @@ public class ProductDaoTest extends AbstractUnitTest {
     @Autowired
     private BrandDao brandDao;
 
-//    @Before
-//    public void beforeTest(){
-//        Integer id = addBrand("brand","category",false);
-//        addProduct("barcode","",(Double)10.0,(Integer) id);
-//    }
-//
-
     @Test
-    public void insertTest(){
-        Integer id = addBrand("brand","category",false);
-        addProduct("barcode","name",(Double)10.0,(Integer) id);
+    public void insertTest() {
+        Integer id = addBrand("brand", "category", false);
+        addProduct("barcode", "name", (Double) 10.0, (Integer) id);
         List<ProductPojo> productPojoList = productDao.getAll();
-        assertEquals("barcode",productPojoList.get(0).getBarcode());
-        assertEquals("name",productPojoList.get(0).getName());
-        assertEquals((Double)10.0,productPojoList.get(0).getMrp());
-        assertEquals((Integer) id,productPojoList.get(0).getBrand_category());
+        assertEquals("barcode", productPojoList.get(0).getBarcode());
+        assertEquals("name", productPojoList.get(0).getName());
+        assertEquals((Double) 10.0, productPojoList.get(0).getMrp());
+        assertEquals((Integer) id, productPojoList.get(0).getBrand_category());
     }
 
     @Test
-    public void insertTest1(){
-        Integer id = addBrand("brand","category",false);
-        addProduct("","name",(Double)10.0,(Integer) id);
+    public void insertTest1() {
+        Integer id = addBrand("brand", "category", false);
+        addProduct("", "name", (Double) 10.0, (Integer) id);
         List<ProductPojo> productPojoList = productDao.getAll();
-        assertEquals("",productPojoList.get(0).getBarcode());
-        assertEquals("name",productPojoList.get(0).getName());
-        assertEquals((Double)10.0,productPojoList.get(0).getMrp());
-        assertEquals((Integer) id,productPojoList.get(0).getBrand_category());
+        assertEquals("", productPojoList.get(0).getBarcode());
+        assertEquals("name", productPojoList.get(0).getName());
+        assertEquals((Double) 10.0, productPojoList.get(0).getMrp());
+        assertEquals((Integer) id, productPojoList.get(0).getBrand_category());
     }
 
     @Test
-    public void insertTest2(){
-        Integer id = addBrand("brand","category",false);
-        addProduct("barcode","",(Double)10.0,(Integer) id);
+    public void insertTest2() {
+        Integer id = addBrand("brand", "category", false);
+        addProduct("barcode", "", (Double) 10.0, (Integer) id);
         List<ProductPojo> productPojoList = productDao.getAll();
-        assertEquals("barcode",productPojoList.get(0).getBarcode());
-        assertEquals("",productPojoList.get(0).getName());
-        assertEquals((Double)10.0,productPojoList.get(0).getMrp());
-        assertEquals((Integer) id,productPojoList.get(0).getBrand_category());
+        assertEquals("barcode", productPojoList.get(0).getBarcode());
+        assertEquals("", productPojoList.get(0).getName());
+        assertEquals((Double) 10.0, productPojoList.get(0).getMrp());
+        assertEquals((Integer) id, productPojoList.get(0).getBrand_category());
     }
 
 
-
-
     @Test
-    public void selectPojoByIdTest(){
-        Integer id = addBrand("brand","category",false);
-        addProduct("barcode","name",(Double)10.0,(Integer) id);
+    public void selectPojoByIdTest() {
+        Integer id = addBrand("brand", "category", false);
+        addProduct("barcode", "name", (Double) 10.0, (Integer) id);
         List<ProductPojo> productPojoList = productDao.getAll();
         ProductPojo productPojo = productPojoList.get(0);
         ProductPojo productPojo1 = productDao.getById(productPojo.getId());
-        assertEquals("name",productPojo1.getName());
-        assertEquals("barcode",productPojo1.getBarcode());
-        assertEquals("brand",brandDao.getById(productPojo1.getBrand_category()).getBrand());
-        assertEquals("category",brandDao.getById(productPojo1.getBrand_category()).getCategory());
-        assertEquals((Double) 10.0,productPojo1.getMrp());
+        assertEquals("name", productPojo1.getName());
+        assertEquals("barcode", productPojo1.getBarcode());
+        assertEquals("brand", brandDao.getById(productPojo1.getBrand_category()).getBrand());
+        assertEquals("category", brandDao.getById(productPojo1.getBrand_category()).getCategory());
+        assertEquals((Double) 10.0, productPojo1.getMrp());
     }
 
     @Test
-    public void selectPojoByIdTest1(){
-        Integer id = addBrand("brand","category",false);
-        addProduct("barcode","name",(Double)10.0,(Integer) id);
+    public void selectPojoByIdTest1() {
+        Integer id = addBrand("brand", "category", false);
+        addProduct("barcode", "name", (Double) 10.0, (Integer) id);
         List<ProductPojo> productPojoList = productDao.getAll();
         ProductPojo productPojo = productPojoList.get(0);
         ProductPojo productPojo1 = productDao.getById(productPojo.getId());
-        assertEquals("name",productPojo1.getName());
-        assertEquals("barcode",productPojo1.getBarcode());
-        assertEquals("brand",brandDao.getById(productPojo1.getBrand_category()).getBrand());
-        assertEquals("category",brandDao.getById(productPojo1.getBrand_category()).getCategory());
-        assertEquals((Double) 10.0,productPojo1.getMrp());
+        assertEquals("name", productPojo1.getName());
+        assertEquals("barcode", productPojo1.getBarcode());
+        assertEquals("brand", brandDao.getById(productPojo1.getBrand_category()).getBrand());
+        assertEquals("category", brandDao.getById(productPojo1.getBrand_category()).getCategory());
+        assertEquals((Double) 10.0, productPojo1.getMrp());
     }
 
     @Test
-    public void selectPojoByBarcodeTest(){
-        Integer id = addBrand("brand","category",false);
-        addProduct("barcode","name",(Double)10.0,(Integer) id);
+    public void selectPojoByBarcodeTest() {
+        Integer id = addBrand("brand", "category", false);
+        addProduct("barcode", "name", (Double) 10.0, (Integer) id);
         List<ProductPojo> productPojoList = productDao.getAll();
         ProductPojo productPojo = productPojoList.get(0);
         ProductPojo productPojo1 = productDao.getByBarcode(productPojo.getBarcode());
-        assertEquals("name",productPojo1.getName());
-        assertEquals("barcode",productPojo1.getBarcode());
-        assertEquals("brand",brandDao.getById(productPojo1.getBrand_category()).getBrand());
-        assertEquals("category",brandDao.getById(productPojo1.getBrand_category()).getCategory());
-        assertEquals((Double) 10.0,productPojo1.getMrp());
+        assertEquals("name", productPojo1.getName());
+        assertEquals("barcode", productPojo1.getBarcode());
+        assertEquals("brand", brandDao.getById(productPojo1.getBrand_category()).getBrand());
+        assertEquals("category", brandDao.getById(productPojo1.getBrand_category()).getCategory());
+        assertEquals((Double) 10.0, productPojo1.getMrp());
     }
 
     @Test
-    public  void selectAllTest(){
-        Integer id = addBrand("brand","category",false);
-        addProduct("barcode","name",(Double)10.0,(Integer) id);
-        id = addBrand("brand1","category1",false);
-        addProduct("barcode1","name1",(Double)20.0,(Integer) id);
+    public void selectAllTest() {
+        Integer id = addBrand("brand", "category", false);
+        addProduct("barcode", "name", (Double) 10.0, (Integer) id);
+        id = addBrand("brand1", "category1", false);
+        addProduct("barcode1", "name1", (Double) 20.0, (Integer) id);
         List<ProductPojo> productPojoList = productDao.getAll();
-        assertEquals(2,productPojoList.size());
+        assertEquals(2, productPojoList.size());
     }
 
     @Test
-    public  void selectAllTest1(){
-        Integer id = addBrand("brand","category",false);
-        addProduct("barcode","name",(Double)10.0,(Integer) id);
+    public void selectAllTest1() {
+        Integer id = addBrand("brand", "category", false);
+        addProduct("barcode", "name", (Double) 10.0, (Integer) id);
         //id = addBrand("brand","category",false);
-        addProduct("barcode1","name1",(Double)20.0,(Integer) id);
+        addProduct("barcode1", "name1", (Double) 20.0, (Integer) id);
         List<ProductPojo> productPojoList = productDao.getAll();
-        assertEquals(2,productPojoList.size());
+        assertEquals(2, productPojoList.size());
     }
 
 //    @Test
@@ -137,38 +128,38 @@ public class ProductDaoTest extends AbstractUnitTest {
 
     @Test
     public void updateTest() {
-        Integer id = addBrand("brand","category",false);
-        addProduct("barcode","name",(Double)10.0,(Integer) id);
+        Integer id = addBrand("brand", "category", false);
+        addProduct("barcode", "name", (Double) 10.0, (Integer) id);
         List<ProductPojo> productPojoList = productDao.getAll();
         ProductPojo productPojo = productPojoList.get(0);
         productPojo.setBarcode("updatedBarcode");
         productDao.update(productPojo);
         productPojoList = productDao.getAll();
-        assertEquals("updatedBarcode",productPojoList.get(0).getBarcode());
+        assertEquals("updatedBarcode", productPojoList.get(0).getBarcode());
     }
 
     @Test
     public void updateTest1() {
-        Integer id = addBrand("brand","category",false);
-        addProduct("barcode","name",(Double)10.0,(Integer) id);
+        Integer id = addBrand("brand", "category", false);
+        addProduct("barcode", "name", (Double) 10.0, (Integer) id);
         List<ProductPojo> productPojoList = productDao.getAll();
         ProductPojo productPojo = productPojoList.get(0);
         productPojo.setName("updatedName");
         productDao.update(productPojo);
         productPojoList = productDao.getAll();
-        assertEquals("updatedName",productPojoList.get(0).getName());
+        assertEquals("updatedName", productPojoList.get(0).getName());
     }
 
     @Test
-    public void getCheckTest(){
-        Integer id = addBrand("brand","category",false);
-        addProduct("barcode","name",(Double)10.0,(Integer) id);
-        ProductPojo productPojo = productDao.getCheck(id,"name");
+    public void getCheckTest() {
+        Integer id = addBrand("brand", "category", false);
+        addProduct("barcode", "name", (Double) 10.0, (Integer) id);
+        ProductPojo productPojo = productDao.getCheck(id, "name");
         boolean flag = productPojo != null;
         assertTrue(flag);
     }
 
-    public void addProduct(String barcode,String name,Double mrp,Integer id){
+    public void addProduct(String barcode, String name, Double mrp, Integer id) {
         ProductPojo productPojo = new ProductPojo();
         productPojo.setName(name);
         productPojo.setBarcode(barcode);
@@ -176,11 +167,11 @@ public class ProductDaoTest extends AbstractUnitTest {
         productPojo.setBrand_category(id);
         productDao.insert(productPojo);
     }
-    public Integer addBrand(String brand,String category,Boolean isDisabled){
+
+    public Integer addBrand(String brand, String category, Boolean isDisabled) {
         BrandPojo brandPojo = new BrandPojo();
         brandPojo.setBrand(brand);
         brandPojo.setCategory(category);
-        brandPojo.setDisabled(isDisabled);
         brandDao.insert(brandPojo);
         List<BrandPojo> brandPojoList = brandDao.getAll();
         return brandPojoList.get(0).getId();

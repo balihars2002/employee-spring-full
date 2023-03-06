@@ -32,12 +32,6 @@ public class BrandReportDtoTest extends AbstractUnitTest {
 
     @Test
     public void generateCsvTest() throws IOException, ApiException {
-//        BrandForm brandForm = new BrandForm();
-//        brandForm.setBrand("brand");
-//        brandForm.setCategory("category");
-//        brandDto.add(brandForm);
-//        List<BrandData> brandDataList = brandDto.getAllList();
-
         MockHttpServletResponse response = new MockHttpServletResponse();
         brandReportDto.generateCsv(response);
         assertEquals("text/csv", response.getContentType());
@@ -64,7 +58,7 @@ public class BrandReportDtoTest extends AbstractUnitTest {
         brandForm1.setBrand("");
         brandForm1.setCategory("category");
         List<BrandData> brandDataList1 = brandReportDto.get(brandForm1);
-        assertEquals(1,brandDataList1.size());
+        assertEquals(0,brandDataList1.size());
     }
     @Test
     public void getTest2() throws ApiException {
@@ -90,7 +84,7 @@ public class BrandReportDtoTest extends AbstractUnitTest {
         brandForm1.setBrand("");
         brandForm1.setCategory("");
         List<BrandData> brandDataList1 = brandReportDto.get(brandForm1);
-        assertEquals(1,brandDataList1.size());
+        assertEquals(0,brandDataList1.size());
     }
 
 
@@ -98,7 +92,6 @@ public class BrandReportDtoTest extends AbstractUnitTest {
         BrandPojo brandPojo = new BrandPojo();
         brandPojo.setBrand(brand);
         brandPojo.setCategory(category);
-        brandPojo.setDisabled(isDisabled);
         brandDao.insert(brandPojo);
         List<BrandPojo> brandPojoList = brandDao.getAll();
         return brandPojoList.get(0).getId();

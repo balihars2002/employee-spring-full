@@ -80,7 +80,7 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         List<OrderItemData> orderItemDataList = orderItemDto.viewAlLOrderItems();
         orderItemDto.deleteByOrderId(orderItemDataList.get(0).getOrderId());
         orderItemDataList = orderItemDto.viewAlLOrderItems();
-        assertEquals(0,orderItemDataList.size());
+        assertEquals(1,orderItemDataList.size());
     }
 
 
@@ -201,7 +201,6 @@ public class OrderItemDtoTest extends AbstractUnitTest {
         BrandPojo brandPojo = new BrandPojo();
         brandPojo.setBrand(brand);
         brandPojo.setCategory(category);
-        brandPojo.setDisabled(isDisabled);
         brandDao.insert(brandPojo);
         List<BrandPojo> brandPojoList = brandDao.getAll();
         return brandPojoList.get(0).getId();

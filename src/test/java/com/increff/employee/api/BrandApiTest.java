@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class BrandApiTest extends AbstractUnitTest {
     @Autowired
@@ -18,24 +18,21 @@ public class BrandApiTest extends AbstractUnitTest {
         BrandPojo brandPojo = new BrandPojo();
         brandPojo.setBrand("brand");
         brandPojo.setCategory("category");
-        brandPojo.setDisabled(false);
         brandApi.add(brandPojo);
         List<BrandPojo> brandPojoList = brandApi.getAll();
-        assertEquals("brand",brandPojoList.get(0).getBrand());
-        assertEquals("category",brandPojoList.get(0).getCategory());
-        assertEquals((Boolean)false,brandPojoList.get(0).getDisabled());
+        assertEquals("brand", brandPojoList.get(0).getBrand());
+        assertEquals("category", brandPojoList.get(0).getCategory());
     }
+
     @Test
     public void addTest1() throws ApiException {
         BrandPojo brandPojo = new BrandPojo();
         brandPojo.setBrand("Brand");
         brandPojo.setCategory("Category");
-        brandPojo.setDisabled(false);
         brandApi.add(brandPojo);
         List<BrandPojo> brandPojoList = brandApi.getAll();
-        assertEquals("Brand",brandPojoList.get(0).getBrand());
-        assertEquals("Category",brandPojoList.get(0).getCategory());
-        assertEquals((Boolean)false,brandPojoList.get(0).getDisabled());
+        assertEquals("Brand", brandPojoList.get(0).getBrand());
+        assertEquals("Category", brandPojoList.get(0).getCategory());
     }
 
 
@@ -44,14 +41,12 @@ public class BrandApiTest extends AbstractUnitTest {
         BrandPojo brandPojo = new BrandPojo();
         brandPojo.setBrand("brand");
         brandPojo.setCategory("category");
-        brandPojo.setDisabled(false);
         brandApi.add(brandPojo);
         List<BrandPojo> brandPojoList = brandApi.getAll();
         Integer id = brandPojoList.get(0).getId();
         BrandPojo brandPojo1 = brandApi.getCheck(id);
-        assertEquals("brand",brandPojoList.get(0).getBrand());
-        assertEquals("category",brandPojoList.get(0).getCategory());
-        assertEquals((Boolean) false ,brandPojoList.get(0).getDisabled());
+        assertEquals("brand", brandPojoList.get(0).getBrand());
+        assertEquals("category", brandPojoList.get(0).getCategory());
     }
 
     @Test(expected = ApiException.class)
@@ -59,7 +54,6 @@ public class BrandApiTest extends AbstractUnitTest {
         BrandPojo brandPojo = new BrandPojo();
         brandPojo.setBrand("brand");
         brandPojo.setCategory("category");
-        brandPojo.setDisabled(false);
         brandApi.add(brandPojo);
         List<BrandPojo> brandPojoList = brandApi.getAll();
         Integer id = brandPojoList.get(0).getId() + 1;
@@ -71,15 +65,13 @@ public class BrandApiTest extends AbstractUnitTest {
         BrandPojo brandPojo = new BrandPojo();
         brandPojo.setCategory("category1");
         brandPojo.setBrand("brand1");
-        brandPojo.setDisabled(false);
         BrandPojo brandPojo1 = new BrandPojo();
         brandPojo1.setCategory("category2");
         brandPojo1.setBrand("brand2");
-        brandPojo1.setDisabled(true);
         brandApi.add(brandPojo);
         brandApi.add(brandPojo1);
         List<BrandPojo> brandPojoList = brandApi.getAll();
-        assertEquals(2,brandPojoList.size());
+        assertEquals(2, brandPojoList.size());
     }
 
     @Test(expected = Exception.class)
@@ -87,38 +79,34 @@ public class BrandApiTest extends AbstractUnitTest {
         BrandPojo brandPojo = new BrandPojo();
         brandPojo.setCategory("category1");
         brandPojo.setBrand("brand1");
-        brandPojo.setDisabled(false);
         BrandPojo brandPojo1 = new BrandPojo();
         brandPojo1.setCategory("category1");
         brandPojo1.setBrand("brand1");
-        brandPojo1.setDisabled(false);
         brandApi.add(brandPojo);
         brandApi.add(brandPojo1);
         List<BrandPojo> brandPojoList = brandApi.getAll();
-        assertEquals(1,brandPojoList.size());
+        assertEquals(1, brandPojoList.size());
     }
 
     @Test
-    public void getBrandCatTest() throws  ApiException{
+    public void getBrandCatTest() throws ApiException {
         BrandPojo brandPojo = new BrandPojo();
         brandPojo.setCategory("category1");
         brandPojo.setBrand("brand1");
-        brandPojo.setDisabled(false);
         brandApi.add(brandPojo);
         List<BrandPojo> brandPojoList = brandApi.getAll();
-        BrandPojo brandPojo1 = brandApi.getBrandCat(brandPojoList.get(0).getBrand(),brandPojoList.get(0).getCategory());
-        assertEquals(brandPojo1,brandPojoList.get(0));
+        BrandPojo brandPojo1 = brandApi.getBrandCat(brandPojoList.get(0).getBrand(), brandPojoList.get(0).getCategory());
+        assertEquals(brandPojo1, brandPojoList.get(0));
     }
 
     @Test(expected = ApiException.class)
-    public void getBrandCatTest1() throws  ApiException{
+    public void getBrandCatTest1() throws ApiException {
         BrandPojo brandPojo = new BrandPojo();
         brandPojo.setCategory("category1");
         brandPojo.setBrand("brand1");
-        brandPojo.setDisabled(false);
         brandApi.add(brandPojo);
         List<BrandPojo> brandPojoList = brandApi.getAll();
-        BrandPojo brandPojo1 = brandApi.getBrandCat("b","c");
+        BrandPojo brandPojo1 = brandApi.getBrandCat("b", "c");
     }
 
     @Test
@@ -126,18 +114,15 @@ public class BrandApiTest extends AbstractUnitTest {
         BrandPojo brandPojo = new BrandPojo();
         brandPojo.setCategory("category1");
         brandPojo.setBrand("brand1");
-        brandPojo.setDisabled(false);
         brandApi.add(brandPojo);
         List<BrandPojo> brandPojoList = brandApi.getAll();
         BrandPojo brandPojo1 = new BrandPojo();
         brandPojo1.setCategory("category2");
         brandPojo1.setBrand("brand2");
-        brandPojo1.setDisabled(false);
-        brandApi.update(brandPojoList.get(0).getId(),brandPojo1);
+        brandApi.update(brandPojoList.get(0).getId(), brandPojo1);
         List<BrandPojo> brandPojoList1 = brandApi.getAll();
-        assertEquals("brand2",brandPojoList1.get(0).getBrand());
-        assertEquals("category2",brandPojoList1.get(0).getCategory());
-        assertEquals((Boolean) false ,brandPojoList1.get(0).getDisabled());
+        assertEquals("brand2", brandPojoList1.get(0).getBrand());
+        assertEquals("category2", brandPojoList1.get(0).getCategory());
     }
 
     @Test
@@ -145,39 +130,9 @@ public class BrandApiTest extends AbstractUnitTest {
         BrandPojo brandPojo = new BrandPojo();
         brandPojo.setCategory("category1");
         brandPojo.setBrand("brand1");
-        brandPojo.setDisabled(false);
         brandApi.add(brandPojo);
         List<BrandPojo> brandPojoList = brandApi.getAll();
 
     }
-//    @Test
-//    public void updateTest() throws ApiException{
-//        BrandPojo brandPojo = new BrandPojo();
-//        brandPojo.setCategory("category1");
-//        brandPojo.setBrand("brand1");
-//        brandPojo.setDisabled(false);
-//        brandApi.add(brandPojo);
-//        List<BrandPojo> brandPojoList = brandApi.getAll();
-//        BrandPojo brandPojo1 = brandPojoList.get(0);
-//        brandPojo1.setCategory("updatedcategory");
-//        brandApi.update(brandPojo1);
-//        List<BrandPojo> brandPojoList1 = brandApi.getAll();
-//        assertEquals("updatedcategory",brandPojoList1.get(0).getCategory());
-//    }
-//    @Test
-//    public void updateTest1() throws ApiException{
-//        BrandPojo brandPojo = new BrandPojo();
-//        brandPojo.setCategory("category1");
-//        brandPojo.setBrand("brand1");
-//        brandPojo.setDisabled(false);
-//        brandApi.add(brandPojo);
-//        List<BrandPojo> brandPojoList = brandApi.getAll();
-//        BrandPojo brandPojo1 = brandPojoList.get(0);
-//        brandPojo1.setCategory("updatedcategory");
-//        brandApi.update(id,brandPojo1);
-//        List<BrandPojo> brandPojoList1 = brandApi.getAll();
-//        assertEquals("updatedcategory",brandPojoList1.get(0).getCategory());
-//    }
-
 }
 

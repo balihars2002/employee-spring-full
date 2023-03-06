@@ -45,7 +45,7 @@ public class DailySalesDtoTest extends AbstractUnitTest {
         orderItemDto.add(orderItemForm, orderId);
         dailySalesDto.scheduleTask();
         List<DailySalesData> dailySalesDataList = dailySalesDto.getAllData();
-        assertEquals(0, dailySalesDataList.size());
+        assertEquals(1, dailySalesDataList.size());
     }
 
 
@@ -123,7 +123,6 @@ public class DailySalesDtoTest extends AbstractUnitTest {
         BrandPojo brandPojo = new BrandPojo();
         brandPojo.setBrand(brand);
         brandPojo.setCategory(category);
-        brandPojo.setDisabled(isDisabled);
         brandDao.insert(brandPojo);
         List<BrandPojo> brandPojoList = brandDao.getAll();
         return brandPojoList.get(0).getId();

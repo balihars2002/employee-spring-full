@@ -37,24 +37,7 @@ public class LoginController {
     @ApiOperation(value = "Logs in a user")
     @RequestMapping(path = "/session/login", method = RequestMethod.POST)
     public void login(HttpServletRequest req, @RequestBody LoginForm f) throws ApiException, NullPointerException {
-        UserPojo p = userDto.get(f.getEmail());
-        boolean authenticated = (p != null && Objects.equals(p.getPassword(), f.getPassword()));
-        if (!authenticated) {
-            throw new ApiException("Invalid username or password");
-        }
-        if (p.getDisabled()) {
-            throw new ApiException("User is Restricted! Contact Supervisor");
-        } else {
-            // Create authentication object
-            Authentication authentication = userDto.convertPojoToAuthentication(p);
-            // Create new session
-            HttpSession session = req.getSession(true);
-            // Attach Spring SecurityContext to this new session
-            SecurityUtil.createContext(session);
-            // Attach Authentication object to the Security Context
-            SecurityUtil.setAuthentication(authentication);
-//			return new ModelAndView("redirect:/ui/order");
-        }
+        userDto.login(req,f);
 
     }
     @RequestMapping(path = "/session/logout", method = RequestMethod.GET)
