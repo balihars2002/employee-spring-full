@@ -7,7 +7,6 @@ import java.util.List;
 
 public class InvoiceForm {
 
-// Todo remove this id if not getting used
     private Integer id;
     private Integer orderId;
     private String addDate;

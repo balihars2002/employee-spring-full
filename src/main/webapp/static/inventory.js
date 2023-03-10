@@ -44,7 +44,6 @@ function addInventory(event){
 }
 
 function updateInventory(event){
-	event.preventDefault();
 	
 	//Get the ID
 	var id = $("#inventory-edit-form input[name=id]").val();	
@@ -116,8 +115,14 @@ var processCount = 0;
 var uploadlength ,error=0 ;
 
 function processData(){
+	
 	var file = $('#inventoryFile')[0].files[0];
 	readFileData(file, readFileDataCallback);
+	console.log(file);
+    if(!file){
+        msgErrorstring("Please select a file")
+        return;
+    }
 	
 }
 
@@ -149,16 +154,19 @@ function uploadFileHelper(data){
 		 error =  response.length;
 			uploadlength -= response.length;
 			 errorData = JSON.stringify(response);
-			 msgSuccess('Products Uploaded:  ' + uploadlength.toString());	
-			msgErrorstring('Errors : ' + error.toString());		
+			//  msgSuccess('Uploaded:  ' + uploadlength.toString());	
+			// msgErrorstring('Errors : ' + error.toString());		
 			 if(response.length == 0){
-				$('#upload-product-modal').modal('toggle');
+				msgSuccess('Uploaded:  ' + uploadlength.toString());	
+				$('#inventoryFile').trigger("reset");
+				$('#upload-inventory-modal').modal('toggle');
 			 }
 			 else{
+				msgErrorstring('Errors : ' + error.toString());		
 				document.getElementById("download-errors").disabled = false;
 			 }
 			 updateUploadDialog();
-			 getBrandList();  
+			 getInventoryList();  
 	   },
 	   error: function(response){
 			msgErrorstring("Error");
@@ -245,7 +253,7 @@ function displayEditInventory(id){
 	var url = getInventoryUrl() + "operator/inventory/" + id;
 	console.log(" into the get edit inventory function ");
 	console.log(" the url int the get inv is :", url);
-	//console.log("the inventory is :",data);
+	// console.log("the inventory is :",data);
 	$.ajax({
 	   url: url,
 	   type: 'GET',
@@ -345,7 +353,9 @@ function cancelButton(){
 }
 
 function displayInventory(data){
+	console.log("data :: ",data);
 	$("#edit-barcode-dropdown-menu").val(data.barcode);
+	$("#inventory-edit-form input[name=barcode]").val(data.barcode);
 	$("#inventory-edit-form input[name=id]").val(data.id);
 	$("#inventory-edit-form input[name=productId]").val(data.productId);	
 	$("#inventory-edit-form input[name=brand]").val(data.brand);

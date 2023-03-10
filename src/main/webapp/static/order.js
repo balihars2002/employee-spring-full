@@ -56,12 +56,15 @@ function getOrderItem(event){
 			console.log("2 :",orderItem.barcode);
 			  if(e.barcode == orderItem.barcode){
 				if(e.mrp < orderItem.sellingPrice){
-					msgErrorstring("Selling price cannot be greater than MRP");
+					msgErrorstring("Selling price cannot be greater than " + e.mrp);
 				}
 			 else{
 				quantityInInventory = e.quantity;
+				console.log("into the selling price error1");
 				if(orderPriceMap.has(orderItem.barcode) && orderPriceMap.get(orderItem.barcode) != orderItem.sellingPrice){
-					msgError("Selling Price can only be " + String.toString(orderPriceMap.get(orderItem.barcode)));
+					console.log("into the selling price error2");
+					msgErrorstring("Selling Price can only be "+ orderPriceMap.get(orderItem.barcode));
+					// msgError("Selling Price can only be " + String.toString(orderPriceMap.get(orderItem.barcode)));
 				}
 				else{
 					
@@ -80,7 +83,8 @@ function getOrderItem(event){
 					}
 				}
 				else{
-					msgErrorstring("Product quantity is not available in inventory");
+					console.log("adfs:" + quantityInInventory );
+					msgErrorstring("Available quantity: "+ quantityInInventory);
 				}
 			
 				}
@@ -94,7 +98,8 @@ function getOrderItem(event){
 					order.push(orderItem);
 					}
 					else{
-						msgErrorstring("Product quantity is not available in inventory");
+						console.log("adfs:" + quantityInInventory );
+						msgErrorstring("Available quantity: "+quantityInInventory);
 					}
 					
 				}

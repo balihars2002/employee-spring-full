@@ -44,7 +44,7 @@ function addProduct(event) {
 
 function updateTheProduct(event) {
     console.log("int to the update product 5");
-    $('#edit-product-modal').modal('toggle');
+   
 
     //Get the ID
     var id = $("#product-edit-form input[name=id]").val();
@@ -62,6 +62,7 @@ function updateTheProduct(event) {
             'Content-Type': 'application/json'
         },
         success: function (response) {
+            $('#edit-product-modal').modal('toggle');
             msgSuccess("Product updated Successfully");
             getProductList();
         },
@@ -117,6 +118,11 @@ var uploadlength ,error=0 ;
 
 function processData(){
 	var file = $('#productFile')[0].files[0];
+    console.log(file);
+    if(!file){
+        msgErrorstring("Please select a file")
+        return;
+    }
 	readFileData(file, readFileDataCallback);
 	
 }
@@ -152,7 +158,7 @@ function uploadFileHelper(data){
 			uploadlength -= response.length;
 			 errorData = JSON.stringify(response);
 			 msgSuccess('Products Uploaded:  ' + uploadlength.toString());	
-			msgErrorstring('Errors : ' + error.toString());		
+			// msgErrorstring('Errors : ' + error.toString());		
 			 if(response.length == 0){
 				$('#upload-product-modal').modal('toggle');
 			 }
@@ -160,7 +166,7 @@ function uploadFileHelper(data){
 				document.getElementById("download-errors").disabled = false;
 			 }
 			 updateUploadDialog();
-			 getBrandList();  
+             getProductList();
 	   },
 	   error: function(response){
 			msgErrorstring("Error");

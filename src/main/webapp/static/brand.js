@@ -103,8 +103,16 @@ var processCount = 0;
 var uploadlength ,error=0 ;
 
 function processData(){
+	
+	
 	var file = $('#brandFile')[0].files[0];
 	readFileData(file, readFileDataCallback);
+
+	console.log(file);
+    if(!file){
+        msgErrorstring("Please select a file");
+        return;
+    }
 	
 }
 
@@ -140,8 +148,9 @@ function uploadFileHelper(data){
 			uploadlength -= response.length;
 			 errorData = JSON.stringify(response);
 			 msgSuccess('Brands Uploaded:  ' + uploadlength.toString());	
-			msgErrorstring('Errors : ' + error.toString());		
+			// msgErrorstring('Errors : ' + error.toString());		
 			 if(response.length == 0){
+				$('#upload-brand-modal').trigger("reset");
 				$('#upload-brand-modal').modal('toggle');
 			 }
 			 else{
@@ -159,7 +168,7 @@ function uploadFileHelper(data){
 
 var array = [];
 function uploadRows(){
-
+	
 	console.log("first");
 	if(fileData.length == 0){
 		msgErrorstring("No Data to upload");

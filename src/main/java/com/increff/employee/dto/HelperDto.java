@@ -1,5 +1,7 @@
 package com.increff.employee.dto;
 
+import com.increff.employee.api.ApiException;
+import com.increff.employee.api.InventoryApi;
 import com.increff.employee.model.data.BrandData;
 import com.increff.employee.model.data.InventoryData;
 import com.increff.employee.model.data.OrderItemData;
@@ -7,10 +9,10 @@ import com.increff.employee.model.data.ProductData;
 import com.increff.employee.model.form.BrandForm;
 import com.increff.employee.model.form.OrderItemForm;
 import com.increff.employee.model.form.ProductForm;
-import com.increff.employee.model.form.UserForm;
-import com.increff.employee.pojo.*;
-import com.increff.employee.api.ApiException;
-import com.increff.employee.api.InventoryApi;
+import com.increff.employee.pojo.BrandPojo;
+import com.increff.employee.pojo.InventoryPojo;
+import com.increff.employee.pojo.OrderItemPojo;
+import com.increff.employee.pojo.ProductPojo;
 import com.increff.employee.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,6 +29,7 @@ public class HelperDto {
         d.setId(pojo.getId());
         return d;
     }
+
     public static BrandPojo convertBrandFormToPojo(BrandForm form) {
         BrandPojo p = new BrandPojo();
         p.setCategory(form.getCategory());
@@ -57,31 +60,33 @@ public class HelperDto {
         form.setBrand(StringUtil.toLowerCase(form.getBrand()));
         form.setCategory(StringUtil.toLowerCase(form.getCategory()));
     }
-    public static void validateProductForm(ProductForm form) throws ApiException{
-        if(StringUtil.isEmpty(form.getBarcode())){
+
+    public static void validateProductForm(ProductForm form) throws ApiException {
+        if (StringUtil.isEmpty(form.getBarcode())) {
             throw new ApiException("Barcode cannot be Empty!");
         }
-        if(StringUtil.isEmpty(form.getName())){
+        if (StringUtil.isEmpty(form.getName())) {
             throw new ApiException("Name cannot be Empty!");
         }
-        if(StringUtil.isEmpty(form.getBrand())){
+        if (StringUtil.isEmpty(form.getBrand())) {
             throw new ApiException("Brand cannot be Empty!");
         }
-        if(StringUtil.isEmpty(form.getCategory())){
+        if (StringUtil.isEmpty(form.getCategory())) {
             throw new ApiException("Category cannot be Empty!");
         }
-        if(form.getMrp() == null || form.getMrp() <= 0){
+        if (form.getMrp() == null || form.getMrp() <= 0) {
             throw new ApiException("Mrp cannot be empty,negative or 0");
         }
     }
-    public static void validateProductEditForm(ProductForm form) throws ApiException{
-        if(StringUtil.isEmpty(form.getBarcode())){
+
+    public static void validateProductEditForm(ProductForm form) throws ApiException {
+        if (StringUtil.isEmpty(form.getBarcode())) {
             throw new ApiException("Barcode cannot be Empty!");
         }
-        if(StringUtil.isEmpty(form.getName())){
+        if (StringUtil.isEmpty(form.getName())) {
             throw new ApiException("Name cannot be Empty!");
         }
-        if(form.getMrp() == null || form.getMrp() <= 0){
+        if (form.getMrp() == null || form.getMrp() <= 0) {
             throw new ApiException("Mrp cannot be empty,negative or 0");
         }
     }
@@ -95,7 +100,7 @@ public class HelperDto {
         return productData;
     }
 
-    public static OrderItemPojo convertOrderItemFormToPojo(OrderItemForm orderItemForm, Integer id) throws ApiException{
+    public static OrderItemPojo convertOrderItemFormToPojo(OrderItemForm orderItemForm, Integer id) throws ApiException {
         OrderItemPojo orderItemPojo = new OrderItemPojo();
         orderItemPojo.setOrderId(id);
         orderItemPojo.setQuantity(orderItemForm.getQuantity());

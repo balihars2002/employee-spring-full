@@ -28,5 +28,7 @@ public class WebInitializer extends AbstractAnnotationConfigDispatcherServletIni
 	protected String[] getServletMappings() {
 		return new String[] { "/" };
 	}
+	//this means that the request from root will be handled by dispacher servlet
+
 
 }
